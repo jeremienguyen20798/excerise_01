@@ -25,6 +25,8 @@ class AddItemForDeleteEvent extends HomeEvent {
 
 class DeleteAlarmEvent extends HomeEvent {}
 
+class DeleteAllAlarmsEvent extends HomeEvent {}
+
 class UpdateAlarmEvent extends HomeEvent {
   Map<String, dynamic> data;
 
@@ -42,3 +44,5 @@ class UpdateItemForListEvent extends HomeEvent {
 
   UpdateItemForListEvent(this.alarm);
 }
+
+class CancelDeleteAllItemsEvent extends HomeEvent {}

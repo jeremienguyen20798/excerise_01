@@ -2,11 +2,8 @@ import 'package:excerise_01/core/constant/app_constant.dart';
 import 'package:excerise_01/core/utils/formatter.dart';
 import 'package:excerise_01/entities/alarm.dart';
 import 'package:excerise_01/features/alarm/view/alarm_page.dart';
-import 'package:excerise_01/features/home/bloc/home_bloc.dart';
-import 'package:excerise_01/features/home/bloc/home_event.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class EditAlarmDialog extends StatefulWidget {
   final Alarm alarm;
@@ -47,15 +44,15 @@ class _EditAlarmDialogState extends State<EditAlarmDialog> {
         ),
         subtitle: widget.alarm.message != null
             ? Text(
-          widget.alarm.message!,
-          maxLines: 1,
-          style: TextStyle(
-            fontSize: 14.0,
-            color: Colors.grey,
-            fontWeight: FontWeight.normal,
-            overflow: TextOverflow.ellipsis,
-          ),
-        )
+                widget.alarm.message!,
+                maxLines: 1,
+                style: TextStyle(
+                  fontSize: 14.0,
+                  color: Colors.grey,
+                  fontWeight: FontWeight.normal,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              )
             : null,
         trailing: Switch(
           value: isActive,
@@ -67,10 +64,7 @@ class _EditAlarmDialogState extends State<EditAlarmDialog> {
         ),
       ),
       content: SizedBox(
-        width: MediaQuery
-            .of(context)
-            .size
-            .width - 24 * 2,
+        width: MediaQuery.of(context).size.width - 24 * 2,
         height: 200.0,
         child: CupertinoDatePicker(
           mode: CupertinoDatePickerMode.time,
@@ -99,9 +93,7 @@ class _EditAlarmDialogState extends State<EditAlarmDialog> {
                       builder: (_) => AlarmPage(alarm: widget.alarm),
                     ),
                   );
-                  if (result != null) {
-                    Navigator.pop(context, result);
-                  }
+                  _onBack(result);
                 },
                 elevation: 0.0,
                 height: 48.0,
@@ -149,5 +141,11 @@ class _EditAlarmDialogState extends State<EditAlarmDialog> {
         ),
       ],
     );
+  }
+
+  _onBack(Alarm? alarm) {
+    if (alarm != null) {
+      Navigator.pop(context, alarm);
+    }
   }
 }

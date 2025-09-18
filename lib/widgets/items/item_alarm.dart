@@ -33,8 +33,14 @@ class _ItemAlarmState extends State<ItemAlarm> {
           isLongPress = true;
         } else if (state is OnRestartState) {
           isLongPress = false;
+          isChoose = false;
         } else if (state is DeleteAlarmState) {
           isLongPress = false;
+        } else if (state is DeleteAllAlarmsState) {
+          isLongPress = true;
+          isChoose = true;
+        } else if (state is CancelDeleteAllItemsState) {
+          isChoose = false;
         }
         return Container(
           margin: EdgeInsets.symmetric(horizontal: 12.0),

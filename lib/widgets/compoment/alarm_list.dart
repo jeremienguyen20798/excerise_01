@@ -27,6 +27,12 @@ class AlarmList extends StatelessWidget {
           final removeItem = alarms.elementAt(index);
           alarms.remove(removeItem);
           alarms.insert(index, item);
+        } else if (state is UpdateItemState) {
+          final item = state.alarm;
+          final index = alarms.indexWhere((e) => e.id == item.id);
+          final removeItem = alarms.elementAt(index);
+          alarms.remove(removeItem);
+          alarms.insert(index, item);
         }
         return alarms.isNotEmpty
             ? ListView.separated(

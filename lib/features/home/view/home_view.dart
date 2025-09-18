@@ -7,7 +7,7 @@ import 'package:excerise_01/widgets/compoment/alarm_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-bool isLongPress = false;
+bool isLongPress = false, isDeleteAllItems = false;
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
@@ -20,8 +20,13 @@ class HomeView extends StatelessWidget {
           isLongPress = true;
         } else if (state is OnRestartState) {
           isLongPress = false;
+          isDeleteAllItems = false;
         } else if (state is DeleteAlarmState) {
           isLongPress = false;
+        } else if (state is DeleteAllAlarmsState) {
+          isDeleteAllItems = state.isDeleteAll;
+        } else if (state is CancelDeleteAllItemsState) {
+          isDeleteAllItems = false;
         }
         return Scaffold(
           backgroundColor: Colors.grey.shade100,
@@ -46,8 +51,23 @@ class HomeView extends StatelessWidget {
             actions: isLongPress
                 ? [
                     IconButton(
-                      onPressed: () {},
-                      icon: Icon(Icons.playlist_add_check),
+                      onPressed: () {
+                        if (isDeleteAllItems) {
+                          BlocProvider.of<HomeBloc>(
+                            context,
+                          ).add(CancelDeleteAllItemsEvent());
+                        } else {
+                          BlocProvider.of<HomeBloc>(
+                            context,
+                          ).add(DeleteAllAlarmsEvent());
+                        }
+                      },
+                      icon: Icon(
+                        Icons.playlist_add_check,
+                        color: isDeleteAllItems
+                            ? Colors.deepPurple
+                            : Colors.black,
+                      ),
                     ),
                   ]
                 : null,
