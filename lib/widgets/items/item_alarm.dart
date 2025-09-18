@@ -1,0 +1,137 @@
+import 'package:excerise_01/core/utils/app_utils.dart';
+import 'package:excerise_01/entities/alarm.dart';
+import 'package:excerise_01/features/home/bloc/home_bloc.dart';
+import 'package:excerise_01/features/home/bloc/home_event.dart';
+import 'package:excerise_01/features/home/bloc/home_state.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+class ItemAlarm extends StatefulWidget {
+  final Alarm alarm;
+
+  const ItemAlarm({super.key, required this.alarm});
+
+  @override
+  State<ItemAlarm> createState() => _ItemAlarmState();
+}
+
+class _ItemAlarmState extends State<ItemAlarm> {
+  bool isChoose = false, isActive = false, isLongPress = false;
+  List<int> itemDeleteIds = [];
+
+  @override
+  void initState() {
+    isActive = widget.alarm.isActive ?? false;
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<HomeBloc, HomeState>(
+      builder: (context, state) {
+        if (state is ItemAlarmLongPressState) {
+          isLongPress = true;
+        } else if (state is OnRestartState) {
+          isLongPress = false;
+        } else if (state is DeleteAlarmState) {
+          isLongPress = false;
+        }
+        return Container(
+          margin: EdgeInsets.symmetric(horizontal: 12.0),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16.0),
+          ),
+          child: ListTile(
+            contentPadding: EdgeInsets.symmetric(
+              horizontal: 16.0,
+              vertical: 8.0,
+            ),
+            onLongPress: () {
+              BlocProvider.of<HomeBloc>(context).add(ItemAlarmLongPressEvent());
+            },
+            onTap: () {
+              AppUtils.showEditAlarmDialog(
+                context,
+                widget.alarm,
+                (result) {
+                  BlocProvider.of<HomeBloc>(
+                    context,
+                  ).add(UpdateAlarmEvent(result));
+                },
+                (value) {
+                  BlocProvider.of<HomeBloc>(
+                    context,
+                  ).add(UpdateItemForListEvent(value));
+                },
+              );
+            },
+            title: RichText(
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              text: TextSpan(
+                text: widget.alarm.getTime(),
+                style: TextStyle(
+                  fontSize: 28.0,
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                ),
+                children: [
+                  TextSpan(text: ' '),
+                  TextSpan(
+                    text: widget.alarm.message,
+                    style: TextStyle(
+                      fontSize: 14.0,
+                      color: Colors.grey,
+                      fontWeight: FontWeight.normal,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            subtitle: RichText(
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              text: TextSpan(
+                text: widget.alarm.getTextByRepeatType(),
+                style: TextStyle(fontSize: 14.0, color: Colors.grey),
+                children: [
+                  TextSpan(text: ' | ', style: TextStyle(fontSize: 16.0)),
+                  TextSpan(
+                    text: widget.alarm.getAlarmDistance(),
+                    style: TextStyle(fontSize: 14.0),
+                  ),
+                ],
+              ),
+            ),
+            trailing: isLongPress
+                ? Checkbox(
+                    value: isChoose,
+                    onChanged: (value) {
+                      setState(() {
+                        isChoose = value ?? false;
+                        if (value == true) {
+                          BlocProvider.of<HomeBloc>(
+                            context,
+                          ).add(AddItemForDeleteEvent(widget.alarm.id));
+                        }
+                      });
+                    },
+                  )
+                : Switch(
+                    value: isActive,
+                    onChanged: (value) {
+                      setState(() {
+                        isActive = value;
+                        BlocProvider.of<HomeBloc>(context).add(
+                          UpdateAlarmStatusEvent(widget.alarm.id, isActive),
+                        );
+                      });
+                    },
+                  ),
+          ),
+        );
+      },
+    );
+  }
+}
