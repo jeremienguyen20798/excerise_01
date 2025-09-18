@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:excerise_01/core/local_db/alarm_local_db.dart';
@@ -57,7 +58,7 @@ class AlarmNotification {
     );
   }
 
-  Future<void> showNotification(Alarm alarm, {String? payloadData}) async {
+  Future<void> showNotification(Alarm alarm) async {
     AndroidNotificationDetails androidNotificationDetails =
         AndroidNotificationDetails(
           'channelId',
@@ -66,6 +67,7 @@ class AlarmNotification {
           priority: Priority.high,
           playSound: true,
           sound: RawResourceAndroidNotificationSound('clock_alarm'),
+          audioAttributesUsage: AudioAttributesUsage.alarm,
           actions: [AndroidNotificationAction('cancel', 'Tắt')],
         );
     final NotificationDetails notificationDetails = NotificationDetails(
@@ -78,7 +80,7 @@ class AlarmNotification {
       alarm.message,
       tz.TZDateTime.now(tz.local).add(duration),
       notificationDetails,
-      payload: payloadData,
+      payload: jsonEncode(alarm),
       androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
       matchDateTimeComponents: alarm.repeatType == AlarmRepeatType.daily
           ? DateTimeComponents.time

@@ -28,9 +28,11 @@ class DeleteAlarmEvent extends HomeEvent {}
 class DeleteAllAlarmsEvent extends HomeEvent {}
 
 class UpdateAlarmEvent extends HomeEvent {
+  //Vi tri index can update du lieu
+  int index;
   Map<String, dynamic> data;
 
-  UpdateAlarmEvent(this.data);
+  UpdateAlarmEvent(this.index, this.data);
 }
 
 class OnReloadAlarmListEvent extends HomeEvent {
@@ -40,9 +42,13 @@ class OnReloadAlarmListEvent extends HomeEvent {
 }
 
 class UpdateItemForListEvent extends HomeEvent {
+  //Vi tri index can update du lieu
+  int index;
   Alarm alarm;
 
-  UpdateItemForListEvent(this.alarm);
+  UpdateItemForListEvent(this.index, this.alarm);
 }
 
 class CancelDeleteAllItemsEvent extends HomeEvent {}
+
+class RequestNotificationPermissionEvent extends HomeEvent {}

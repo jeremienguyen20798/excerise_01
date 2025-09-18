@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:excerise_01/features/home/bloc/home_event.dart';
 import 'package:excerise_01/features/home/bloc/home_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../../../core/local_db/alarm_local_db.dart';
 import '../../../core/notification/alarm_notification.dart';
@@ -24,6 +25,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<UpdateItemForListEvent>(_updateItemForList);
     on<DeleteAlarmEvent>(_onDeleteAlarm);
     on<DeleteAllAlarmsEvent>(_onDeleteAllAlarms);
+    on<RequestNotificationPermissionEvent>(_requestNotificationPermission);
   }
 
   //Lấy ra danh sách các báo thức
@@ -97,6 +99,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     UpdateAlarmEvent event,
     Emitter<HomeState> emitter,
   ) async {
+    final int index = event.index;
     final data = event.data;
     final idAlarm = data['id'];
     final dateTime = data['dateTime'];
@@ -106,7 +109,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     final alarm = await localDB.getAlarmById(idAlarm);
     if (alarm != null) {
       await alarmNotification.showNotification(alarm);
-      emitter(UpdateItemState(alarm));
+      emitter(UpdateItemState(index, alarm));
     }
   }
 
@@ -123,14 +126,27 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     UpdateItemForListEvent event,
     Emitter<HomeState> emitter,
   ) async {
+    final int index = event.index;
     await alarmNotification.showNotification(event.alarm);
-    emitter(UpdateItemForListState(event.alarm));
+    emitter(UpdateItemForListState(index, event.alarm));
   }
 
+  //Huỷ việc xoá tất cả item báo thức
   void _cancelDeleteAllItems(
     CancelDeleteAllItemsEvent event,
     Emitter<HomeState> emitter,
   ) {
     emitter(CancelDeleteAllItemsState());
+  }
+
+  //Yêu cầu xin quyền hiện thông báo
+  Future<void> _requestNotificationPermission(
+    RequestNotificationPermissionEvent event,
+    Emitter<HomeState> emitter,
+  ) async {
+    final result = await Permission.notification.request();
+    if (result.isDenied) {
+      openAppSettings();
+    }
   }
 }

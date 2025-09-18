@@ -23,13 +23,13 @@ class AlarmList extends StatelessWidget {
           alarms.add(state.alarm);
         } else if (state is UpdateItemForListState) {
           final item = state.alarm;
-          final index = alarms.indexWhere((e) => e.id == item.id);
+          final index = state.index;
           final removeItem = alarms.elementAt(index);
           alarms.remove(removeItem);
           alarms.insert(index, item);
         } else if (state is UpdateItemState) {
           final item = state.alarm;
-          final index = alarms.indexWhere((e) => e.id == item.id);
+          final index = state.index;
           final removeItem = alarms.elementAt(index);
           alarms.remove(removeItem);
           alarms.insert(index, item);
@@ -38,7 +38,7 @@ class AlarmList extends StatelessWidget {
             ? ListView.separated(
                 shrinkWrap: true,
                 itemBuilder: (context, index) {
-                  return ItemAlarm(alarm: alarms[index]);
+                  return ItemAlarm(index: index, alarm: alarms[index]);
                 },
                 separatorBuilder: (BuildContext context, int index) =>
                     SizedBox(height: 16.0),

@@ -7,9 +7,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ItemAlarm extends StatefulWidget {
+  final int index;
   final Alarm alarm;
 
-  const ItemAlarm({super.key, required this.alarm});
+  const ItemAlarm({super.key, required this.index, required this.alarm});
 
   @override
   State<ItemAlarm> createState() => _ItemAlarmState();
@@ -63,12 +64,12 @@ class _ItemAlarmState extends State<ItemAlarm> {
                 (result) {
                   BlocProvider.of<HomeBloc>(
                     context,
-                  ).add(UpdateAlarmEvent(result));
+                  ).add(UpdateAlarmEvent(widget.index, result));
                 },
                 (value) {
                   BlocProvider.of<HomeBloc>(
                     context,
-                  ).add(UpdateItemForListEvent(value));
+                  ).add(UpdateItemForListEvent(widget.index, value));
                 },
               );
             },

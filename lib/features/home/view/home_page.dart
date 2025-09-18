@@ -10,7 +10,9 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => HomeBloc()..add(GetAlarmListEvent()),
+      create: (_) => HomeBloc()
+        ..add(RequestNotificationPermissionEvent())
+        ..add(GetAlarmListEvent()),
       child: HomeView(),
     );
   }

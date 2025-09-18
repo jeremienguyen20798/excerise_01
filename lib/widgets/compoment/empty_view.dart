@@ -11,7 +11,17 @@ class EmptyView extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
-        children: [Text(defaultEmptyText, style: TextStyle(fontSize: 16.0))],
+        children: [
+          Text(
+            defaultEmptyText,
+            style: TextStyle(
+              fontSize: 16.0,
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          Text(defaultSubEmptyText, style: TextStyle(fontSize: 14.0)),
+        ],
       ),
     );
   }
