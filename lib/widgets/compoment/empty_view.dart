@@ -20,7 +20,31 @@ class EmptyView extends StatelessWidget {
               fontWeight: FontWeight.bold,
             ),
           ),
-          Text(defaultSubEmptyText, style: TextStyle(fontSize: 14.0)),
+          RichText(
+            textAlign: TextAlign.end,
+            text: TextSpan(
+              text: "$defaultSubEmptyText\n",
+              style: TextStyle(
+                fontSize: 14.0,
+                color: Colors.black,
+                fontStyle: FontStyle.italic,
+              ),
+              children: [
+                TextSpan(
+                  text: 'Trích dẫn: ',
+                  style: TextStyle(fontSize: 14.0, color: Colors.black),
+                ),
+                TextSpan(
+                  text: "Gemini AI",
+                  style: TextStyle(
+                    fontSize: 14.0,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );

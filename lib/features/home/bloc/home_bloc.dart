@@ -90,7 +90,11 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     await localDB.updateAlarmStatus(id, isActive);
     final alarm = await localDB.getAlarmById(id);
     if (alarm != null) {
-      await alarmNotification.showNotification(alarm);
+      if (isActive) {
+        await alarmNotification.showNotification(alarm);
+      } else {
+        await alarmNotification.cancelAlarmRingById(id);
+      }
     }
   }
 
@@ -108,7 +112,11 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     await localDB.updateAlarm(idAlarm, dateTime, isActive);
     final alarm = await localDB.getAlarmById(idAlarm);
     if (alarm != null) {
-      await alarmNotification.showNotification(alarm);
+      if (isActive) {
+        await alarmNotification.showNotification(alarm);
+      } else {
+        await alarmNotification.cancelAlarmRingById(idAlarm);
+      }
       emitter(UpdateItemState(index, alarm));
     }
   }

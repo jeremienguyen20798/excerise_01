@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:developer';
 
 import 'package:excerise_01/core/local_db/alarm_local_db.dart';
@@ -8,7 +7,6 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import '../../main.dart';
 import '../constant/app_constant.dart';
-import 'package:timezone/timezone.dart' as tz;
 
 FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
@@ -58,7 +56,7 @@ class AlarmNotification {
     );
   }
 
-  Future<void> showNotification(Alarm alarm) async {
+  Future<void> showNotification(Alarm alarm, {String? payloadData}) async {
     AndroidNotificationDetails androidNotificationDetails =
         AndroidNotificationDetails(
           'channelId',
@@ -73,18 +71,19 @@ class AlarmNotification {
     final NotificationDetails notificationDetails = NotificationDetails(
       android: androidNotificationDetails,
     );
-    final duration = alarm.getTimeAlarm().difference(DateTime.now());
+    final scheduleDateTime = alarm.getTimeAlarm();
     await flutterLocalNotificationsPlugin.zonedSchedule(
       alarm.id,
       alarm.getTime(),
       alarm.message,
-      tz.TZDateTime.now(tz.local).add(duration),
+      scheduleDateTime,
       notificationDetails,
-      payload: jsonEncode(alarm),
+      payload: payloadData,
       androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
       matchDateTimeComponents: alarm.repeatType == AlarmRepeatType.daily
           ? DateTimeComponents.time
-          : alarm.repeatType == AlarmRepeatType.week
+          : alarm.repeatType == AlarmRepeatType.custom ||
+                alarm.repeatType == AlarmRepeatType.mondayToFriday
           ? DateTimeComponents.dayOfWeekAndTime
           : null,
     );
