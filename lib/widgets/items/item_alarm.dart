@@ -1,5 +1,6 @@
 import 'package:excerise_01/core/utils/app_utils.dart';
 import 'package:excerise_01/entities/alarm.dart';
+import 'package:excerise_01/entities/alarm_repeat_type.dart';
 import 'package:excerise_01/features/home/bloc/home_bloc.dart';
 import 'package:excerise_01/features/home/bloc/home_event.dart';
 import 'package:excerise_01/features/home/bloc/home_state.dart';
@@ -130,9 +131,20 @@ class _ItemAlarmState extends State<ItemAlarm> {
                     onChanged: (value) {
                       setState(() {
                         isActive = value;
-                        BlocProvider.of<HomeBloc>(context).add(
-                          UpdateAlarmStatusEvent(widget.alarm.id, isActive),
-                        );
+                        if (widget.alarm.repeatType ==
+                            AlarmRepeatType.onlyOnce) {
+                          BlocProvider.of<HomeBloc>(context).add(
+                            UpdateAlarmStatusEvent(widget.alarm.id, isActive),
+                          );
+                        } else {
+                          AppUtils.showCancelAlarmBottomSheet(
+                            context,
+                            widget.alarm,
+                            (option) {
+
+                            },
+                          );
+                        }
                       });
                     },
                   ),

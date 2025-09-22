@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:excerise_01/core/constant/app_constant.dart';
 import 'package:excerise_01/core/utils/formatter.dart';
 import 'package:excerise_01/entities/alarm_repeat_type.dart';
@@ -111,5 +113,16 @@ class Alarm {
         return Formatter.formatTime(duration);
       }
     }
+  }
+
+  String toPayload() {
+    final data = {
+      'message': message,
+      'time': time.toString(),
+      'repeatType': repeatType.name,
+      'isActive': isActive,
+      'days': days?.map((item) => item.toString()).toList(),
+    };
+    return jsonEncode(data);
   }
 }

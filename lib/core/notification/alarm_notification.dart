@@ -48,9 +48,9 @@ class AlarmNotification {
       initializationSettings,
       onDidReceiveNotificationResponse:
           (NotificationResponse notificationResponse) async {
-            if (notificationResponse.actionId == 'cancel') {
-              log('Cancel alarm notification');
-            }
+            log('Cancel alarm notification with ${notificationResponse.id}');
+            int alarmId = notificationResponse.id ?? -1;
+            await localDB.updateAlarmStatus(alarmId, false);
           },
       onDidReceiveBackgroundNotificationResponse: notificationTapBackground,
     );

@@ -30,7 +30,10 @@ class AlarmBloc extends Bloc<AlarmEvent, AlarmState> {
       ..message = message
       ..repeatType = repeatType;
     await localDB.writeAlarm(alarm);
-    await alarmNotification.showNotification(alarm);
+    await alarmNotification.showNotification(
+      alarm,
+      payloadData: alarm.toPayload(),
+    );
     emitter(AddAlarmState(alarm));
   }
 
@@ -50,7 +53,10 @@ class AlarmBloc extends Bloc<AlarmEvent, AlarmState> {
     );
     Alarm? alarm = await localDB.getAlarmById(idAlarm);
     if (alarm != null) {
-      await alarmNotification.showNotification(alarm);
+      await alarmNotification.showNotification(
+        alarm,
+        payloadData: alarm.toPayload(),
+      );
       emitter(UpdateAlarmState(alarm));
     }
   }
