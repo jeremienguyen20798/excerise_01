@@ -7,10 +7,11 @@ class InitialHomeEvent extends HomeEvent {}
 class GetAlarmListEvent extends HomeEvent {}
 
 class UpdateAlarmStatusEvent extends HomeEvent {
+  String? option;
   int id;
   bool isActive;
 
-  UpdateAlarmStatusEvent(this.id, this.isActive);
+  UpdateAlarmStatusEvent(this.option, this.id, this.isActive);
 }
 
 class ItemAlarmLongPressEvent extends HomeEvent {}

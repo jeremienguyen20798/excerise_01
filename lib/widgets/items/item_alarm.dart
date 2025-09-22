@@ -134,14 +134,24 @@ class _ItemAlarmState extends State<ItemAlarm> {
                         if (widget.alarm.repeatType ==
                             AlarmRepeatType.onlyOnce) {
                           BlocProvider.of<HomeBloc>(context).add(
-                            UpdateAlarmStatusEvent(widget.alarm.id, isActive),
+                            UpdateAlarmStatusEvent(
+                              null,
+                              widget.alarm.id,
+                              isActive,
+                            ),
                           );
                         } else {
                           AppUtils.showCancelAlarmBottomSheet(
                             context,
                             widget.alarm,
                             (option) {
-
+                              BlocProvider.of<HomeBloc>(context).add(
+                                UpdateAlarmStatusEvent(
+                                  option,
+                                  widget.alarm.id,
+                                  isActive,
+                                ),
+                              );
                             },
                           );
                         }

@@ -89,11 +89,26 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     bool isActive = event.isActive;
     await localDB.updateAlarmStatus(id, isActive);
     final alarm = await localDB.getAlarmById(id);
-    if (alarm != null) {
-      if (isActive) {
-        await alarmNotification.showNotification(alarm);
+    if (event.option == null) {
+      if (alarm != null) {
+        if (isActive) {
+          await alarmNotification.showNotification(alarm);
+        } else {
+          await alarmNotification.cancelAlarmRingById(id);
+        }
+      }
+    } else {
+      String cancelOption = event.option!;
+      if (cancelOption == "cancel") {
+        if (alarm != null) {
+          if (isActive) {
+            await alarmNotification.showNotification(alarm);
+          } else {
+            await alarmNotification.cancelAlarmRingById(id);
+          }
+        }
       } else {
-        await alarmNotification.cancelAlarmRingById(id);
+        log('Tính năng đang được phát triển');
       }
     }
   }
