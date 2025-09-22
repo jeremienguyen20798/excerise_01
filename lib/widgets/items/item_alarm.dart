@@ -1,5 +1,6 @@
 import 'package:excerise_01/core/utils/app_utils.dart';
 import 'package:excerise_01/entities/alarm.dart';
+import 'package:excerise_01/entities/alarm_repeat_type.dart';
 import 'package:excerise_01/features/home/bloc/home_bloc.dart';
 import 'package:excerise_01/features/home/bloc/home_event.dart';
 import 'package:excerise_01/features/home/bloc/home_state.dart';
@@ -7,9 +8,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ItemAlarm extends StatefulWidget {
+  final int index;
   final Alarm alarm;
 
-  const ItemAlarm({super.key, required this.alarm});
+  const ItemAlarm({super.key, required this.index, required this.alarm});
 
   @override
   State<ItemAlarm> createState() => _ItemAlarmState();
@@ -33,8 +35,14 @@ class _ItemAlarmState extends State<ItemAlarm> {
           isLongPress = true;
         } else if (state is OnRestartState) {
           isLongPress = false;
+          isChoose = false;
         } else if (state is DeleteAlarmState) {
           isLongPress = false;
+        } else if (state is DeleteAllAlarmsState) {
+          isLongPress = true;
+          isChoose = true;
+        } else if (state is CancelDeleteAllItemsState) {
+          isChoose = false;
         }
         return Container(
           margin: EdgeInsets.symmetric(horizontal: 12.0),
@@ -57,12 +65,12 @@ class _ItemAlarmState extends State<ItemAlarm> {
                 (result) {
                   BlocProvider.of<HomeBloc>(
                     context,
-                  ).add(UpdateAlarmEvent(result));
+                  ).add(UpdateAlarmEvent(widget.index, result));
                 },
                 (value) {
                   BlocProvider.of<HomeBloc>(
                     context,
-                  ).add(UpdateItemForListEvent(value));
+                  ).add(UpdateItemForListEvent(widget.index, value));
                 },
               );
             },
@@ -123,9 +131,20 @@ class _ItemAlarmState extends State<ItemAlarm> {
                     onChanged: (value) {
                       setState(() {
                         isActive = value;
-                        BlocProvider.of<HomeBloc>(context).add(
-                          UpdateAlarmStatusEvent(widget.alarm.id, isActive),
-                        );
+                        if (widget.alarm.repeatType ==
+                            AlarmRepeatType.onlyOnce) {
+                          BlocProvider.of<HomeBloc>(context).add(
+                            UpdateAlarmStatusEvent(widget.alarm.id, isActive),
+                          );
+                        } else {
+                          AppUtils.showCancelAlarmBottomSheet(
+                            context,
+                            widget.alarm,
+                            (option) {
+
+                            },
+                          );
+                        }
                       });
                     },
                   ),

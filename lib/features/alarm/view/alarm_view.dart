@@ -131,8 +131,8 @@ class _AlarmViewState extends State<AlarmView> {
                       label: defaultDailyText,
                     ),
                     DropdownMenuEntry<AlarmRepeatType>(
-                      value: AlarmRepeatType.week,
-                      label: defaultWeekText,
+                      value: AlarmRepeatType.mondayToFriday,
+                      label: defaultMondayToFridayText,
                     ),
                     DropdownMenuEntry<AlarmRepeatType>(
                       value: AlarmRepeatType.custom,

@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:excerise_01/features/home/bloc/home_event.dart';
 import 'package:excerise_01/features/home/bloc/home_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../../../core/local_db/alarm_local_db.dart';
 import '../../../core/notification/alarm_notification.dart';
@@ -13,15 +14,18 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   List<int> itemDeleteIds = [];
 
   HomeBloc() : super(InitHomeState()) {
-    on<GetAlarmListEvent>(_getAlarmList);
     on<ItemAlarmLongPressEvent>(_onLongPressItem);
     on<OnRestartEvent>(_onRestart);
+    on<OnReloadAlarmListEvent>(_onReloadAlarmList);
+    on<CancelDeleteAllItemsEvent>(_cancelDeleteAllItems);
     on<AddItemForDeleteEvent>(_addItemDelete);
-    on<DeleteAlarmEvent>(_onDeleteAlarm);
+    on<GetAlarmListEvent>(_getAlarmList);
     on<UpdateAlarmStatusEvent>(_updateAlarmStatus);
     on<UpdateAlarmEvent>(_updateAlarm);
-    on<OnReloadAlarmListEvent>(_onReloadAlarmList);
     on<UpdateItemForListEvent>(_updateItemForList);
+    on<DeleteAlarmEvent>(_onDeleteAlarm);
+    on<DeleteAllAlarmsEvent>(_onDeleteAllAlarms);
+    on<RequestNotificationPermissionEvent>(_requestNotificationPermission);
   }
 
   //Lấy ra danh sách các báo thức
@@ -63,6 +67,19 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     emitter(DeleteAlarmState(dataList));
   }
 
+  //Xoá tất cả các item alarm
+  Future<void> _onDeleteAllAlarms(
+    DeleteAllAlarmsEvent event,
+    Emitter<HomeState> emitter,
+  ) async {
+    final alarms = await localDB.getAlarms();
+    if (alarms.isNotEmpty) {
+      itemDeleteIds = alarms.map((item) => item.id).toList();
+      alarmNotification.cancelAllAlarmRing();
+      emitter(DeleteAllAlarmsState(true));
+    }
+  }
+
   //Cập nhật nhanh trạng thái của báo thức
   Future<void> _updateAlarmStatus(
     UpdateAlarmStatusEvent event,
@@ -71,6 +88,14 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     int id = event.id;
     bool isActive = event.isActive;
     await localDB.updateAlarmStatus(id, isActive);
+    final alarm = await localDB.getAlarmById(id);
+    if (alarm != null) {
+      if (isActive) {
+        await alarmNotification.showNotification(alarm);
+      } else {
+        await alarmNotification.cancelAlarmRingById(id);
+      }
+    }
   }
 
   //Cập nhật nội dung chi tiết của báo thức
@@ -78,12 +103,22 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     UpdateAlarmEvent event,
     Emitter<HomeState> emitter,
   ) async {
+    final int index = event.index;
     final data = event.data;
     final idAlarm = data['id'];
     final dateTime = data['dateTime'];
     final isActive = data['isActive'];
     log("Data update: $dateTime - $isActive");
     await localDB.updateAlarm(idAlarm, dateTime, isActive);
+    final alarm = await localDB.getAlarmById(idAlarm);
+    if (alarm != null) {
+      if (isActive) {
+        await alarmNotification.showNotification(alarm);
+      } else {
+        await alarmNotification.cancelAlarmRingById(idAlarm);
+      }
+      emitter(UpdateItemState(index, alarm));
+    }
   }
 
   //Reload danh sách báo thức khi có thêm mới item
@@ -94,7 +129,32 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     emitter(ReloadAlarmListState(event.alarm));
   }
 
-  void _updateItemForList(UpdateItemForListEvent event, Emitter<HomeState> emitter) {
-    emitter(UpdateItemForListState(event.alarm));
+  //Cập nhật dữ liệu item báo thức
+  Future<void> _updateItemForList(
+    UpdateItemForListEvent event,
+    Emitter<HomeState> emitter,
+  ) async {
+    final int index = event.index;
+    await alarmNotification.showNotification(event.alarm);
+    emitter(UpdateItemForListState(index, event.alarm));
+  }
+
+  //Huỷ việc xoá tất cả item báo thức
+  void _cancelDeleteAllItems(
+    CancelDeleteAllItemsEvent event,
+    Emitter<HomeState> emitter,
+  ) {
+    emitter(CancelDeleteAllItemsState());
+  }
+
+  //Yêu cầu xin quyền hiện thông báo
+  Future<void> _requestNotificationPermission(
+    RequestNotificationPermissionEvent event,
+    Emitter<HomeState> emitter,
+  ) async {
+    final result = await Permission.notification.request();
+    if (result.isDenied) {
+      openAppSettings();
+    }
   }
 }

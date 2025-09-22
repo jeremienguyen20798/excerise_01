@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class AlarmClock extends StatelessWidget {
-  const AlarmClock({super.key});
+class RequestPermissionDialog extends StatelessWidget {
+  const RequestPermissionDialog({super.key});
 
   @override
   Widget build(BuildContext context) {

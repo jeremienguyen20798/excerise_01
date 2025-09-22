@@ -32,6 +32,15 @@ class DeleteAlarmState extends HomeState {
   List<Object?> get props => [alarms];
 }
 
+class DeleteAllAlarmsState extends HomeState {
+  final bool isDeleteAll;
+
+  DeleteAllAlarmsState(this.isDeleteAll);
+
+  @override
+  List<Object?> get props => [isDeleteAll];
+}
+
 class ReloadAlarmListState extends HomeState {
   final Alarm alarm;
 
@@ -41,11 +50,24 @@ class ReloadAlarmListState extends HomeState {
   List<Object?> get props => [alarm];
 }
 
-class UpdateItemForListState extends HomeState {
+class UpdateItemState extends HomeState {
+  final int index;
   final Alarm alarm;
 
-  UpdateItemForListState(this.alarm);
+  UpdateItemState(this.index, this.alarm);
 
   @override
-  List<Object?> get props => [alarm];
+  List<Object?> get props => [index, alarm];
 }
+
+class UpdateItemForListState extends HomeState {
+  final int index;
+  final Alarm alarm;
+
+  UpdateItemForListState(this.index, this.alarm);
+
+  @override
+  List<Object?> get props => [index, alarm];
+}
+
+class CancelDeleteAllItemsState extends HomeState {}

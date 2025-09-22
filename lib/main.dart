@@ -10,15 +10,15 @@ import 'core/constant/app_constant.dart';
 import 'features/home/view/home_page.dart';
 
 @pragma('vm:entry-point')
-void notificationTapBackground(NotificationResponse notificationResponse) {
+Future<void> notificationTapBackground(
+  NotificationResponse notificationResponse,
+) async {
   log(
-    'notification(${notificationResponse.id}) action tapped: '
-    '${notificationResponse.actionId} with'
-    ' payload: ${notificationResponse.payload}',
+    'Cancel alarm notification with ${notificationResponse.id} on background',
   );
-  if (notificationResponse.input?.isNotEmpty ?? false) {
-    log('notification action tapped with input: ${notificationResponse.input}');
-  }
+  AlarmLocalDB localDB = AlarmLocalDB();
+  int alarmId = notificationResponse.id ?? -1;
+  await localDB.updateAlarmStatus(alarmId, false);
 }
 
 Future<void> main() async {

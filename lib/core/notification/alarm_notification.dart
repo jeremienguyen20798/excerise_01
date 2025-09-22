@@ -7,7 +7,6 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import '../../main.dart';
 import '../constant/app_constant.dart';
-import 'package:timezone/timezone.dart' as tz;
 
 FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
@@ -49,9 +48,9 @@ class AlarmNotification {
       initializationSettings,
       onDidReceiveNotificationResponse:
           (NotificationResponse notificationResponse) async {
-            if (notificationResponse.actionId == 'cancel') {
-              log('Cancel alarm notification');
-            }
+            log('Cancel alarm notification with ${notificationResponse.id}');
+            int alarmId = notificationResponse.id ?? -1;
+            await localDB.updateAlarmStatus(alarmId, false);
           },
       onDidReceiveBackgroundNotificationResponse: notificationTapBackground,
     );
@@ -66,23 +65,25 @@ class AlarmNotification {
           priority: Priority.high,
           playSound: true,
           sound: RawResourceAndroidNotificationSound('clock_alarm'),
+          audioAttributesUsage: AudioAttributesUsage.alarm,
           actions: [AndroidNotificationAction('cancel', 'Tắt')],
         );
     final NotificationDetails notificationDetails = NotificationDetails(
       android: androidNotificationDetails,
     );
-    final duration = alarm.getTimeAlarm().difference(DateTime.now());
+    final scheduleDateTime = alarm.getTimeAlarm();
     await flutterLocalNotificationsPlugin.zonedSchedule(
       alarm.id,
       alarm.getTime(),
       alarm.message,
-      tz.TZDateTime.now(tz.local).add(duration),
+      scheduleDateTime,
       notificationDetails,
       payload: payloadData,
       androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
       matchDateTimeComponents: alarm.repeatType == AlarmRepeatType.daily
           ? DateTimeComponents.time
-          : alarm.repeatType == AlarmRepeatType.week
+          : alarm.repeatType == AlarmRepeatType.custom ||
+                alarm.repeatType == AlarmRepeatType.mondayToFriday
           ? DateTimeComponents.dayOfWeekAndTime
           : null,
     );

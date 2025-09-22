@@ -17,24 +17,29 @@ const AlarmSchema = CollectionSchema(
   name: r'Alarm',
   id: -6172094888861729789,
   properties: {
-    r'isActive': PropertySchema(
+    r'days': PropertySchema(
       id: 0,
+      name: r'days',
+      type: IsarType.longList,
+    ),
+    r'isActive': PropertySchema(
+      id: 1,
       name: r'isActive',
       type: IsarType.bool,
     ),
     r'message': PropertySchema(
-      id: 1,
+      id: 2,
       name: r'message',
       type: IsarType.string,
     ),
     r'repeatType': PropertySchema(
-      id: 2,
+      id: 3,
       name: r'repeatType',
       type: IsarType.byte,
       enumMap: _AlarmrepeatTypeEnumValueMap,
     ),
     r'time': PropertySchema(
-      id: 3,
+      id: 4,
       name: r'time',
       type: IsarType.dateTime,
     )
@@ -83,6 +88,19 @@ const AlarmSchema = CollectionSchema(
           caseSensitive: false,
         )
       ],
+    ),
+    r'days': IndexSchema(
+      id: -8885427885754891039,
+      name: r'days',
+      unique: false,
+      replace: false,
+      properties: [
+        IndexPropertySchema(
+          name: r'days',
+          type: IndexType.value,
+          caseSensitive: false,
+        )
+      ],
     )
   },
   links: {},
@@ -100,6 +118,12 @@ int _alarmEstimateSize(
 ) {
   var bytesCount = offsets.last;
   {
+    final value = object.days;
+    if (value != null) {
+      bytesCount += 3 + value.length * 8;
+    }
+  }
+  {
     final value = object.message;
     if (value != null) {
       bytesCount += 3 + value.length * 3;
@@ -114,10 +138,11 @@ void _alarmSerialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  writer.writeBool(offsets[0], object.isActive);
-  writer.writeString(offsets[1], object.message);
-  writer.writeByte(offsets[2], object.repeatType.index);
-  writer.writeDateTime(offsets[3], object.time);
+  writer.writeLongList(offsets[0], object.days);
+  writer.writeBool(offsets[1], object.isActive);
+  writer.writeString(offsets[2], object.message);
+  writer.writeByte(offsets[3], object.repeatType.index);
+  writer.writeDateTime(offsets[4], object.time);
 }
 
 Alarm _alarmDeserialize(
@@ -127,12 +152,13 @@ Alarm _alarmDeserialize(
   Map<Type, List<int>> allOffsets,
 ) {
   final object = Alarm(
-    isActive: reader.readBoolOrNull(offsets[0]),
-    message: reader.readStringOrNull(offsets[1]),
+    days: reader.readLongList(offsets[0]),
+    isActive: reader.readBoolOrNull(offsets[1]),
+    message: reader.readStringOrNull(offsets[2]),
     repeatType:
-        _AlarmrepeatTypeValueEnumMap[reader.readByteOrNull(offsets[2])] ??
+        _AlarmrepeatTypeValueEnumMap[reader.readByteOrNull(offsets[3])] ??
             AlarmRepeatType.onlyOnce,
-    time: reader.readDateTime(offsets[3]),
+    time: reader.readDateTime(offsets[4]),
   );
   object.id = id;
   return object;
@@ -146,13 +172,15 @@ P _alarmDeserializeProp<P>(
 ) {
   switch (propertyId) {
     case 0:
-      return (reader.readBoolOrNull(offset)) as P;
+      return (reader.readLongList(offset)) as P;
     case 1:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readBoolOrNull(offset)) as P;
     case 2:
+      return (reader.readStringOrNull(offset)) as P;
+    case 3:
       return (_AlarmrepeatTypeValueEnumMap[reader.readByteOrNull(offset)] ??
           AlarmRepeatType.onlyOnce) as P;
-    case 3:
+    case 4:
       return (reader.readDateTime(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -162,13 +190,13 @@ P _alarmDeserializeProp<P>(
 const _AlarmrepeatTypeEnumValueMap = {
   'onlyOnce': 0,
   'daily': 1,
-  'week': 2,
+  'mondayToFriday': 2,
   'custom': 3,
 };
 const _AlarmrepeatTypeValueEnumMap = {
   0: AlarmRepeatType.onlyOnce,
   1: AlarmRepeatType.daily,
-  2: AlarmRepeatType.week,
+  2: AlarmRepeatType.mondayToFriday,
   3: AlarmRepeatType.custom,
 };
 
@@ -211,6 +239,14 @@ extension AlarmQueryWhereSort on QueryBuilder<Alarm, Alarm, QWhere> {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(
         const IndexWhereClause.any(indexName: r'isActive'),
+      );
+    });
+  }
+
+  QueryBuilder<Alarm, Alarm, QAfterWhere> anyDaysElement() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(
+        const IndexWhereClause.any(indexName: r'days'),
       );
     });
   }
@@ -590,9 +626,252 @@ extension AlarmQueryWhere on QueryBuilder<Alarm, Alarm, QWhereClause> {
       }
     });
   }
+
+  QueryBuilder<Alarm, Alarm, QAfterWhereClause> daysElementEqualTo(
+      int daysElement) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.equalTo(
+        indexName: r'days',
+        value: [daysElement],
+      ));
+    });
+  }
+
+  QueryBuilder<Alarm, Alarm, QAfterWhereClause> daysElementNotEqualTo(
+      int daysElement) {
+    return QueryBuilder.apply(this, (query) {
+      if (query.whereSort == Sort.asc) {
+        return query
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'days',
+              lower: [],
+              upper: [daysElement],
+              includeUpper: false,
+            ))
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'days',
+              lower: [daysElement],
+              includeLower: false,
+              upper: [],
+            ));
+      } else {
+        return query
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'days',
+              lower: [daysElement],
+              includeLower: false,
+              upper: [],
+            ))
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'days',
+              lower: [],
+              upper: [daysElement],
+              includeUpper: false,
+            ));
+      }
+    });
+  }
+
+  QueryBuilder<Alarm, Alarm, QAfterWhereClause> daysElementGreaterThan(
+    int daysElement, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.between(
+        indexName: r'days',
+        lower: [daysElement],
+        includeLower: include,
+        upper: [],
+      ));
+    });
+  }
+
+  QueryBuilder<Alarm, Alarm, QAfterWhereClause> daysElementLessThan(
+    int daysElement, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.between(
+        indexName: r'days',
+        lower: [],
+        upper: [daysElement],
+        includeUpper: include,
+      ));
+    });
+  }
+
+  QueryBuilder<Alarm, Alarm, QAfterWhereClause> daysElementBetween(
+    int lowerDaysElement,
+    int upperDaysElement, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.between(
+        indexName: r'days',
+        lower: [lowerDaysElement],
+        includeLower: includeLower,
+        upper: [upperDaysElement],
+        includeUpper: includeUpper,
+      ));
+    });
+  }
 }
 
 extension AlarmQueryFilter on QueryBuilder<Alarm, Alarm, QFilterCondition> {
+  QueryBuilder<Alarm, Alarm, QAfterFilterCondition> daysIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'days',
+      ));
+    });
+  }
+
+  QueryBuilder<Alarm, Alarm, QAfterFilterCondition> daysIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'days',
+      ));
+    });
+  }
+
+  QueryBuilder<Alarm, Alarm, QAfterFilterCondition> daysElementEqualTo(
+      int value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'days',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Alarm, Alarm, QAfterFilterCondition> daysElementGreaterThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'days',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Alarm, Alarm, QAfterFilterCondition> daysElementLessThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'days',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Alarm, Alarm, QAfterFilterCondition> daysElementBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'days',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<Alarm, Alarm, QAfterFilterCondition> daysLengthEqualTo(
+      int length) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'days',
+        length,
+        true,
+        length,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<Alarm, Alarm, QAfterFilterCondition> daysIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'days',
+        0,
+        true,
+        0,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<Alarm, Alarm, QAfterFilterCondition> daysIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'days',
+        0,
+        false,
+        999999,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<Alarm, Alarm, QAfterFilterCondition> daysLengthLessThan(
+    int length, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'days',
+        0,
+        true,
+        length,
+        include,
+      );
+    });
+  }
+
+  QueryBuilder<Alarm, Alarm, QAfterFilterCondition> daysLengthGreaterThan(
+    int length, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'days',
+        length,
+        include,
+        999999,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<Alarm, Alarm, QAfterFilterCondition> daysLengthBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'days',
+        lower,
+        includeLower,
+        upper,
+        includeUpper,
+      );
+    });
+  }
+
   QueryBuilder<Alarm, Alarm, QAfterFilterCondition> idEqualTo(Id value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
@@ -1041,6 +1320,12 @@ extension AlarmQuerySortThenBy on QueryBuilder<Alarm, Alarm, QSortThenBy> {
 }
 
 extension AlarmQueryWhereDistinct on QueryBuilder<Alarm, Alarm, QDistinct> {
+  QueryBuilder<Alarm, Alarm, QDistinct> distinctByDays() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'days');
+    });
+  }
+
   QueryBuilder<Alarm, Alarm, QDistinct> distinctByIsActive() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'isActive');
@@ -1071,6 +1356,12 @@ extension AlarmQueryProperty on QueryBuilder<Alarm, Alarm, QQueryProperty> {
   QueryBuilder<Alarm, int, QQueryOperations> idProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'id');
+    });
+  }
+
+  QueryBuilder<Alarm, List<int>?, QQueryOperations> daysProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'days');
     });
   }
 
