@@ -162,13 +162,13 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     emitter(CancelDeleteAllItemsState());
   }
 
-  //Yêu cầu xin quyền hiện thông báo
+  //Xử lý UI khi xin quyền hiện thông báo
   Future<void> _requestNotificationPermission(
     RequestNotificationPermissionEvent event,
     Emitter<HomeState> emitter,
   ) async {
     final result = await Permission.notification.request();
-    if (result.isDenied) {
+    if (result.isDenied || result.isPermanentlyDenied) {
       emitter(DeniedNotificationPermissionRequestState());
     }
   }

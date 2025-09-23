@@ -26,9 +26,16 @@ class AlarmBloc extends Bloc<AlarmEvent, AlarmState> {
         : defaultMessage;
     final DateTime time = event.dateTime;
     final repeatType = event.repeatType ?? AlarmRepeatType.onlyOnce;
+    final days = event.days;
     final alarm = Alarm(time: time)
       ..message = message
-      ..repeatType = repeatType;
+      ..repeatType =
+          (repeatType == AlarmRepeatType.custom &&
+              days != null &&
+              days.length == 7)
+          ? AlarmRepeatType.daily
+          : repeatType
+      ..days = days;
     await localDB.writeAlarm(alarm);
     await alarmNotification.showNotification(
       alarm,
@@ -44,12 +51,18 @@ class AlarmBloc extends Bloc<AlarmEvent, AlarmState> {
     int idAlarm = event.id;
     DateTime dateTime = event.dateTime;
     String? messageAlarm = event.message;
+    List<int>? days = event.days;
     AlarmRepeatType? alarmRepeatType = event.repeatType;
     await localDB.updateDetailAlarm(
       idAlarm: idAlarm,
       dateTime: dateTime,
       message: messageAlarm,
-      repeatType: alarmRepeatType,
+      repeatType:
+          (alarmRepeatType == AlarmRepeatType.custom &&
+              days != null &&
+              days.length == 7)
+          ? AlarmRepeatType.daily
+          : alarmRepeatType,
     );
     Alarm? alarm = await localDB.getAlarmById(idAlarm);
     if (alarm != null) {

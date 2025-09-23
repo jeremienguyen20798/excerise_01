@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:excerise_01/core/constant/app_constant.dart';
+import 'package:excerise_01/core/extensions/day_alarm_ext.dart';
 import 'package:excerise_01/core/utils/formatter.dart';
 import 'package:excerise_01/entities/alarm_repeat_type.dart';
 import 'package:isar/isar.dart';
@@ -91,6 +92,9 @@ class Alarm {
       case AlarmRepeatType.mondayToFriday:
         return defaultMondayToFridayText;
       case AlarmRepeatType.custom:
+        if (days != null) {
+          return getDays();
+        }
         return defaultCustom;
     }
   }
@@ -113,6 +117,16 @@ class Alarm {
         return Formatter.formatTime(duration);
       }
     }
+  }
+
+  String getDays() {
+    String daysStr = '';
+    if (days != null && days!.isNotEmpty) {
+      for (int day in days!) {
+        daysStr += '${day.getStr()} ';
+      }
+    }
+    return daysStr;
   }
 
   String toPayload() {

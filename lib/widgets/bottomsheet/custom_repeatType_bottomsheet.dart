@@ -3,7 +3,9 @@ import 'package:excerise_01/widgets/items/item_day.dart';
 import 'package:flutter/material.dart';
 
 class CustomRepeatTypeBottomSheet extends StatefulWidget {
-  const CustomRepeatTypeBottomSheet({super.key});
+  final List<int>? days;
+
+  const CustomRepeatTypeBottomSheet({super.key, this.days});
 
   @override
   State<CustomRepeatTypeBottomSheet> createState() =>
@@ -12,15 +14,22 @@ class CustomRepeatTypeBottomSheet extends StatefulWidget {
 
 class _CustomRepeatTypeBottomSheetState
     extends State<CustomRepeatTypeBottomSheet> {
-  List<String> days = [
-    'Thứ Hai',
-    'Thứ Ba',
-    'Thứ Tư',
-    'Thứ Năm',
-    'Thứ Sáu',
-    'Thứ Bảy',
-    'Chủ Nhật',
+  List<int> days = [
+    DateTime.monday,
+    DateTime.tuesday,
+    DateTime.wednesday,
+    DateTime.thursday,
+    DateTime.friday,
+    DateTime.saturday,
+    DateTime.sunday,
   ];
+  List<int> alarmDays = [];
+
+  @override
+  void initState() {
+    alarmDays = widget.days ?? [];
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +55,19 @@ class _CustomRepeatTypeBottomSheetState
           ),
           Expanded(
             child: ListView.builder(
-              itemBuilder: (context, index) => ItemDay(title: days[index]),
+              itemBuilder: (context, index) => ItemDay(
+                day: days[index],
+                onAddDay: (value) {
+                  setState(() {
+                    alarmDays.add(value);
+                  });
+                },
+                onRemoveDay: (value) {
+                  setState(() {
+                    alarmDays.remove(value);
+                  });
+                },
+              ),
               itemCount: days.length,
               shrinkWrap: true,
             ),
@@ -84,7 +105,9 @@ class _CustomRepeatTypeBottomSheetState
                 SizedBox(width: 12.0),
                 Expanded(
                   child: MaterialButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pop(context, alarmDays);
+                    },
                     elevation: 0.0,
                     height: 48.0,
                     shape: RoundedRectangleBorder(

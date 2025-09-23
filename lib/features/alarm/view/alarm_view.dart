@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:excerise_01/core/extensions/day_alarm_ext.dart';
 import 'package:excerise_01/core/utils/app_utils.dart';
 import 'package:excerise_01/features/alarm/bloc/alarm_bloc.dart';
 import 'package:excerise_01/features/alarm/bloc/alarm_event.dart';
@@ -23,6 +26,7 @@ class _AlarmViewState extends State<AlarmView> {
   AlarmRepeatType repeatType = AlarmRepeatType.onlyOnce;
   TextEditingController messageController = TextEditingController();
   DateTime dateTime = DateTime.now();
+  List<int>? days;
 
   @override
   void initState() {
@@ -30,6 +34,7 @@ class _AlarmViewState extends State<AlarmView> {
       repeatType = widget.alarm!.repeatType;
       dateTime = widget.alarm!.time;
       messageController.text = widget.alarm!.message ?? defaultMessage;
+      days = widget.alarm!.days;
     }
     super.initState();
   }
@@ -57,10 +62,11 @@ class _AlarmViewState extends State<AlarmView> {
                   if (widget.alarm != null) {
                     BlocProvider.of<AlarmBloc>(context).add(
                       UpdateAlarmEvent(
-                        widget.alarm!.id,
-                        dateTime,
-                        messageController.text,
-                        repeatType,
+                        id: widget.alarm!.id,
+                        dateTime: dateTime,
+                        message: messageController.text,
+                        repeatType: repeatType,
+                        days: days,
                       ),
                     );
                   } else {
@@ -69,6 +75,7 @@ class _AlarmViewState extends State<AlarmView> {
                         dateTime: dateTime,
                         repeatType: repeatType,
                         message: messageController.text,
+                        days: days,
                       ),
                     );
                   }
@@ -112,6 +119,18 @@ class _AlarmViewState extends State<AlarmView> {
                 SizedBox(height: 24.0),
                 DropdownMenu<AlarmRepeatType>(
                   width: MediaQuery.of(context).size.width,
+                  helperText:
+                      repeatType == AlarmRepeatType.custom && days != null
+                      ? 'Thời gian lặp lại: ${days!.map((item) => item.getStr())}'
+                      : null,
+                  inputDecorationTheme: InputDecorationTheme(
+                    border: OutlineInputBorder(),
+                    helperStyle: TextStyle(
+                      color: Colors.deepPurple,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 12.0,
+                    ),
+                  ),
                   label: Text(
                     titleRepeat,
                     style: TextStyle(
@@ -143,7 +162,7 @@ class _AlarmViewState extends State<AlarmView> {
                     setState(() {
                       repeatType = newValue ?? AlarmRepeatType.onlyOnce;
                       if (repeatType == AlarmRepeatType.custom) {
-                        AppUtils.showCustomRepeatTypeBottomSheet(context);
+                        _setDaysAlarmRepeat();
                       }
                     });
                   },
@@ -163,5 +182,18 @@ class _AlarmViewState extends State<AlarmView> {
         }
       },
     );
+  }
+
+  Future<void> _setDaysAlarmRepeat() async {
+    final result = await AppUtils.showCustomRepeatTypeBottomSheet(
+      context,
+      days ?? [],
+    );
+    setState(() {
+      if (result != null) {
+        days = result;
+        log('Days length: ${days?.length}');
+      }
+    });
   }
 }

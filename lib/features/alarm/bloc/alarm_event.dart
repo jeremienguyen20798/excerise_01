@@ -3,18 +3,31 @@ import 'package:excerise_01/entities/alarm_repeat_type.dart';
 abstract class AlarmEvent {}
 
 class AddAlarmEvent extends AlarmEvent {
-  final DateTime dateTime;
-  final String? message;
-  final AlarmRepeatType? repeatType;
+  DateTime dateTime;
+  String? message;
+  AlarmRepeatType? repeatType;
+  List<int>? days;
 
-  AddAlarmEvent({required this.dateTime, this.message, this.repeatType});
+  AddAlarmEvent({
+    required this.dateTime,
+    this.message,
+    this.repeatType,
+    this.days,
+  });
 }
 
 class UpdateAlarmEvent extends AlarmEvent {
   int id;
-  final DateTime dateTime;
-  final String? message;
-  final AlarmRepeatType? repeatType;
+  DateTime dateTime;
+  String? message;
+  AlarmRepeatType? repeatType;
+  List<int>? days;
 
-  UpdateAlarmEvent(this.id, this.dateTime, this.message, this.repeatType);
+  UpdateAlarmEvent({
+    required this.id,
+    required this.dateTime,
+    this.message,
+    this.repeatType,
+    this.days,
+  });
 }
