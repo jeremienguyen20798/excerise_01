@@ -169,7 +169,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   ) async {
     final result = await Permission.notification.request();
     if (result.isDenied) {
-      openAppSettings();
+      emitter(DeniedNotificationPermissionRequestState());
     }
   }
 }

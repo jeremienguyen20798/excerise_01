@@ -1,4 +1,5 @@
 import 'package:excerise_01/core/constant/app_constant.dart';
+import 'package:excerise_01/core/utils/app_utils.dart';
 import 'package:excerise_01/features/alarm/view/alarm_page.dart';
 import 'package:excerise_01/features/home/bloc/home_bloc.dart';
 import 'package:excerise_01/features/home/bloc/home_event.dart';
@@ -15,7 +16,7 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<HomeBloc, HomeState>(
+    return BlocConsumer<HomeBloc, HomeState>(
       builder: (context, state) {
         if (state is ItemAlarmLongPressState) {
           isLongPress = true;
@@ -122,6 +123,11 @@ class HomeView extends StatelessWidget {
                 ]
               : null,
         );
+      },
+      listener: (BuildContext context, HomeState state) {
+        if (state is DeniedNotificationPermissionRequestState) {
+          AppUtils.showNotificationWarningDialog(context);
+        }
       },
     );
   }
