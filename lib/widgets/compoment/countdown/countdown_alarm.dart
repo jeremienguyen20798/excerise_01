@@ -1,10 +1,7 @@
 import 'dart:async';
 
 import 'package:excerise_01/core/utils/formatter.dart';
-import 'package:excerise_01/widgets/compoment/countdown/countdown_bloc.dart';
-import 'package:excerise_01/widgets/compoment/countdown/countdown_event.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CountdownAlarm extends StatefulWidget {
   final String repeatTypeStr;
@@ -74,9 +71,6 @@ class _CountdownAlarmState extends State<CountdownAlarm> {
           countdownTimer?.cancel();
           remaining = Duration.zero;
           // 🚨 Kích hoạt báo thức ở đây
-          BlocProvider.of<CountdownAlarmBloc>(
-            context,
-          ).add(RingAlarmEvent(alarmTime!));
         }
       });
     });
