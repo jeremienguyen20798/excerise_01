@@ -6,3 +6,12 @@ abstract class CountdownAlarmState extends Equatable {
 }
 
 class InitialState extends CountdownAlarmState {}
+
+class RingAlarmState extends CountdownAlarmState {
+  final DateTime dateTime;
+
+  RingAlarmState(this.dateTime);
+
+  @override
+  List<Object?> get props => [dateTime];
+}

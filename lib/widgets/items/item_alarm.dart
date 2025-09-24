@@ -4,6 +4,7 @@ import 'package:excerise_01/entities/alarm_repeat_type.dart';
 import 'package:excerise_01/features/home/bloc/home_bloc.dart';
 import 'package:excerise_01/features/home/bloc/home_event.dart';
 import 'package:excerise_01/features/home/bloc/home_state.dart';
+import 'package:excerise_01/widgets/compoment/countdown/countdown_alarm.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -97,20 +98,9 @@ class _ItemAlarmState extends State<ItemAlarm> {
                 ],
               ),
             ),
-            subtitle: RichText(
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              text: TextSpan(
-                text: widget.alarm.getTextByRepeatType(),
-                style: TextStyle(fontSize: 14.0, color: Colors.grey),
-                children: [
-                  TextSpan(text: ' | ', style: TextStyle(fontSize: 16.0)),
-                  TextSpan(
-                    text: widget.alarm.getAlarmDistance(),
-                    style: TextStyle(fontSize: 14.0),
-                  ),
-                ],
-              ),
+            subtitle: CountdownAlarm(
+              repeatTypeStr: widget.alarm.getTextByRepeatType(),
+              dateTime: widget.alarm.time,
             ),
             trailing: isLongPress
                 ? Checkbox(

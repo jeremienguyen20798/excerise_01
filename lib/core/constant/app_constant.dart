@@ -24,3 +24,5 @@ const String permissionStr = 'Quyền ';
 const String notificationStr = 'Notification';
 const String settings = 'Cài đặt';
 const String warningContent = ' không được chấp nhận . Vì vậy, chúng tôi không đảm bảo là báo thức sẽ được hiển thị đúng với thời gian bạn đã chọn.';
+const String ringAlarm = 'Đổ chuông';
+const String cancelRing = 'Tắt';

@@ -1,9 +1,7 @@
-import 'package:excerise_01/entities/alarm.dart';
-
 abstract class CountdownAlarmEvent {}
 
-class GetComingAlarmEvent extends CountdownAlarmEvent {
-  final List<Alarm> alarms;
+class RingAlarmEvent extends CountdownAlarmEvent {
+  final DateTime dateTime;
 
-  GetComingAlarmEvent(this.alarms);
+  RingAlarmEvent(this.dateTime);
 }

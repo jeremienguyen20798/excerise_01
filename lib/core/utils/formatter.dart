@@ -12,6 +12,9 @@ class Formatter {
       }
       return 'Báo thức sau $inHours';
     } else {
+      if (inMinutes <= 0) {
+        return 'Báo thức sắp đến...';
+      }
       return 'Báo thức sau $inMinutes phút';
     }
   }

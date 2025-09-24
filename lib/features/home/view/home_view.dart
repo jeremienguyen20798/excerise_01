@@ -5,7 +5,6 @@ import 'package:excerise_01/features/home/bloc/home_bloc.dart';
 import 'package:excerise_01/features/home/bloc/home_event.dart';
 import 'package:excerise_01/features/home/bloc/home_state.dart';
 import 'package:excerise_01/widgets/compoment/alarm_list.dart';
-import 'package:excerise_01/widgets/compoment/alarm_ring_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -74,13 +73,7 @@ class HomeView extends StatelessWidget {
                   ]
                 : null,
           ),
-          body: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              AlarmRingView(),
-              Expanded(child: AlarmList()),
-            ],
-          ),
+          body: AlarmList(),
           floatingActionButton: isLongPress
               ? null
               : FloatingActionButton(
