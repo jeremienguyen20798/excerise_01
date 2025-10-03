@@ -28,8 +28,11 @@ class NotificationWarningDialog extends StatelessWidget {
       ),
       actions: [
         TextButton(
-          onPressed: () {
-            openAppSettings();
+          onPressed: () async {
+            final isOpened = await openAppSettings();
+            if(isOpened) {
+              Navigator.pop(context);
+            }
           },
           child: Text(settings),
         ),
