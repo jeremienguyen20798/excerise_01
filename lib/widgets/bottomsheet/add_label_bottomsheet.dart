@@ -1,0 +1,96 @@
+import 'package:excerise_01/core/constant/app_constant.dart';
+import 'package:flutter/material.dart';
+
+class AddLabelBottomSheet extends StatefulWidget {
+  const AddLabelBottomSheet({super.key});
+
+  @override
+  State<AddLabelBottomSheet> createState() => _AddLabelBottomSheetState();
+}
+
+class _AddLabelBottomSheetState extends State<AddLabelBottomSheet> {
+  TextEditingController labelController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: MediaQuery.of(context).size.width - 12 * 2,
+      margin: EdgeInsets.only(bottom: 12),
+      padding: EdgeInsets.all(16.0),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16.0),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            addAlarmLabel,
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 18.0,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          SizedBox(height: 24.0),
+          TextField(
+            controller: labelController,
+            decoration: InputDecoration(
+              hintText: labelInput,
+              border: OutlineInputBorder(),
+            ),
+          ),
+          SizedBox(height: 24.0),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Expanded(
+                child: MaterialButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  height: 48.0,
+                  elevation: 0.0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16.0),
+                  ),
+                  color: Colors.grey.shade100,
+                  child: Text(
+                    cancel,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(width: 12.0),
+              Expanded(
+                child: MaterialButton(
+                  onPressed: () {
+                    Navigator.pop(context, labelController.text);
+                  },
+                  height: 48.0,
+                  elevation: 0.0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16.0),
+                  ),
+                  color: Colors.deepPurple,
+                  child: Text(
+                    add,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
