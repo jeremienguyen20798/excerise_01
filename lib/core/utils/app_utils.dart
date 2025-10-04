@@ -1,4 +1,5 @@
 import 'package:excerise_01/entities/alarm.dart';
+import 'package:excerise_01/widgets/bottomsheet/add_label_bottomsheet.dart';
 import 'package:excerise_01/widgets/bottomsheet/custom_repeatType_bottomsheet.dart';
 import 'package:excerise_01/widgets/bottomsheet/cancel_alarm_bottomsheet.dart';
 import 'package:excerise_01/widgets/dialogs/edit_alarm_dialog.dart';
@@ -56,5 +57,21 @@ class AppUtils {
 
   static void showNotificationWarningDialog(BuildContext context) {
     showDialog(context: context, builder: (_) => NotificationWarningDialog());
+  }
+
+  static void showAddLabelBottomSheet(
+    BuildContext context,
+    Function(String) onAdd,
+  ) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
+      builder: (_) => AddLabelBottomSheet(),
+    ).then((value) {
+      if (value != null) {
+        onAdd(value);
+      }
+    });
   }
 }
