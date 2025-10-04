@@ -1,4 +1,3 @@
-import 'package:excerise_01/core/extensions/cancel_alarm_str.dart';
 import 'package:excerise_01/entities/alarm.dart';
 import 'package:flutter/material.dart';
 
@@ -14,14 +13,6 @@ class CancelAlarmBottomSheet extends StatefulWidget {
 class _CancelAlarmBottomSheetState extends State<CancelAlarmBottomSheet> {
   final now = DateTime.now();
   String titleOption = '';
-
-  @override
-  void initState() {
-    final dateTime = widget.alarm.time;
-    final difference = dateTime.difference(now);
-    titleOption = difference.getTitleOption();
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {

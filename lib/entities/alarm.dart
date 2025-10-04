@@ -95,7 +95,7 @@ class Alarm {
         if (days != null) {
           return getDays();
         }
-        return defaultCustom;
+        return defaultCustomText;
     }
   }
 
