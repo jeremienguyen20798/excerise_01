@@ -4,14 +4,16 @@ import 'package:excerise_01/widgets/items/item_repeat.dart';
 import 'package:flutter/material.dart';
 
 class RepeatPage extends StatefulWidget {
-  const RepeatPage({super.key});
+  final AlarmRepeatType? alarmRepeatType;
+
+  const RepeatPage({super.key, required this.alarmRepeatType});
 
   @override
   State<RepeatPage> createState() => _RepeatPageState();
 }
 
 class _RepeatPageState extends State<RepeatPage> {
-  AlarmRepeatType alarmRepeatType = AlarmRepeatType.onlyOnce;
+  AlarmRepeatType? _alarmRepeatType;
 
   List<AlarmRepeatType> alarmRepeatTypes = [
     AlarmRepeatType.onlyOnce,
@@ -19,6 +21,12 @@ class _RepeatPageState extends State<RepeatPage> {
     AlarmRepeatType.mondayToFriday,
     AlarmRepeatType.custom,
   ];
+
+  @override
+  void initState() {
+    _alarmRepeatType = widget.alarmRepeatType ?? AlarmRepeatType.onlyOnce;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +37,7 @@ class _RepeatPageState extends State<RepeatPage> {
         automaticallyImplyLeading: false,
         leading: IconButton(
           onPressed: () {
-            Navigator.pop(context, alarmRepeatType);
+            Navigator.pop(context, _alarmRepeatType);
           },
           icon: Icon(Icons.arrow_back),
         ),
@@ -51,10 +59,10 @@ class _RepeatPageState extends State<RepeatPage> {
         itemBuilder: (BuildContext context, int index) {
           return ItemRepeat(
             alarmRepeatType: alarmRepeatTypes[index],
-            isItemSelected: alarmRepeatType == alarmRepeatTypes[index],
+            isItemSelected: _alarmRepeatType == alarmRepeatTypes[index],
             onClick: (repeatType) {
               setState(() {
-                alarmRepeatType = repeatType;
+                _alarmRepeatType = repeatType;
               });
             },
           );
