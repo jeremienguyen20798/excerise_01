@@ -1,6 +1,5 @@
 import 'package:excerise_01/core/utils/app_utils.dart';
-import 'package:excerise_01/entities/alarm.dart';
-import 'package:excerise_01/entities/alarm_repeat_type.dart';
+import 'package:excerise_01/domain/entities/alarm_entity.dart';
 import 'package:excerise_01/features/home/bloc/home_bloc.dart';
 import 'package:excerise_01/features/home/bloc/home_event.dart';
 import 'package:excerise_01/features/home/bloc/home_state.dart';
@@ -8,11 +7,13 @@ import 'package:excerise_01/widgets/compoment/countdown/countdown_alarm.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../domain/entities/alarm_repeat_type.dart';
+
 import '../../core/constant/app_constant.dart';
 
 class ItemAlarm extends StatefulWidget {
   final int index;
-  final Alarm alarm;
+  final AlarmEntity alarm;
 
   const ItemAlarm({super.key, required this.index, required this.alarm});
 
@@ -113,7 +114,7 @@ class _ItemAlarmState extends State<ItemAlarm> {
                         if (value == true) {
                           BlocProvider.of<HomeBloc>(
                             context,
-                          ).add(AddItemForDeleteEvent(widget.alarm.id));
+                          ).add(AddItemForDeleteEvent(widget.alarm.alarmId));
                         }
                       });
                     },
@@ -128,7 +129,7 @@ class _ItemAlarmState extends State<ItemAlarm> {
                           BlocProvider.of<HomeBloc>(context).add(
                             UpdateAlarmStatusEvent(
                               null,
-                              widget.alarm.id,
+                              widget.alarm.alarmId,
                               isActive,
                             ),
                           );
@@ -140,7 +141,7 @@ class _ItemAlarmState extends State<ItemAlarm> {
                               BlocProvider.of<HomeBloc>(context).add(
                                 UpdateAlarmStatusEvent(
                                   option,
-                                  widget.alarm.id,
+                                  widget.alarm.alarmId,
                                   isActive,
                                 ),
                               );

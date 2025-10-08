@@ -1,4 +1,4 @@
-import 'package:excerise_01/entities/alarm.dart';
+import 'package:excerise_01/domain/entities/alarm_entity.dart';
 
 abstract class HomeEvent {}
 
@@ -37,7 +37,7 @@ class UpdateAlarmEvent extends HomeEvent {
 }
 
 class OnReloadAlarmListEvent extends HomeEvent {
-  Alarm alarm;
+  AlarmEntity alarm;
 
   OnReloadAlarmListEvent(this.alarm);
 }
@@ -45,7 +45,7 @@ class OnReloadAlarmListEvent extends HomeEvent {
 class UpdateItemForListEvent extends HomeEvent {
   //Vi tri index can update du lieu
   int index;
-  Alarm alarm;
+  AlarmEntity alarm;
 
   UpdateItemForListEvent(this.index, this.alarm);
 }

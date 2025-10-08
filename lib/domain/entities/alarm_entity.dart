@@ -3,37 +3,20 @@ import 'dart:convert';
 import 'package:excerise_01/core/constant/app_constant.dart';
 import 'package:excerise_01/core/extensions/day_alarm_ext.dart';
 import 'package:excerise_01/core/utils/formatter.dart';
-import 'package:excerise_01/entities/alarm_repeat_type.dart';
-import 'package:isar/isar.dart';
 import 'package:timezone/timezone.dart' as tz;
 
-part 'alarm.g.dart';
+import 'alarm_repeat_type.dart';
 
-@collection
-class Alarm {
-  Id id = Isar.autoIncrement;
-
-  //Tin nhan bao thuc
-  @Index(type: IndexType.value)
+class AlarmEntity {
+  int alarmId;
   String? message;
-
-  //Thoi gian bao thuc
-  @Index(type: IndexType.value)
   DateTime time;
-
-  //Che do lap lai bao thuc
-  @enumerated
   AlarmRepeatType repeatType;
-
-  //Trang thai bao thuc
-  @Index(type: IndexType.value)
   bool? isActive;
-
-  //Danh sach cac ngay bao thuc
-  @Index(type: IndexType.value)
   List<int>? days;
 
-  Alarm({
+  AlarmEntity({
+    required this.alarmId,
     this.message = defaultMessage,
     required this.time,
     this.repeatType = AlarmRepeatType.onlyOnce,

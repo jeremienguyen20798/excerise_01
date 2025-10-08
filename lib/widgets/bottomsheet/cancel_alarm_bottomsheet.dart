@@ -1,8 +1,10 @@
+import 'package:excerise_01/core/extensions/cancel_alarm_str.dart';
+import 'package:excerise_01/domain/entities/alarm_entity.dart';
 import 'package:excerise_01/entities/alarm.dart';
 import 'package:flutter/material.dart';
 
 class CancelAlarmBottomSheet extends StatefulWidget {
-  final Alarm alarm;
+  final AlarmEntity alarm;
 
   const CancelAlarmBottomSheet({super.key, required this.alarm});
 

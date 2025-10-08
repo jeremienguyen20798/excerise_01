@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:excerise_01/core/extensions/alarm_repeat_ext.dart';
 import 'package:excerise_01/core/utils/app_utils.dart';
+import 'package:excerise_01/domain/entities/alarm_entity.dart';
 import 'package:excerise_01/features/alarm/bloc/alarm_bloc.dart';
 import 'package:excerise_01/features/alarm/bloc/alarm_event.dart';
 import 'package:excerise_01/features/alarm/bloc/alarm_state.dart';
@@ -11,11 +12,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/constant/app_constant.dart';
-import '../../../entities/alarm.dart';
-import '../../../entities/alarm_repeat_type.dart';
+import '../../../domain/entities/alarm_repeat_type.dart';
 
 class AlarmView extends StatefulWidget {
-  final Alarm? alarm;
+  final AlarmEntity? alarm;
 
   const AlarmView({super.key, this.alarm});
 
@@ -72,7 +72,7 @@ class _AlarmViewState extends State<AlarmView> {
                   if (widget.alarm != null) {
                     BlocProvider.of<AlarmBloc>(context).add(
                       UpdateAlarmEvent(
-                        id: widget.alarm!.id,
+                        id: widget.alarm!.alarmId,
                         dateTime: dateTime,
                         message: labelStr,
                         repeatType: repeatType,
