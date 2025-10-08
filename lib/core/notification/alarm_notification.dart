@@ -1,17 +1,17 @@
 import 'dart:developer';
 
-import 'package:excerise_01/core/local_db/alarm_local_db.dart';
-import 'package:excerise_01/entities/alarm.dart';
-import 'package:excerise_01/entities/alarm_repeat_type.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
+import '../../data/local_db/alarm_local_db.dart';
+import '../../domain/entities/alarm_entity.dart';
+import '../../domain/entities/alarm_repeat_type.dart';
 import '../../main.dart';
 import '../constant/app_constant.dart';
 
 FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 
-AlarmLocalDB localDB = AlarmLocalDB();
+AlarmLocalDB _localDB = AlarmLocalDB();
 
 class AlarmNotification {
   AndroidInitializationSettings initializationSettingsAndroid =
@@ -50,13 +50,13 @@ class AlarmNotification {
           (NotificationResponse notificationResponse) async {
             log('Cancel alarm notification with ${notificationResponse.id}');
             int alarmId = notificationResponse.id ?? -1;
-            await localDB.updateAlarmStatus(alarmId, false);
+            await _localDB.updateAlarmStatus(alarmId, false);
           },
       onDidReceiveBackgroundNotificationResponse: notificationTapBackground,
     );
   }
 
-  Future<void> showNotification(Alarm alarm, {String? payloadData}) async {
+  Future<void> showNotification(AlarmEntity alarm, {String? payloadData}) async {
     AndroidNotificationDetails androidNotificationDetails =
         AndroidNotificationDetails(
           'channelId',
@@ -73,7 +73,7 @@ class AlarmNotification {
     );
     final scheduleDateTime = alarm.getTimeAlarm();
     await flutterLocalNotificationsPlugin.zonedSchedule(
-      alarm.id,
+      alarm.alarmId,
       alarm.getTime(),
       alarm.message,
       scheduleDateTime,

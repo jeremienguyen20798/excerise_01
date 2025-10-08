@@ -1,4 +1,4 @@
-import 'package:excerise_01/entities/alarm_repeat_type.dart';
+import '../../../domain/entities/alarm_repeat_type.dart';
 
 abstract class AlarmEvent {}
 

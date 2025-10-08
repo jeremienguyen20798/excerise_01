@@ -1,13 +1,13 @@
+import 'package:excerise_01/domain/entities/alarm_entity.dart';
 import 'package:excerise_01/features/alarm/bloc/alarm_bloc.dart';
 import 'package:excerise_01/features/alarm/view/alarm_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../entities/alarm.dart';
 
 class AlarmPage extends StatelessWidget {
-  final Alarm? alarm;
+  final AlarmEntity? alarm;
 
   const AlarmPage({super.key, this.alarm});
 

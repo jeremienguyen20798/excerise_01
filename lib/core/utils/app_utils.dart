@@ -1,22 +1,23 @@
-import 'package:excerise_01/entities/alarm.dart';
 import 'package:excerise_01/widgets/bottomsheet/custom_repeatType_bottomsheet.dart';
 import 'package:excerise_01/widgets/bottomsheet/cancel_alarm_bottomsheet.dart';
 import 'package:excerise_01/widgets/dialogs/edit_alarm_dialog.dart';
 import 'package:excerise_01/widgets/dialogs/notification_warning_dialog.dart';
 import 'package:flutter/material.dart';
 
+import '../../domain/entities/alarm_entity.dart';
+
 class AppUtils {
   static void showEditAlarmDialog(
     BuildContext context,
-    Alarm alarm,
+    AlarmEntity alarm,
     Function(dynamic) onConfirm,
-    Function(Alarm) onUpdate,
+    Function(AlarmEntity) onUpdate,
   ) {
     showDialog(
       context: context,
       builder: (_) => EditAlarmDialog(alarm: alarm),
     ).then((value) {
-      if (value != null && value is Alarm) {
+      if (value != null && value is AlarmEntity) {
         onUpdate(value);
       } else if (value != null) {
         onConfirm(value);
@@ -39,7 +40,7 @@ class AppUtils {
 
   static void showCancelAlarmBottomSheet(
     BuildContext context,
-    Alarm alarm,
+    AlarmEntity alarm,
     Function(String) onChanged,
   ) {
     showModalBottomSheet(

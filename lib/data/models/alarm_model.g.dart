@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'alarm.dart';
+part of 'alarm_model.dart';
 
 // **************************************************************************
 // IsarCollectionGenerator
@@ -9,13 +9,13 @@ part of 'alarm.dart';
 // coverage:ignore-file
 // ignore_for_file: duplicate_ignore, non_constant_identifier_names, constant_identifier_names, invalid_use_of_protected_member, unnecessary_cast, prefer_const_constructors, lines_longer_than_80_chars, require_trailing_commas, inference_failure_on_function_invocation, unnecessary_parenthesis, unnecessary_raw_strings, unnecessary_null_checks, join_return_with_assignment, prefer_final_locals, avoid_js_rounded_ints, avoid_positional_boolean_parameters, always_specify_types
 
-extension GetAlarmCollection on Isar {
-  IsarCollection<Alarm> get alarms => this.collection();
+extension GetAlarmModelCollection on Isar {
+  IsarCollection<AlarmModel> get alarmModels => this.collection();
 }
 
-const AlarmSchema = CollectionSchema(
-  name: r'Alarm',
-  id: -6172094888861729789,
+const AlarmModelSchema = CollectionSchema(
+  name: r'AlarmModel',
+  id: 1796575337475990193,
   properties: {
     r'days': PropertySchema(
       id: 0,
@@ -36,7 +36,7 @@ const AlarmSchema = CollectionSchema(
       id: 3,
       name: r'repeatType',
       type: IsarType.byte,
-      enumMap: _AlarmrepeatTypeEnumValueMap,
+      enumMap: _AlarmModelrepeatTypeEnumValueMap,
     ),
     r'time': PropertySchema(
       id: 4,
@@ -44,10 +44,10 @@ const AlarmSchema = CollectionSchema(
       type: IsarType.dateTime,
     )
   },
-  estimateSize: _alarmEstimateSize,
-  serialize: _alarmSerialize,
-  deserialize: _alarmDeserialize,
-  deserializeProp: _alarmDeserializeProp,
+  estimateSize: _alarmModelEstimateSize,
+  serialize: _alarmModelSerialize,
+  deserialize: _alarmModelDeserialize,
+  deserializeProp: _alarmModelDeserializeProp,
   idName: r'id',
   indexes: {
     r'message': IndexSchema(
@@ -105,14 +105,14 @@ const AlarmSchema = CollectionSchema(
   },
   links: {},
   embeddedSchemas: {},
-  getId: _alarmGetId,
-  getLinks: _alarmGetLinks,
-  attach: _alarmAttach,
+  getId: _alarmModelGetId,
+  getLinks: _alarmModelGetLinks,
+  attach: _alarmModelAttach,
   version: '3.1.0+1',
 );
 
-int _alarmEstimateSize(
-  Alarm object,
+int _alarmModelEstimateSize(
+  AlarmModel object,
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
@@ -132,8 +132,8 @@ int _alarmEstimateSize(
   return bytesCount;
 }
 
-void _alarmSerialize(
-  Alarm object,
+void _alarmModelSerialize(
+  AlarmModel object,
   IsarWriter writer,
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
@@ -145,18 +145,18 @@ void _alarmSerialize(
   writer.writeDateTime(offsets[4], object.time);
 }
 
-Alarm _alarmDeserialize(
+AlarmModel _alarmModelDeserialize(
   Id id,
   IsarReader reader,
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  final object = Alarm(
+  final object = AlarmModel(
     days: reader.readLongList(offsets[0]),
     isActive: reader.readBoolOrNull(offsets[1]),
     message: reader.readStringOrNull(offsets[2]),
     repeatType:
-        _AlarmrepeatTypeValueEnumMap[reader.readByteOrNull(offsets[3])] ??
+        _AlarmModelrepeatTypeValueEnumMap[reader.readByteOrNull(offsets[3])] ??
             AlarmRepeatType.onlyOnce,
     time: reader.readDateTime(offsets[4]),
   );
@@ -164,7 +164,7 @@ Alarm _alarmDeserialize(
   return object;
 }
 
-P _alarmDeserializeProp<P>(
+P _alarmModelDeserializeProp<P>(
   IsarReader reader,
   int propertyId,
   int offset,
@@ -178,7 +178,8 @@ P _alarmDeserializeProp<P>(
     case 2:
       return (reader.readStringOrNull(offset)) as P;
     case 3:
-      return (_AlarmrepeatTypeValueEnumMap[reader.readByteOrNull(offset)] ??
+      return (_AlarmModelrepeatTypeValueEnumMap[
+              reader.readByteOrNull(offset)] ??
           AlarmRepeatType.onlyOnce) as P;
     case 4:
       return (reader.readDateTime(offset)) as P;
@@ -187,39 +188,40 @@ P _alarmDeserializeProp<P>(
   }
 }
 
-const _AlarmrepeatTypeEnumValueMap = {
+const _AlarmModelrepeatTypeEnumValueMap = {
   'onlyOnce': 0,
   'daily': 1,
   'mondayToFriday': 2,
   'custom': 3,
 };
-const _AlarmrepeatTypeValueEnumMap = {
+const _AlarmModelrepeatTypeValueEnumMap = {
   0: AlarmRepeatType.onlyOnce,
   1: AlarmRepeatType.daily,
   2: AlarmRepeatType.mondayToFriday,
   3: AlarmRepeatType.custom,
 };
 
-Id _alarmGetId(Alarm object) {
+Id _alarmModelGetId(AlarmModel object) {
   return object.id;
 }
 
-List<IsarLinkBase<dynamic>> _alarmGetLinks(Alarm object) {
+List<IsarLinkBase<dynamic>> _alarmModelGetLinks(AlarmModel object) {
   return [];
 }
 
-void _alarmAttach(IsarCollection<dynamic> col, Id id, Alarm object) {
+void _alarmModelAttach(IsarCollection<dynamic> col, Id id, AlarmModel object) {
   object.id = id;
 }
 
-extension AlarmQueryWhereSort on QueryBuilder<Alarm, Alarm, QWhere> {
-  QueryBuilder<Alarm, Alarm, QAfterWhere> anyId() {
+extension AlarmModelQueryWhereSort
+    on QueryBuilder<AlarmModel, AlarmModel, QWhere> {
+  QueryBuilder<AlarmModel, AlarmModel, QAfterWhere> anyId() {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(const IdWhereClause.any());
     });
   }
 
-  QueryBuilder<Alarm, Alarm, QAfterWhere> anyMessage() {
+  QueryBuilder<AlarmModel, AlarmModel, QAfterWhere> anyMessage() {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(
         const IndexWhereClause.any(indexName: r'message'),
@@ -227,7 +229,7 @@ extension AlarmQueryWhereSort on QueryBuilder<Alarm, Alarm, QWhere> {
     });
   }
 
-  QueryBuilder<Alarm, Alarm, QAfterWhere> anyTime() {
+  QueryBuilder<AlarmModel, AlarmModel, QAfterWhere> anyTime() {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(
         const IndexWhereClause.any(indexName: r'time'),
@@ -235,7 +237,7 @@ extension AlarmQueryWhereSort on QueryBuilder<Alarm, Alarm, QWhere> {
     });
   }
 
-  QueryBuilder<Alarm, Alarm, QAfterWhere> anyIsActive() {
+  QueryBuilder<AlarmModel, AlarmModel, QAfterWhere> anyIsActive() {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(
         const IndexWhereClause.any(indexName: r'isActive'),
@@ -243,7 +245,7 @@ extension AlarmQueryWhereSort on QueryBuilder<Alarm, Alarm, QWhere> {
     });
   }
 
-  QueryBuilder<Alarm, Alarm, QAfterWhere> anyDaysElement() {
+  QueryBuilder<AlarmModel, AlarmModel, QAfterWhere> anyDaysElement() {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(
         const IndexWhereClause.any(indexName: r'days'),
@@ -252,8 +254,9 @@ extension AlarmQueryWhereSort on QueryBuilder<Alarm, Alarm, QWhere> {
   }
 }
 
-extension AlarmQueryWhere on QueryBuilder<Alarm, Alarm, QWhereClause> {
-  QueryBuilder<Alarm, Alarm, QAfterWhereClause> idEqualTo(Id id) {
+extension AlarmModelQueryWhere
+    on QueryBuilder<AlarmModel, AlarmModel, QWhereClause> {
+  QueryBuilder<AlarmModel, AlarmModel, QAfterWhereClause> idEqualTo(Id id) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(IdWhereClause.between(
         lower: id,
@@ -262,7 +265,7 @@ extension AlarmQueryWhere on QueryBuilder<Alarm, Alarm, QWhereClause> {
     });
   }
 
-  QueryBuilder<Alarm, Alarm, QAfterWhereClause> idNotEqualTo(Id id) {
+  QueryBuilder<AlarmModel, AlarmModel, QAfterWhereClause> idNotEqualTo(Id id) {
     return QueryBuilder.apply(this, (query) {
       if (query.whereSort == Sort.asc) {
         return query
@@ -284,7 +287,7 @@ extension AlarmQueryWhere on QueryBuilder<Alarm, Alarm, QWhereClause> {
     });
   }
 
-  QueryBuilder<Alarm, Alarm, QAfterWhereClause> idGreaterThan(Id id,
+  QueryBuilder<AlarmModel, AlarmModel, QAfterWhereClause> idGreaterThan(Id id,
       {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(
@@ -293,7 +296,7 @@ extension AlarmQueryWhere on QueryBuilder<Alarm, Alarm, QWhereClause> {
     });
   }
 
-  QueryBuilder<Alarm, Alarm, QAfterWhereClause> idLessThan(Id id,
+  QueryBuilder<AlarmModel, AlarmModel, QAfterWhereClause> idLessThan(Id id,
       {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(
@@ -302,7 +305,7 @@ extension AlarmQueryWhere on QueryBuilder<Alarm, Alarm, QWhereClause> {
     });
   }
 
-  QueryBuilder<Alarm, Alarm, QAfterWhereClause> idBetween(
+  QueryBuilder<AlarmModel, AlarmModel, QAfterWhereClause> idBetween(
     Id lowerId,
     Id upperId, {
     bool includeLower = true,
@@ -318,7 +321,7 @@ extension AlarmQueryWhere on QueryBuilder<Alarm, Alarm, QWhereClause> {
     });
   }
 
-  QueryBuilder<Alarm, Alarm, QAfterWhereClause> messageIsNull() {
+  QueryBuilder<AlarmModel, AlarmModel, QAfterWhereClause> messageIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(IndexWhereClause.equalTo(
         indexName: r'message',
@@ -327,7 +330,7 @@ extension AlarmQueryWhere on QueryBuilder<Alarm, Alarm, QWhereClause> {
     });
   }
 
-  QueryBuilder<Alarm, Alarm, QAfterWhereClause> messageIsNotNull() {
+  QueryBuilder<AlarmModel, AlarmModel, QAfterWhereClause> messageIsNotNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(IndexWhereClause.between(
         indexName: r'message',
@@ -338,7 +341,7 @@ extension AlarmQueryWhere on QueryBuilder<Alarm, Alarm, QWhereClause> {
     });
   }
 
-  QueryBuilder<Alarm, Alarm, QAfterWhereClause> messageEqualTo(
+  QueryBuilder<AlarmModel, AlarmModel, QAfterWhereClause> messageEqualTo(
       String? message) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(IndexWhereClause.equalTo(
@@ -348,7 +351,7 @@ extension AlarmQueryWhere on QueryBuilder<Alarm, Alarm, QWhereClause> {
     });
   }
 
-  QueryBuilder<Alarm, Alarm, QAfterWhereClause> messageNotEqualTo(
+  QueryBuilder<AlarmModel, AlarmModel, QAfterWhereClause> messageNotEqualTo(
       String? message) {
     return QueryBuilder.apply(this, (query) {
       if (query.whereSort == Sort.asc) {
@@ -383,7 +386,7 @@ extension AlarmQueryWhere on QueryBuilder<Alarm, Alarm, QWhereClause> {
     });
   }
 
-  QueryBuilder<Alarm, Alarm, QAfterWhereClause> messageGreaterThan(
+  QueryBuilder<AlarmModel, AlarmModel, QAfterWhereClause> messageGreaterThan(
     String? message, {
     bool include = false,
   }) {
@@ -397,7 +400,7 @@ extension AlarmQueryWhere on QueryBuilder<Alarm, Alarm, QWhereClause> {
     });
   }
 
-  QueryBuilder<Alarm, Alarm, QAfterWhereClause> messageLessThan(
+  QueryBuilder<AlarmModel, AlarmModel, QAfterWhereClause> messageLessThan(
     String? message, {
     bool include = false,
   }) {
@@ -411,7 +414,7 @@ extension AlarmQueryWhere on QueryBuilder<Alarm, Alarm, QWhereClause> {
     });
   }
 
-  QueryBuilder<Alarm, Alarm, QAfterWhereClause> messageBetween(
+  QueryBuilder<AlarmModel, AlarmModel, QAfterWhereClause> messageBetween(
     String? lowerMessage,
     String? upperMessage, {
     bool includeLower = true,
@@ -428,7 +431,7 @@ extension AlarmQueryWhere on QueryBuilder<Alarm, Alarm, QWhereClause> {
     });
   }
 
-  QueryBuilder<Alarm, Alarm, QAfterWhereClause> messageStartsWith(
+  QueryBuilder<AlarmModel, AlarmModel, QAfterWhereClause> messageStartsWith(
       String MessagePrefix) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(IndexWhereClause.between(
@@ -439,7 +442,7 @@ extension AlarmQueryWhere on QueryBuilder<Alarm, Alarm, QWhereClause> {
     });
   }
 
-  QueryBuilder<Alarm, Alarm, QAfterWhereClause> messageIsEmpty() {
+  QueryBuilder<AlarmModel, AlarmModel, QAfterWhereClause> messageIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(IndexWhereClause.equalTo(
         indexName: r'message',
@@ -448,7 +451,7 @@ extension AlarmQueryWhere on QueryBuilder<Alarm, Alarm, QWhereClause> {
     });
   }
 
-  QueryBuilder<Alarm, Alarm, QAfterWhereClause> messageIsNotEmpty() {
+  QueryBuilder<AlarmModel, AlarmModel, QAfterWhereClause> messageIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       if (query.whereSort == Sort.asc) {
         return query
@@ -474,7 +477,8 @@ extension AlarmQueryWhere on QueryBuilder<Alarm, Alarm, QWhereClause> {
     });
   }
 
-  QueryBuilder<Alarm, Alarm, QAfterWhereClause> timeEqualTo(DateTime time) {
+  QueryBuilder<AlarmModel, AlarmModel, QAfterWhereClause> timeEqualTo(
+      DateTime time) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(IndexWhereClause.equalTo(
         indexName: r'time',
@@ -483,7 +487,8 @@ extension AlarmQueryWhere on QueryBuilder<Alarm, Alarm, QWhereClause> {
     });
   }
 
-  QueryBuilder<Alarm, Alarm, QAfterWhereClause> timeNotEqualTo(DateTime time) {
+  QueryBuilder<AlarmModel, AlarmModel, QAfterWhereClause> timeNotEqualTo(
+      DateTime time) {
     return QueryBuilder.apply(this, (query) {
       if (query.whereSort == Sort.asc) {
         return query
@@ -517,7 +522,7 @@ extension AlarmQueryWhere on QueryBuilder<Alarm, Alarm, QWhereClause> {
     });
   }
 
-  QueryBuilder<Alarm, Alarm, QAfterWhereClause> timeGreaterThan(
+  QueryBuilder<AlarmModel, AlarmModel, QAfterWhereClause> timeGreaterThan(
     DateTime time, {
     bool include = false,
   }) {
@@ -531,7 +536,7 @@ extension AlarmQueryWhere on QueryBuilder<Alarm, Alarm, QWhereClause> {
     });
   }
 
-  QueryBuilder<Alarm, Alarm, QAfterWhereClause> timeLessThan(
+  QueryBuilder<AlarmModel, AlarmModel, QAfterWhereClause> timeLessThan(
     DateTime time, {
     bool include = false,
   }) {
@@ -545,7 +550,7 @@ extension AlarmQueryWhere on QueryBuilder<Alarm, Alarm, QWhereClause> {
     });
   }
 
-  QueryBuilder<Alarm, Alarm, QAfterWhereClause> timeBetween(
+  QueryBuilder<AlarmModel, AlarmModel, QAfterWhereClause> timeBetween(
     DateTime lowerTime,
     DateTime upperTime, {
     bool includeLower = true,
@@ -562,7 +567,7 @@ extension AlarmQueryWhere on QueryBuilder<Alarm, Alarm, QWhereClause> {
     });
   }
 
-  QueryBuilder<Alarm, Alarm, QAfterWhereClause> isActiveIsNull() {
+  QueryBuilder<AlarmModel, AlarmModel, QAfterWhereClause> isActiveIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(IndexWhereClause.equalTo(
         indexName: r'isActive',
@@ -571,7 +576,7 @@ extension AlarmQueryWhere on QueryBuilder<Alarm, Alarm, QWhereClause> {
     });
   }
 
-  QueryBuilder<Alarm, Alarm, QAfterWhereClause> isActiveIsNotNull() {
+  QueryBuilder<AlarmModel, AlarmModel, QAfterWhereClause> isActiveIsNotNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(IndexWhereClause.between(
         indexName: r'isActive',
@@ -582,7 +587,7 @@ extension AlarmQueryWhere on QueryBuilder<Alarm, Alarm, QWhereClause> {
     });
   }
 
-  QueryBuilder<Alarm, Alarm, QAfterWhereClause> isActiveEqualTo(
+  QueryBuilder<AlarmModel, AlarmModel, QAfterWhereClause> isActiveEqualTo(
       bool? isActive) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(IndexWhereClause.equalTo(
@@ -592,7 +597,7 @@ extension AlarmQueryWhere on QueryBuilder<Alarm, Alarm, QWhereClause> {
     });
   }
 
-  QueryBuilder<Alarm, Alarm, QAfterWhereClause> isActiveNotEqualTo(
+  QueryBuilder<AlarmModel, AlarmModel, QAfterWhereClause> isActiveNotEqualTo(
       bool? isActive) {
     return QueryBuilder.apply(this, (query) {
       if (query.whereSort == Sort.asc) {
@@ -627,7 +632,7 @@ extension AlarmQueryWhere on QueryBuilder<Alarm, Alarm, QWhereClause> {
     });
   }
 
-  QueryBuilder<Alarm, Alarm, QAfterWhereClause> daysElementEqualTo(
+  QueryBuilder<AlarmModel, AlarmModel, QAfterWhereClause> daysElementEqualTo(
       int daysElement) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(IndexWhereClause.equalTo(
@@ -637,7 +642,7 @@ extension AlarmQueryWhere on QueryBuilder<Alarm, Alarm, QWhereClause> {
     });
   }
 
-  QueryBuilder<Alarm, Alarm, QAfterWhereClause> daysElementNotEqualTo(
+  QueryBuilder<AlarmModel, AlarmModel, QAfterWhereClause> daysElementNotEqualTo(
       int daysElement) {
     return QueryBuilder.apply(this, (query) {
       if (query.whereSort == Sort.asc) {
@@ -672,7 +677,8 @@ extension AlarmQueryWhere on QueryBuilder<Alarm, Alarm, QWhereClause> {
     });
   }
 
-  QueryBuilder<Alarm, Alarm, QAfterWhereClause> daysElementGreaterThan(
+  QueryBuilder<AlarmModel, AlarmModel, QAfterWhereClause>
+      daysElementGreaterThan(
     int daysElement, {
     bool include = false,
   }) {
@@ -686,7 +692,7 @@ extension AlarmQueryWhere on QueryBuilder<Alarm, Alarm, QWhereClause> {
     });
   }
 
-  QueryBuilder<Alarm, Alarm, QAfterWhereClause> daysElementLessThan(
+  QueryBuilder<AlarmModel, AlarmModel, QAfterWhereClause> daysElementLessThan(
     int daysElement, {
     bool include = false,
   }) {
@@ -700,7 +706,7 @@ extension AlarmQueryWhere on QueryBuilder<Alarm, Alarm, QWhereClause> {
     });
   }
 
-  QueryBuilder<Alarm, Alarm, QAfterWhereClause> daysElementBetween(
+  QueryBuilder<AlarmModel, AlarmModel, QAfterWhereClause> daysElementBetween(
     int lowerDaysElement,
     int upperDaysElement, {
     bool includeLower = true,
@@ -718,8 +724,9 @@ extension AlarmQueryWhere on QueryBuilder<Alarm, Alarm, QWhereClause> {
   }
 }
 
-extension AlarmQueryFilter on QueryBuilder<Alarm, Alarm, QFilterCondition> {
-  QueryBuilder<Alarm, Alarm, QAfterFilterCondition> daysIsNull() {
+extension AlarmModelQueryFilter
+    on QueryBuilder<AlarmModel, AlarmModel, QFilterCondition> {
+  QueryBuilder<AlarmModel, AlarmModel, QAfterFilterCondition> daysIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
         property: r'days',
@@ -727,7 +734,7 @@ extension AlarmQueryFilter on QueryBuilder<Alarm, Alarm, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Alarm, Alarm, QAfterFilterCondition> daysIsNotNull() {
+  QueryBuilder<AlarmModel, AlarmModel, QAfterFilterCondition> daysIsNotNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNotNull(
         property: r'days',
@@ -735,8 +742,8 @@ extension AlarmQueryFilter on QueryBuilder<Alarm, Alarm, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Alarm, Alarm, QAfterFilterCondition> daysElementEqualTo(
-      int value) {
+  QueryBuilder<AlarmModel, AlarmModel, QAfterFilterCondition>
+      daysElementEqualTo(int value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'days',
@@ -745,7 +752,8 @@ extension AlarmQueryFilter on QueryBuilder<Alarm, Alarm, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Alarm, Alarm, QAfterFilterCondition> daysElementGreaterThan(
+  QueryBuilder<AlarmModel, AlarmModel, QAfterFilterCondition>
+      daysElementGreaterThan(
     int value, {
     bool include = false,
   }) {
@@ -758,7 +766,8 @@ extension AlarmQueryFilter on QueryBuilder<Alarm, Alarm, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Alarm, Alarm, QAfterFilterCondition> daysElementLessThan(
+  QueryBuilder<AlarmModel, AlarmModel, QAfterFilterCondition>
+      daysElementLessThan(
     int value, {
     bool include = false,
   }) {
@@ -771,7 +780,8 @@ extension AlarmQueryFilter on QueryBuilder<Alarm, Alarm, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Alarm, Alarm, QAfterFilterCondition> daysElementBetween(
+  QueryBuilder<AlarmModel, AlarmModel, QAfterFilterCondition>
+      daysElementBetween(
     int lower,
     int upper, {
     bool includeLower = true,
@@ -788,7 +798,7 @@ extension AlarmQueryFilter on QueryBuilder<Alarm, Alarm, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Alarm, Alarm, QAfterFilterCondition> daysLengthEqualTo(
+  QueryBuilder<AlarmModel, AlarmModel, QAfterFilterCondition> daysLengthEqualTo(
       int length) {
     return QueryBuilder.apply(this, (query) {
       return query.listLength(
@@ -801,7 +811,7 @@ extension AlarmQueryFilter on QueryBuilder<Alarm, Alarm, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Alarm, Alarm, QAfterFilterCondition> daysIsEmpty() {
+  QueryBuilder<AlarmModel, AlarmModel, QAfterFilterCondition> daysIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.listLength(
         r'days',
@@ -813,7 +823,7 @@ extension AlarmQueryFilter on QueryBuilder<Alarm, Alarm, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Alarm, Alarm, QAfterFilterCondition> daysIsNotEmpty() {
+  QueryBuilder<AlarmModel, AlarmModel, QAfterFilterCondition> daysIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.listLength(
         r'days',
@@ -825,7 +835,8 @@ extension AlarmQueryFilter on QueryBuilder<Alarm, Alarm, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Alarm, Alarm, QAfterFilterCondition> daysLengthLessThan(
+  QueryBuilder<AlarmModel, AlarmModel, QAfterFilterCondition>
+      daysLengthLessThan(
     int length, {
     bool include = false,
   }) {
@@ -840,7 +851,8 @@ extension AlarmQueryFilter on QueryBuilder<Alarm, Alarm, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Alarm, Alarm, QAfterFilterCondition> daysLengthGreaterThan(
+  QueryBuilder<AlarmModel, AlarmModel, QAfterFilterCondition>
+      daysLengthGreaterThan(
     int length, {
     bool include = false,
   }) {
@@ -855,7 +867,7 @@ extension AlarmQueryFilter on QueryBuilder<Alarm, Alarm, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Alarm, Alarm, QAfterFilterCondition> daysLengthBetween(
+  QueryBuilder<AlarmModel, AlarmModel, QAfterFilterCondition> daysLengthBetween(
     int lower,
     int upper, {
     bool includeLower = true,
@@ -872,7 +884,8 @@ extension AlarmQueryFilter on QueryBuilder<Alarm, Alarm, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Alarm, Alarm, QAfterFilterCondition> idEqualTo(Id value) {
+  QueryBuilder<AlarmModel, AlarmModel, QAfterFilterCondition> idEqualTo(
+      Id value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'id',
@@ -881,7 +894,7 @@ extension AlarmQueryFilter on QueryBuilder<Alarm, Alarm, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Alarm, Alarm, QAfterFilterCondition> idGreaterThan(
+  QueryBuilder<AlarmModel, AlarmModel, QAfterFilterCondition> idGreaterThan(
     Id value, {
     bool include = false,
   }) {
@@ -894,7 +907,7 @@ extension AlarmQueryFilter on QueryBuilder<Alarm, Alarm, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Alarm, Alarm, QAfterFilterCondition> idLessThan(
+  QueryBuilder<AlarmModel, AlarmModel, QAfterFilterCondition> idLessThan(
     Id value, {
     bool include = false,
   }) {
@@ -907,7 +920,7 @@ extension AlarmQueryFilter on QueryBuilder<Alarm, Alarm, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Alarm, Alarm, QAfterFilterCondition> idBetween(
+  QueryBuilder<AlarmModel, AlarmModel, QAfterFilterCondition> idBetween(
     Id lower,
     Id upper, {
     bool includeLower = true,
@@ -924,7 +937,7 @@ extension AlarmQueryFilter on QueryBuilder<Alarm, Alarm, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Alarm, Alarm, QAfterFilterCondition> isActiveIsNull() {
+  QueryBuilder<AlarmModel, AlarmModel, QAfterFilterCondition> isActiveIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
         property: r'isActive',
@@ -932,7 +945,8 @@ extension AlarmQueryFilter on QueryBuilder<Alarm, Alarm, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Alarm, Alarm, QAfterFilterCondition> isActiveIsNotNull() {
+  QueryBuilder<AlarmModel, AlarmModel, QAfterFilterCondition>
+      isActiveIsNotNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNotNull(
         property: r'isActive',
@@ -940,7 +954,7 @@ extension AlarmQueryFilter on QueryBuilder<Alarm, Alarm, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Alarm, Alarm, QAfterFilterCondition> isActiveEqualTo(
+  QueryBuilder<AlarmModel, AlarmModel, QAfterFilterCondition> isActiveEqualTo(
       bool? value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
@@ -950,7 +964,7 @@ extension AlarmQueryFilter on QueryBuilder<Alarm, Alarm, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Alarm, Alarm, QAfterFilterCondition> messageIsNull() {
+  QueryBuilder<AlarmModel, AlarmModel, QAfterFilterCondition> messageIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
         property: r'message',
@@ -958,7 +972,8 @@ extension AlarmQueryFilter on QueryBuilder<Alarm, Alarm, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Alarm, Alarm, QAfterFilterCondition> messageIsNotNull() {
+  QueryBuilder<AlarmModel, AlarmModel, QAfterFilterCondition>
+      messageIsNotNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNotNull(
         property: r'message',
@@ -966,7 +981,7 @@ extension AlarmQueryFilter on QueryBuilder<Alarm, Alarm, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Alarm, Alarm, QAfterFilterCondition> messageEqualTo(
+  QueryBuilder<AlarmModel, AlarmModel, QAfterFilterCondition> messageEqualTo(
     String? value, {
     bool caseSensitive = true,
   }) {
@@ -979,7 +994,8 @@ extension AlarmQueryFilter on QueryBuilder<Alarm, Alarm, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Alarm, Alarm, QAfterFilterCondition> messageGreaterThan(
+  QueryBuilder<AlarmModel, AlarmModel, QAfterFilterCondition>
+      messageGreaterThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -994,7 +1010,7 @@ extension AlarmQueryFilter on QueryBuilder<Alarm, Alarm, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Alarm, Alarm, QAfterFilterCondition> messageLessThan(
+  QueryBuilder<AlarmModel, AlarmModel, QAfterFilterCondition> messageLessThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -1009,7 +1025,7 @@ extension AlarmQueryFilter on QueryBuilder<Alarm, Alarm, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Alarm, Alarm, QAfterFilterCondition> messageBetween(
+  QueryBuilder<AlarmModel, AlarmModel, QAfterFilterCondition> messageBetween(
     String? lower,
     String? upper, {
     bool includeLower = true,
@@ -1028,7 +1044,7 @@ extension AlarmQueryFilter on QueryBuilder<Alarm, Alarm, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Alarm, Alarm, QAfterFilterCondition> messageStartsWith(
+  QueryBuilder<AlarmModel, AlarmModel, QAfterFilterCondition> messageStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -1041,7 +1057,7 @@ extension AlarmQueryFilter on QueryBuilder<Alarm, Alarm, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Alarm, Alarm, QAfterFilterCondition> messageEndsWith(
+  QueryBuilder<AlarmModel, AlarmModel, QAfterFilterCondition> messageEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -1054,7 +1070,7 @@ extension AlarmQueryFilter on QueryBuilder<Alarm, Alarm, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Alarm, Alarm, QAfterFilterCondition> messageContains(
+  QueryBuilder<AlarmModel, AlarmModel, QAfterFilterCondition> messageContains(
       String value,
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -1066,7 +1082,7 @@ extension AlarmQueryFilter on QueryBuilder<Alarm, Alarm, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Alarm, Alarm, QAfterFilterCondition> messageMatches(
+  QueryBuilder<AlarmModel, AlarmModel, QAfterFilterCondition> messageMatches(
       String pattern,
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -1078,7 +1094,7 @@ extension AlarmQueryFilter on QueryBuilder<Alarm, Alarm, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Alarm, Alarm, QAfterFilterCondition> messageIsEmpty() {
+  QueryBuilder<AlarmModel, AlarmModel, QAfterFilterCondition> messageIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'message',
@@ -1087,7 +1103,8 @@ extension AlarmQueryFilter on QueryBuilder<Alarm, Alarm, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Alarm, Alarm, QAfterFilterCondition> messageIsNotEmpty() {
+  QueryBuilder<AlarmModel, AlarmModel, QAfterFilterCondition>
+      messageIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'message',
@@ -1096,7 +1113,7 @@ extension AlarmQueryFilter on QueryBuilder<Alarm, Alarm, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Alarm, Alarm, QAfterFilterCondition> repeatTypeEqualTo(
+  QueryBuilder<AlarmModel, AlarmModel, QAfterFilterCondition> repeatTypeEqualTo(
       AlarmRepeatType value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
@@ -1106,7 +1123,8 @@ extension AlarmQueryFilter on QueryBuilder<Alarm, Alarm, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Alarm, Alarm, QAfterFilterCondition> repeatTypeGreaterThan(
+  QueryBuilder<AlarmModel, AlarmModel, QAfterFilterCondition>
+      repeatTypeGreaterThan(
     AlarmRepeatType value, {
     bool include = false,
   }) {
@@ -1119,7 +1137,8 @@ extension AlarmQueryFilter on QueryBuilder<Alarm, Alarm, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Alarm, Alarm, QAfterFilterCondition> repeatTypeLessThan(
+  QueryBuilder<AlarmModel, AlarmModel, QAfterFilterCondition>
+      repeatTypeLessThan(
     AlarmRepeatType value, {
     bool include = false,
   }) {
@@ -1132,7 +1151,7 @@ extension AlarmQueryFilter on QueryBuilder<Alarm, Alarm, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Alarm, Alarm, QAfterFilterCondition> repeatTypeBetween(
+  QueryBuilder<AlarmModel, AlarmModel, QAfterFilterCondition> repeatTypeBetween(
     AlarmRepeatType lower,
     AlarmRepeatType upper, {
     bool includeLower = true,
@@ -1149,7 +1168,7 @@ extension AlarmQueryFilter on QueryBuilder<Alarm, Alarm, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Alarm, Alarm, QAfterFilterCondition> timeEqualTo(
+  QueryBuilder<AlarmModel, AlarmModel, QAfterFilterCondition> timeEqualTo(
       DateTime value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
@@ -1159,7 +1178,7 @@ extension AlarmQueryFilter on QueryBuilder<Alarm, Alarm, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Alarm, Alarm, QAfterFilterCondition> timeGreaterThan(
+  QueryBuilder<AlarmModel, AlarmModel, QAfterFilterCondition> timeGreaterThan(
     DateTime value, {
     bool include = false,
   }) {
@@ -1172,7 +1191,7 @@ extension AlarmQueryFilter on QueryBuilder<Alarm, Alarm, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Alarm, Alarm, QAfterFilterCondition> timeLessThan(
+  QueryBuilder<AlarmModel, AlarmModel, QAfterFilterCondition> timeLessThan(
     DateTime value, {
     bool include = false,
   }) {
@@ -1185,7 +1204,7 @@ extension AlarmQueryFilter on QueryBuilder<Alarm, Alarm, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Alarm, Alarm, QAfterFilterCondition> timeBetween(
+  QueryBuilder<AlarmModel, AlarmModel, QAfterFilterCondition> timeBetween(
     DateTime lower,
     DateTime upper, {
     bool includeLower = true,
@@ -1203,187 +1222,194 @@ extension AlarmQueryFilter on QueryBuilder<Alarm, Alarm, QFilterCondition> {
   }
 }
 
-extension AlarmQueryObject on QueryBuilder<Alarm, Alarm, QFilterCondition> {}
+extension AlarmModelQueryObject
+    on QueryBuilder<AlarmModel, AlarmModel, QFilterCondition> {}
 
-extension AlarmQueryLinks on QueryBuilder<Alarm, Alarm, QFilterCondition> {}
+extension AlarmModelQueryLinks
+    on QueryBuilder<AlarmModel, AlarmModel, QFilterCondition> {}
 
-extension AlarmQuerySortBy on QueryBuilder<Alarm, Alarm, QSortBy> {
-  QueryBuilder<Alarm, Alarm, QAfterSortBy> sortByIsActive() {
+extension AlarmModelQuerySortBy
+    on QueryBuilder<AlarmModel, AlarmModel, QSortBy> {
+  QueryBuilder<AlarmModel, AlarmModel, QAfterSortBy> sortByIsActive() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'isActive', Sort.asc);
     });
   }
 
-  QueryBuilder<Alarm, Alarm, QAfterSortBy> sortByIsActiveDesc() {
+  QueryBuilder<AlarmModel, AlarmModel, QAfterSortBy> sortByIsActiveDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'isActive', Sort.desc);
     });
   }
 
-  QueryBuilder<Alarm, Alarm, QAfterSortBy> sortByMessage() {
+  QueryBuilder<AlarmModel, AlarmModel, QAfterSortBy> sortByMessage() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'message', Sort.asc);
     });
   }
 
-  QueryBuilder<Alarm, Alarm, QAfterSortBy> sortByMessageDesc() {
+  QueryBuilder<AlarmModel, AlarmModel, QAfterSortBy> sortByMessageDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'message', Sort.desc);
     });
   }
 
-  QueryBuilder<Alarm, Alarm, QAfterSortBy> sortByRepeatType() {
+  QueryBuilder<AlarmModel, AlarmModel, QAfterSortBy> sortByRepeatType() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'repeatType', Sort.asc);
     });
   }
 
-  QueryBuilder<Alarm, Alarm, QAfterSortBy> sortByRepeatTypeDesc() {
+  QueryBuilder<AlarmModel, AlarmModel, QAfterSortBy> sortByRepeatTypeDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'repeatType', Sort.desc);
     });
   }
 
-  QueryBuilder<Alarm, Alarm, QAfterSortBy> sortByTime() {
+  QueryBuilder<AlarmModel, AlarmModel, QAfterSortBy> sortByTime() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'time', Sort.asc);
     });
   }
 
-  QueryBuilder<Alarm, Alarm, QAfterSortBy> sortByTimeDesc() {
+  QueryBuilder<AlarmModel, AlarmModel, QAfterSortBy> sortByTimeDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'time', Sort.desc);
     });
   }
 }
 
-extension AlarmQuerySortThenBy on QueryBuilder<Alarm, Alarm, QSortThenBy> {
-  QueryBuilder<Alarm, Alarm, QAfterSortBy> thenById() {
+extension AlarmModelQuerySortThenBy
+    on QueryBuilder<AlarmModel, AlarmModel, QSortThenBy> {
+  QueryBuilder<AlarmModel, AlarmModel, QAfterSortBy> thenById() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'id', Sort.asc);
     });
   }
 
-  QueryBuilder<Alarm, Alarm, QAfterSortBy> thenByIdDesc() {
+  QueryBuilder<AlarmModel, AlarmModel, QAfterSortBy> thenByIdDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'id', Sort.desc);
     });
   }
 
-  QueryBuilder<Alarm, Alarm, QAfterSortBy> thenByIsActive() {
+  QueryBuilder<AlarmModel, AlarmModel, QAfterSortBy> thenByIsActive() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'isActive', Sort.asc);
     });
   }
 
-  QueryBuilder<Alarm, Alarm, QAfterSortBy> thenByIsActiveDesc() {
+  QueryBuilder<AlarmModel, AlarmModel, QAfterSortBy> thenByIsActiveDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'isActive', Sort.desc);
     });
   }
 
-  QueryBuilder<Alarm, Alarm, QAfterSortBy> thenByMessage() {
+  QueryBuilder<AlarmModel, AlarmModel, QAfterSortBy> thenByMessage() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'message', Sort.asc);
     });
   }
 
-  QueryBuilder<Alarm, Alarm, QAfterSortBy> thenByMessageDesc() {
+  QueryBuilder<AlarmModel, AlarmModel, QAfterSortBy> thenByMessageDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'message', Sort.desc);
     });
   }
 
-  QueryBuilder<Alarm, Alarm, QAfterSortBy> thenByRepeatType() {
+  QueryBuilder<AlarmModel, AlarmModel, QAfterSortBy> thenByRepeatType() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'repeatType', Sort.asc);
     });
   }
 
-  QueryBuilder<Alarm, Alarm, QAfterSortBy> thenByRepeatTypeDesc() {
+  QueryBuilder<AlarmModel, AlarmModel, QAfterSortBy> thenByRepeatTypeDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'repeatType', Sort.desc);
     });
   }
 
-  QueryBuilder<Alarm, Alarm, QAfterSortBy> thenByTime() {
+  QueryBuilder<AlarmModel, AlarmModel, QAfterSortBy> thenByTime() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'time', Sort.asc);
     });
   }
 
-  QueryBuilder<Alarm, Alarm, QAfterSortBy> thenByTimeDesc() {
+  QueryBuilder<AlarmModel, AlarmModel, QAfterSortBy> thenByTimeDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'time', Sort.desc);
     });
   }
 }
 
-extension AlarmQueryWhereDistinct on QueryBuilder<Alarm, Alarm, QDistinct> {
-  QueryBuilder<Alarm, Alarm, QDistinct> distinctByDays() {
+extension AlarmModelQueryWhereDistinct
+    on QueryBuilder<AlarmModel, AlarmModel, QDistinct> {
+  QueryBuilder<AlarmModel, AlarmModel, QDistinct> distinctByDays() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'days');
     });
   }
 
-  QueryBuilder<Alarm, Alarm, QDistinct> distinctByIsActive() {
+  QueryBuilder<AlarmModel, AlarmModel, QDistinct> distinctByIsActive() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'isActive');
     });
   }
 
-  QueryBuilder<Alarm, Alarm, QDistinct> distinctByMessage(
+  QueryBuilder<AlarmModel, AlarmModel, QDistinct> distinctByMessage(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'message', caseSensitive: caseSensitive);
     });
   }
 
-  QueryBuilder<Alarm, Alarm, QDistinct> distinctByRepeatType() {
+  QueryBuilder<AlarmModel, AlarmModel, QDistinct> distinctByRepeatType() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'repeatType');
     });
   }
 
-  QueryBuilder<Alarm, Alarm, QDistinct> distinctByTime() {
+  QueryBuilder<AlarmModel, AlarmModel, QDistinct> distinctByTime() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'time');
     });
   }
 }
 
-extension AlarmQueryProperty on QueryBuilder<Alarm, Alarm, QQueryProperty> {
-  QueryBuilder<Alarm, int, QQueryOperations> idProperty() {
+extension AlarmModelQueryProperty
+    on QueryBuilder<AlarmModel, AlarmModel, QQueryProperty> {
+  QueryBuilder<AlarmModel, int, QQueryOperations> idProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'id');
     });
   }
 
-  QueryBuilder<Alarm, List<int>?, QQueryOperations> daysProperty() {
+  QueryBuilder<AlarmModel, List<int>?, QQueryOperations> daysProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'days');
     });
   }
 
-  QueryBuilder<Alarm, bool?, QQueryOperations> isActiveProperty() {
+  QueryBuilder<AlarmModel, bool?, QQueryOperations> isActiveProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'isActive');
     });
   }
 
-  QueryBuilder<Alarm, String?, QQueryOperations> messageProperty() {
+  QueryBuilder<AlarmModel, String?, QQueryOperations> messageProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'message');
     });
   }
 
-  QueryBuilder<Alarm, AlarmRepeatType, QQueryOperations> repeatTypeProperty() {
+  QueryBuilder<AlarmModel, AlarmRepeatType, QQueryOperations>
+      repeatTypeProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'repeatType');
     });
   }
 
-  QueryBuilder<Alarm, DateTime, QQueryOperations> timeProperty() {
+  QueryBuilder<AlarmModel, DateTime, QQueryOperations> timeProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'time');
     });

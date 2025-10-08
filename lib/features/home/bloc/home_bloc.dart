@@ -1,15 +1,12 @@
-import 'dart:developer';
-
+import 'package:excerise_01/domain/usecase/delete_alarms_usecase.dart';
+import 'package:excerise_01/domain/usecase/get_alarms_usecase.dart';
 import 'package:excerise_01/features/home/bloc/home_event.dart';
 import 'package:excerise_01/features/home/bloc/home_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:permission_handler/permission_handler.dart';
-
-import '../../../core/local_db/alarm_local_db.dart';
 import '../../../core/notification/alarm_notification.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
-  AlarmLocalDB localDB = AlarmLocalDB();
   AlarmNotification alarmNotification = AlarmNotification();
   List<int> itemDeleteIds = [];
 
@@ -33,7 +30,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     GetAlarmListEvent event,
     Emitter<HomeState> emitter,
   ) async {
-    final dataList = await localDB.getAlarms();
+    final dataList = await GetAlarmsUseCase().execute();
     emitter(GetAlarmListState(dataList));
   }
 
@@ -61,9 +58,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     DeleteAlarmEvent event,
     Emitter<HomeState> emitter,
   ) async {
-    await localDB.deleteAlarms(itemDeleteIds);
+    await DeleteAlarmsUseCase().execute(itemDeleteIds);
     await alarmNotification.cancelAllAlarmRing();
-    final dataList = await localDB.getAlarms();
+    final dataList = await GetAlarmsUseCase().execute();
     emitter(DeleteAlarmState(dataList));
   }
 
@@ -72,12 +69,12 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     DeleteAllAlarmsEvent event,
     Emitter<HomeState> emitter,
   ) async {
-    final alarms = await localDB.getAlarms();
-    if (alarms.isNotEmpty) {
-      itemDeleteIds = alarms.map((item) => item.id).toList();
-      alarmNotification.cancelAllAlarmRing();
-      emitter(DeleteAllAlarmsState(true));
-    }
+    // final alarms = await localDB.getAlarms();
+    // if (alarms.isNotEmpty) {
+    //   itemDeleteIds = alarms.map((item) => item.id).toList();
+    //   alarmNotification.cancelAllAlarmRing();
+    //   emitter(DeleteAllAlarmsState(true));
+    // }
   }
 
   //Cập nhật nhanh trạng thái của báo thức
@@ -85,32 +82,32 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     UpdateAlarmStatusEvent event,
     Emitter<HomeState> emitter,
   ) async {
-    int id = event.id;
-    bool isActive = event.isActive;
-    await localDB.updateAlarmStatus(id, isActive);
-    final alarm = await localDB.getAlarmById(id);
-    if (event.option == null) {
-      if (alarm != null) {
-        if (isActive) {
-          await alarmNotification.showNotification(alarm);
-        } else {
-          await alarmNotification.cancelAlarmRingById(id);
-        }
-      }
-    } else {
-      String cancelOption = event.option!;
-      if (cancelOption == "cancel") {
-        if (alarm != null) {
-          if (isActive) {
-            await alarmNotification.showNotification(alarm);
-          } else {
-            await alarmNotification.cancelAlarmRingById(id);
-          }
-        }
-      } else {
-        log('Tính năng đang được phát triển');
-      }
-    }
+    // int id = event.id;
+    // bool isActive = event.isActive;
+    // await localDB.updateAlarmStatus(id, isActive);
+    // final alarm = await localDB.getAlarmById(id);
+    // if (event.option == null) {
+    //   if (alarm != null) {
+    //     if (isActive) {
+    //       await alarmNotification.showNotification(alarm);
+    //     } else {
+    //       await alarmNotification.cancelAlarmRingById(id);
+    //     }
+    //   }
+    // } else {
+    //   String cancelOption = event.option!;
+    //   if (cancelOption == "cancel") {
+    //     if (alarm != null) {
+    //       if (isActive) {
+    //         await alarmNotification.showNotification(alarm);
+    //       } else {
+    //         await alarmNotification.cancelAlarmRingById(id);
+    //       }
+    //     }
+    //   } else {
+    //     log('Tính năng đang được phát triển');
+    //   }
+    // }
   }
 
   //Cập nhật nội dung chi tiết của báo thức
@@ -118,22 +115,22 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     UpdateAlarmEvent event,
     Emitter<HomeState> emitter,
   ) async {
-    final int index = event.index;
-    final data = event.data;
-    final idAlarm = data['id'];
-    final dateTime = data['dateTime'];
-    final isActive = data['isActive'];
-    log("Data update: $dateTime - $isActive");
-    await localDB.updateAlarm(idAlarm, dateTime, isActive);
-    final alarm = await localDB.getAlarmById(idAlarm);
-    if (alarm != null) {
-      if (isActive) {
-        await alarmNotification.showNotification(alarm);
-      } else {
-        await alarmNotification.cancelAlarmRingById(idAlarm);
-      }
-      emitter(UpdateItemState(index, alarm));
-    }
+    // final int index = event.index;
+    // final data = event.data;
+    // final idAlarm = data['id'];
+    // final dateTime = data['dateTime'];
+    // final isActive = data['isActive'];
+    // log("Data update: $dateTime - $isActive");
+    // await localDB.updateAlarm(idAlarm, dateTime, isActive);
+    // final alarm = await localDB.getAlarmById(idAlarm);
+    // if (alarm != null) {
+    //   if (isActive) {
+    //     await alarmNotification.showNotification(alarm);
+    //   } else {
+    //     await alarmNotification.cancelAlarmRingById(idAlarm);
+    //   }
+    //   emitter(UpdateItemState(index, alarm));
+    // }
   }
 
   //Reload danh sách báo thức khi có thêm mới item

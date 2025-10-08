@@ -1,12 +1,12 @@
 import 'package:excerise_01/core/constant/app_constant.dart';
 import 'package:excerise_01/core/utils/formatter.dart';
-import 'package:excerise_01/entities/alarm.dart';
+import 'package:excerise_01/domain/entities/alarm_entity.dart';
 import 'package:excerise_01/features/alarm/view/alarm_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class EditAlarmDialog extends StatefulWidget {
-  final Alarm alarm;
+  final AlarmEntity alarm;
 
   const EditAlarmDialog({super.key, required this.alarm});
 
@@ -116,7 +116,7 @@ class _EditAlarmDialogState extends State<EditAlarmDialog> {
               child: MaterialButton(
                 onPressed: () {
                   Navigator.pop(context, {
-                    'id': widget.alarm.id,
+                    'id': widget.alarm.alarmId,
                     "dateTime": dateTime,
                     "isActive": isActive,
                   });
@@ -143,7 +143,7 @@ class _EditAlarmDialogState extends State<EditAlarmDialog> {
     );
   }
 
-  _onBack(Alarm? alarm) {
+  _onBack(AlarmEntity? alarm) {
     if (alarm != null) {
       Navigator.pop(context, alarm);
     }
