@@ -1,6 +1,7 @@
 import 'package:excerise_01/core/extensions/alarm_repeat_ext.dart';
-import 'package:excerise_01/entities/alarm_repeat_type.dart';
 import 'package:flutter/material.dart';
+
+import '../../domain/entities/alarm_repeat_type.dart';
 
 class ItemRepeat extends StatelessWidget {
   final AlarmRepeatType alarmRepeatType;

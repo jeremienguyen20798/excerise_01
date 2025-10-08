@@ -69,11 +69,11 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     DeleteAllAlarmsEvent event,
     Emitter<HomeState> emitter,
   ) async {
-    final alarms = await localDB.getAlarms();
-    if (alarms.isNotEmpty) {
-      itemDeleteIds = alarms.map((item) => item.id).toList();
-      emitter(DeleteAllAlarmsState(true));
-    }
+    // final alarms = await localDB.getAlarms();
+    // if (alarms.isNotEmpty) {
+    //   itemDeleteIds = alarms.map((item) => item.id).toList();
+    //   emitter(DeleteAllAlarmsState(true));
+    // }
     // final alarms = await localDB.getAlarms();
     // if (alarms.isNotEmpty) {
     //   itemDeleteIds = alarms.map((item) => item.id).toList();
