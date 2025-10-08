@@ -35,14 +35,13 @@ class AlarmList extends StatelessWidget {
           alarms.insert(index, item);
         }
         return alarms.isNotEmpty
-            ? ListView.separated(
-                shrinkWrap: true,
-                itemBuilder: (context, index) {
+            ? SliverList.separated(
+                itemCount: alarms.length,
+                itemBuilder: (BuildContext context, int index) {
                   return ItemAlarm(index: index, alarm: alarms[index]);
                 },
                 separatorBuilder: (BuildContext context, int index) =>
                     SizedBox(height: 16.0),
-                itemCount: alarms.length,
               )
             : EmptyView();
       },

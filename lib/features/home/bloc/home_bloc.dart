@@ -47,6 +47,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   //Đưa mọi thứ trở về trạng thái ban đầu
   void _onRestart(OnRestartEvent event, Emitter<HomeState> emitter) {
+    itemDeleteIds = [];
     emitter(OnRestartState());
   }
 
@@ -67,7 +68,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     emitter(DeleteAlarmState(dataList));
   }
 
-  //Xoá tất cả các item alarm
+  //Add all items alarm into blacklist
   Future<void> _onDeleteAllAlarms(
     DeleteAllAlarmsEvent event,
     Emitter<HomeState> emitter,
@@ -75,7 +76,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     final alarms = await localDB.getAlarms();
     if (alarms.isNotEmpty) {
       itemDeleteIds = alarms.map((item) => item.id).toList();
-      alarmNotification.cancelAllAlarmRing();
       emitter(DeleteAllAlarmsState(true));
     }
   }
@@ -159,6 +159,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     CancelDeleteAllItemsEvent event,
     Emitter<HomeState> emitter,
   ) {
+    itemDeleteIds = [];
     emitter(CancelDeleteAllItemsState());
   }
 

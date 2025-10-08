@@ -93,7 +93,7 @@ class Alarm {
         return defaultMondayToFridayText;
       case AlarmRepeatType.custom:
         if (days != null) {
-          return getDays();
+          return _getDays();
         }
         return defaultCustomText;
     }
@@ -119,7 +119,7 @@ class Alarm {
     }
   }
 
-  String getDays() {
+  String _getDays() {
     String daysStr = '';
     if (days != null && days!.isNotEmpty) {
       for (int day in days!) {

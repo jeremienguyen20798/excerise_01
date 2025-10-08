@@ -31,29 +31,56 @@ class _EditAlarmDialogState extends State<EditAlarmDialog> {
   Widget build(BuildContext context) {
     return AlertDialog(
       backgroundColor: Colors.white,
-      insetPadding: EdgeInsets.symmetric(horizontal: 24.0),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
+      insetPadding: EdgeInsets.symmetric(horizontal: 12.0),
       title: ListTile(
         contentPadding: EdgeInsets.zero,
-        title: Text(
-          titleAlarm,
-          style: TextStyle(
-            fontSize: 28.0,
-            color: Colors.black,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        subtitle: widget.alarm.message != null
-            ? Text(
-                widget.alarm.message!,
-                maxLines: 1,
+        title: RichText(
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          text: TextSpan(
+            text: titleAlarm,
+            style: TextStyle(
+              fontSize: 28.0,
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+            ),
+            children: [
+              TextSpan(text: defaultSpace),
+              TextSpan(
+                text: widget.alarm.message!,
                 style: TextStyle(
                   fontSize: 14.0,
                   color: Colors.grey,
                   fontWeight: FontWeight.normal,
-                  overflow: TextOverflow.ellipsis,
                 ),
-              )
-            : null,
+              ),
+            ],
+          ),
+        ),
+        subtitle: RichText(
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          text: TextSpan(
+            text: widget.alarm.getTextByRepeatType(),
+            style: TextStyle(
+              fontSize: 14.0,
+              color: Colors.grey,
+              fontWeight: FontWeight.normal,
+            ),
+            children: [
+              TextSpan(text: defaultSpace1),
+              TextSpan(
+                text: widget.alarm.getAlarmDistance(),
+                style: TextStyle(
+                  fontSize: 14.0,
+                  color: Colors.grey,
+                  fontWeight: FontWeight.normal,
+                ),
+              ),
+            ],
+          ),
+        ),
         trailing: Switch(
           value: isActive,
           onChanged: (value) {
@@ -64,7 +91,7 @@ class _EditAlarmDialogState extends State<EditAlarmDialog> {
         ),
       ),
       content: SizedBox(
-        width: MediaQuery.of(context).size.width - 24 * 2,
+        width: MediaQuery.of(context).size.width - 12 * 2,
         height: 200.0,
         child: CupertinoDatePicker(
           mode: CupertinoDatePickerMode.time,
@@ -79,6 +106,7 @@ class _EditAlarmDialogState extends State<EditAlarmDialog> {
           },
         ),
       ),
+      actionsPadding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 24.0),
       actions: [
         Row(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -147,5 +175,6 @@ class _EditAlarmDialogState extends State<EditAlarmDialog> {
     if (alarm != null) {
       Navigator.pop(context, alarm);
     }
+    Navigator.pop(context);
   }
 }

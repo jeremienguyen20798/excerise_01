@@ -6,8 +6,8 @@ const String defaultEmptyText = 'Không có báo thức nào ở đây';
 const String defaultSubEmptyText =
     '"Kỷ luật là cây cầu nối giữa mục tiêu và thành tựu."';
 const String chooseItem = 'Chọn mục';
-const String confirmText = 'Xác nhận';
-const String advanceText = 'Nâng cao';
+const String confirmText = 'Hoàn tất';
+const String advanceText = 'Cài đặt bổ sung';
 const String deleteText = 'Xoá';
 const String titleAddAlarm = 'Thêm báo thức';
 const String labelAlarm = 'Báo thức';
@@ -31,6 +31,8 @@ const String label = 'Nhãn';
 const String labelInput = 'Nhập nhãn';
 const String addAlarmLabel = 'Thêm nhãn báo thức';
 const String add = 'Đặt';
+const String defaultSpace = ' ';
+const String defaultSpace1 = ' | ';
 
 //Default Alarm Repeat Type Text
 const String defaultOnlyOnceText = 'Một lần';
