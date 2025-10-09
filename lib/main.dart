@@ -4,7 +4,6 @@ import 'package:excerise_01/core/notification/alarm_notification.dart';
 import 'package:excerise_01/di.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:timezone/data/latest.dart' as tz;
 
 import 'core/constant/app_constant.dart';
 import 'data/local_db/alarm_local_db.dart';
@@ -24,10 +23,7 @@ Future<void> notificationTapBackground(
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await AlarmNotification().notificationInitial();
-  tz.initializeTimeZones();
-  await AlarmLocalDB().initDatabase();
-  DependencyInjection.setUp();
+  await DependencyInjection.setUp();
   runApp(const MyApp());
 }
 

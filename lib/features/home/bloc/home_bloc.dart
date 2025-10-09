@@ -7,8 +7,8 @@ import 'package:permission_handler/permission_handler.dart';
 import '../../../core/notification/alarm_notification.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
-  AlarmNotification alarmNotification = AlarmNotification();
-  List<int> itemDeleteIds = [];
+  final AlarmNotification _alarmNotification = AlarmNotification();
+  List<int> _itemDeleteIds = [];
 
   HomeBloc() : super(InitHomeState()) {
     on<ItemAlarmLongPressEvent>(_onLongPressItem);
@@ -44,12 +44,13 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   //Đưa mọi thứ trở về trạng thái ban đầu
   void _onRestart(OnRestartEvent event, Emitter<HomeState> emitter) {
+    _itemDeleteIds = [];
     emitter(OnRestartState());
   }
 
   //Them các item vào danh sách để xoá
   void _addItemDelete(AddItemForDeleteEvent event, Emitter<HomeState> emitter) {
-    itemDeleteIds.add(event.id);
+    _itemDeleteIds.add(event.id);
     emitter(AddItemForDeleteState());
   }
 
@@ -58,8 +59,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     DeleteAlarmEvent event,
     Emitter<HomeState> emitter,
   ) async {
-    await DeleteAlarmsUseCase().execute(itemDeleteIds);
-    await alarmNotification.cancelAllAlarmRing();
+    await DeleteAlarmsUseCase().execute(_itemDeleteIds);
+    await _alarmNotification.cancelAllAlarmRing();
     final dataList = await GetAlarmsUseCase().execute();
     emitter(DeleteAlarmState(dataList));
   }
@@ -69,17 +70,11 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     DeleteAllAlarmsEvent event,
     Emitter<HomeState> emitter,
   ) async {
-    // final alarms = await localDB.getAlarms();
-    // if (alarms.isNotEmpty) {
-    //   itemDeleteIds = alarms.map((item) => item.id).toList();
-    //   emitter(DeleteAllAlarmsState(true));
-    // }
-    // final alarms = await localDB.getAlarms();
-    // if (alarms.isNotEmpty) {
-    //   itemDeleteIds = alarms.map((item) => item.id).toList();
-    //   alarmNotification.cancelAllAlarmRing();
-    //   emitter(DeleteAllAlarmsState(true));
-    // }
+    final alarms = await GetAlarmsUseCase().execute();
+    if (alarms.isNotEmpty) {
+      _itemDeleteIds = alarms.map((item) => item.alarmId ?? 0).toList();
+      emitter(DeleteAllAlarmsState(true));
+    }
   }
 
   //Cập nhật nhanh trạng thái của báo thức
@@ -152,7 +147,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     Emitter<HomeState> emitter,
   ) async {
     final int index = event.index;
-    await alarmNotification.showNotification(event.alarm);
+    await _alarmNotification.showNotification(event.alarm);
     emitter(UpdateItemForListState(index, event.alarm));
   }
 
@@ -161,7 +156,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     CancelDeleteAllItemsEvent event,
     Emitter<HomeState> emitter,
   ) {
-    itemDeleteIds = [];
+    _itemDeleteIds = [];
     emitter(CancelDeleteAllItemsState());
   }
 
