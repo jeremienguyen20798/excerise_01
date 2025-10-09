@@ -20,14 +20,14 @@ class UpdateAlarmEvent extends AlarmEvent {
   int id;
   DateTime dateTime;
   String? message;
-  AlarmRepeatType? repeatType;
+  AlarmRepeatType repeatType;
   List<int>? days;
 
   UpdateAlarmEvent({
     required this.id,
     required this.dateTime,
     this.message,
-    this.repeatType,
+    required this.repeatType,
     this.days,
   });
 }

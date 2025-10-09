@@ -56,7 +56,10 @@ class AlarmNotification {
     );
   }
 
-  Future<void> showNotification(AlarmEntity alarm, {String? payloadData}) async {
+  Future<void> showNotification(
+    AlarmEntity alarm, {
+    String? payloadData,
+  }) async {
     AndroidNotificationDetails androidNotificationDetails =
         AndroidNotificationDetails(
           'channelId',
@@ -73,7 +76,7 @@ class AlarmNotification {
     );
     final scheduleDateTime = alarm.getTimeAlarm();
     await flutterLocalNotificationsPlugin.zonedSchedule(
-      alarm.alarmId,
+      alarm.alarmId ?? 0,
       alarm.getTime(),
       alarm.message,
       scheduleDateTime,

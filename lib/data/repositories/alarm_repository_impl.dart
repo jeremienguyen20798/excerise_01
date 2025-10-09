@@ -3,12 +3,15 @@ import 'package:excerise_01/data/models/alarm_model.dart';
 import 'package:excerise_01/domain/entities/alarm_entity.dart';
 import 'package:excerise_01/domain/repository/alarm_repository.dart';
 
+import '../../domain/entities/alarm_repeat_type.dart';
+
 class AlarmRepositoryImpl extends AlarmRepository {
   final AlarmLocalDB _localDB = AlarmLocalDB();
 
   @override
-  Future<void> createAlarm(AlarmModel model) async {
-    await _localDB.writeAlarm(model);
+  Future<AlarmEntity?> createAlarm(AlarmModel model) async {
+    final alarmModel = await _localDB.writeAlarm(model);
+    return alarmModel?.toEntity();
   }
 
   @override
@@ -44,5 +47,22 @@ class AlarmRepositoryImpl extends AlarmRepository {
   @override
   Future<void> updateAlarm(int id, DateTime dateTime, bool isActive) async {
     await _localDB.updateAlarm(id, dateTime, isActive);
+  }
+
+  @override
+  Future<AlarmEntity?> updateDetailAlarm(
+    int id, {
+    required DateTime dateTime,
+    String? message,
+    AlarmRepeatType? repeatType,
+    List<int>? days,
+  }) async {
+    final model = await _localDB.updateDetailAlarm(
+      idAlarm: id,
+      dateTime: dateTime,
+      message: message,
+      repeatType: repeatType,
+    );
+    return model?.toEntity();
   }
 }

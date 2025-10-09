@@ -25,12 +25,14 @@ class AlarmLocalDB {
     return Future.value(Isar.getInstance());
   }
 
-  Future<void> writeAlarm(AlarmModel alarm) async {
+  Future<AlarmModel?> writeAlarm(AlarmModel alarm) async {
     final isar = await localDb;
-    isar.writeTxnSync(() {
+    final result = isar.writeTxnSync(() {
       Id? id = isar.alarmModels.putSync(alarm);
       log('Create alarm successfully with: $id');
+      return isar.alarmModels.getSync(id);
     });
+    return result;
   }
 
   Future<void> updateAlarmStatus(int idAlarm, bool? status) async {
@@ -59,7 +61,7 @@ class AlarmLocalDB {
     }
   }
 
-  Future<void> updateDetailAlarm({
+  Future<AlarmModel?> updateDetailAlarm({
     required int idAlarm,
     DateTime? dateTime,
     String? message,
@@ -72,11 +74,14 @@ class AlarmLocalDB {
         ..time = dateTime ?? DateTime.now()
         ..message = message
         ..repeatType = repeatType ?? AlarmRepeatType.onlyOnce;
-      isar.writeTxnSync(() {
-        isar.alarmModels.putSync(alarm);
+      final result = isar.writeTxnSync(() {
+        int id = isar.alarmModels.putSync(alarm);
         log('Update alarm successfully');
+        return isar.alarmModels.getSync(id);
       });
+      return result;
     }
+    return null;
   }
 
   Future<AlarmModel?> getAlarmById(int id) async {

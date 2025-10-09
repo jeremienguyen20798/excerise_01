@@ -31,6 +31,7 @@ class _AlarmViewState extends State<AlarmView> {
   @override
   void initState() {
     if (widget.alarm != null) {
+      log('Alarm with ${widget.alarm!.alarmId}');
       repeatType = widget.alarm!.repeatType;
       dateTime = widget.alarm!.time;
       labelStr = widget.alarm!.message ?? labelInput;

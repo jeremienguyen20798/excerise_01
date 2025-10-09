@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:excerise_01/core/constant/app_constant.dart';
 import 'package:excerise_01/core/extensions/day_alarm_ext.dart';
 import 'package:excerise_01/core/utils/formatter.dart';
+import 'package:excerise_01/data/models/alarm_model.dart';
 import 'package:timezone/timezone.dart' as tz;
 
 import 'alarm_repeat_type.dart';
@@ -121,5 +122,15 @@ class AlarmEntity {
       'days': days?.map((item) => item.toString()).toList(),
     };
     return jsonEncode(data);
+  }
+
+  AlarmModel toModel() {
+    return AlarmModel(
+      time: time,
+      message: message,
+      repeatType: repeatType,
+      isActive: isActive,
+      days: days,
+    );
   }
 }

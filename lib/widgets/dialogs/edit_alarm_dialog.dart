@@ -174,7 +174,8 @@ class _EditAlarmDialogState extends State<EditAlarmDialog> {
   _onBack(AlarmEntity? alarm) {
     if (alarm != null) {
       Navigator.pop(context, alarm);
+    } else {
+      Navigator.pop(context);
     }
-    Navigator.pop(context);
   }
 }

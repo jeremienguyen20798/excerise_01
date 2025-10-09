@@ -1,8 +1,10 @@
 import 'package:excerise_01/data/models/alarm_model.dart';
 import 'package:excerise_01/domain/entities/alarm_entity.dart';
 
+import '../entities/alarm_repeat_type.dart';
+
 abstract class AlarmRepository {
-  Future<void> createAlarm(AlarmModel model);
+  Future<AlarmEntity?> createAlarm(AlarmModel model);
 
   Future<List<AlarmEntity>> getAlarms();
 
@@ -15,4 +17,12 @@ abstract class AlarmRepository {
   Future<void> updateAlarmStatus(int id, bool isActive);
 
   Future<void> updateAlarm(int id, DateTime dateTime, bool isActive);
+
+  Future<AlarmEntity?> updateDetailAlarm(
+    int id, {
+    required DateTime dateTime,
+    String? message,
+    AlarmRepeatType? repeatType,
+    List<int>? days,
+  });
 }
