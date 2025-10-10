@@ -25,3 +25,12 @@ class UpdateAlarmState extends AlarmState {
   @override
   List<Object?> get props => [alarm];
 }
+
+class DateTimeChangedState extends AlarmState {
+  final DateTime dateTime;
+
+  DateTimeChangedState(this.dateTime);
+
+  @override
+  List<Object?> get props => [dateTime];
+}

@@ -7,6 +7,7 @@ import 'package:excerise_01/features/alarm/bloc/alarm_bloc.dart';
 import 'package:excerise_01/features/alarm/bloc/alarm_event.dart';
 import 'package:excerise_01/features/alarm/bloc/alarm_state.dart';
 import 'package:excerise_01/features/repeat/repeat_page.dart';
+import 'package:excerise_01/widgets/compoment/countdown/countdown_alarm.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -26,7 +27,7 @@ class AlarmView extends StatefulWidget {
 class _AlarmViewState extends State<AlarmView> {
   AlarmRepeatType repeatType = AlarmRepeatType.onlyOnce;
   DateTime dateTime = DateTime.now();
-  String labelStr = labelInput;
+  String labelStr = labelInput, titleAlarm = titleAddAlarm;
 
   @override
   void initState() {
@@ -35,6 +36,7 @@ class _AlarmViewState extends State<AlarmView> {
       repeatType = widget.alarm!.repeatType;
       dateTime = widget.alarm!.time;
       labelStr = widget.alarm!.message ?? labelInput;
+      titleAlarm = titleEditAlarm;
     }
     super.initState();
   }
@@ -43,6 +45,9 @@ class _AlarmViewState extends State<AlarmView> {
   Widget build(BuildContext context) {
     return BlocConsumer<AlarmBloc, AlarmState>(
       builder: (context, state) {
+        if (state is DateTimeChangedState) {
+          dateTime = state.dateTime;
+        }
         return Scaffold(
           appBar: AppBar(
             leading: IconButton(
@@ -53,7 +58,7 @@ class _AlarmViewState extends State<AlarmView> {
             ),
             centerTitle: true,
             title: Text(
-              titleAddAlarm,
+              titleAlarm,
               style: TextStyle(
                 fontSize: 18.0,
                 color: Colors.black,
@@ -62,10 +67,7 @@ class _AlarmViewState extends State<AlarmView> {
             ),
             bottom: PreferredSize(
               preferredSize: Size.fromHeight(kTextHeightNone),
-              child: Text(
-                'Báo thức sau 23 giờ 59 phút',
-                style: TextStyle(fontSize: 16.0, color: Colors.black),
-              ),
+              child: CountdownAlarm(dateTime: dateTime),
             ),
             actions: [
               IconButton(
@@ -107,9 +109,9 @@ class _AlarmViewState extends State<AlarmView> {
                     itemExtent: kToolbarHeight,
                     initialDateTime: dateTime,
                     onDateTimeChanged: (value) {
-                      setState(() {
-                        dateTime = value;
-                      });
+                      BlocProvider.of<AlarmBloc>(
+                        context,
+                      ).add(OnDateTimeChangedEvent(value));
                     },
                     use24hFormat: true,
                     selectionOverlayBuilder:

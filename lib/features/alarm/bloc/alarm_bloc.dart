@@ -14,6 +14,7 @@ class AlarmBloc extends Bloc<AlarmEvent, AlarmState> {
   AlarmBloc() : super(InitAlarmState()) {
     on<AddAlarmEvent>(_addAlarm);
     on<UpdateAlarmEvent>(_updateAlarm);
+    on<OnDateTimeChangedEvent>(_onDateTimeChanged);
   }
 
   Future<void> _addAlarm(
@@ -64,5 +65,9 @@ class AlarmBloc extends Bloc<AlarmEvent, AlarmState> {
       );
       emitter(UpdateAlarmState(alarmEntity));
     }
+  }
+
+  void _onDateTimeChanged(OnDateTimeChangedEvent event, Emitter<AlarmState> emitter) {
+    emitter(DateTimeChangedState(event.dateTime));
   }
 }

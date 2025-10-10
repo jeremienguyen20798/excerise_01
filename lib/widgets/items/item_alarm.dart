@@ -112,9 +112,9 @@ class _ItemAlarmState extends State<ItemAlarm> {
                       setState(() {
                         isChoose = value ?? false;
                         if (value == true) {
-                          BlocProvider.of<HomeBloc>(context).add(
-                            AddItemForDeleteEvent(widget.alarm.alarmId ?? 0),
-                          );
+                          BlocProvider.of<HomeBloc>(
+                            context,
+                          ).add(AddItemForDeleteEvent(widget.alarm.alarmId));
                         }
                       });
                     },
@@ -129,7 +129,7 @@ class _ItemAlarmState extends State<ItemAlarm> {
                           BlocProvider.of<HomeBloc>(context).add(
                             UpdateAlarmStatusEvent(
                               null,
-                              widget.alarm.alarmId ?? 0,
+                              widget.alarm.alarmId,
                               isActive,
                             ),
                           );
@@ -141,7 +141,7 @@ class _ItemAlarmState extends State<ItemAlarm> {
                               BlocProvider.of<HomeBloc>(context).add(
                                 UpdateAlarmStatusEvent(
                                   option,
-                                  widget.alarm.alarmId ?? 0,
+                                  widget.alarm.alarmId,
                                   isActive,
                                 ),
                               );

@@ -31,3 +31,9 @@ class UpdateAlarmEvent extends AlarmEvent {
     this.days,
   });
 }
+
+class OnDateTimeChangedEvent extends AlarmEvent {
+  final DateTime dateTime;
+
+  OnDateTimeChangedEvent(this.dateTime);
+}

@@ -10,6 +10,7 @@ const String confirmText = 'Hoàn tất';
 const String advanceText = 'Cài đặt bổ sung';
 const String deleteText = 'Xoá';
 const String titleAddAlarm = 'Thêm báo thức';
+const String titleEditAlarm = 'Sửa báo thức';
 const String labelAlarm = 'Báo thức';
 const String contentAlarmHintText = 'Nội dung báo thức';
 const String customText = 'Tuỳ chỉnh';

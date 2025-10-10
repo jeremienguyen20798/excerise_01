@@ -2,6 +2,7 @@ import 'package:excerise_01/core/constant/app_constant.dart';
 import 'package:excerise_01/core/utils/formatter.dart';
 import 'package:excerise_01/domain/entities/alarm_entity.dart';
 import 'package:excerise_01/features/alarm/view/alarm_page.dart';
+import 'package:excerise_01/widgets/compoment/countdown/countdown_alarm.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -58,28 +59,9 @@ class _EditAlarmDialogState extends State<EditAlarmDialog> {
             ],
           ),
         ),
-        subtitle: RichText(
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          text: TextSpan(
-            text: widget.alarm.getTextByRepeatType(),
-            style: TextStyle(
-              fontSize: 14.0,
-              color: Colors.grey,
-              fontWeight: FontWeight.normal,
-            ),
-            children: [
-              TextSpan(text: defaultSpace1),
-              TextSpan(
-                text: widget.alarm.getAlarmDistance(),
-                style: TextStyle(
-                  fontSize: 14.0,
-                  color: Colors.grey,
-                  fontWeight: FontWeight.normal,
-                ),
-              ),
-            ],
-          ),
+        subtitle: CountdownAlarm(
+          dateTime: dateTime,
+          repeatTypeStr: widget.alarm.getTextByRepeatType(),
         ),
         trailing: Switch(
           value: isActive,
