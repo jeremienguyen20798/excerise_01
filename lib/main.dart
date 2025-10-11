@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:excerise_01/core/notification/alarm_notification.dart';
 import 'package:excerise_01/di.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';

@@ -14,9 +14,9 @@ abstract class AlarmRepository {
 
   Future<void> deleteAllAlarms(List<int> ids);
 
-  Future<void> updateAlarmStatus(int id, bool isActive);
+  Future<AlarmEntity?> updateAlarmStatus(int id, bool isActive);
 
-  Future<void> updateAlarm(int id, DateTime dateTime, bool isActive);
+  Future<AlarmEntity?> updateAlarm(int id, DateTime dateTime, bool isActive);
 
   Future<AlarmEntity?> updateDetailAlarm(
     int id, {

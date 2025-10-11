@@ -29,6 +29,10 @@ class AlarmEntity {
     return Formatter.formatTimeStr(time);
   }
 
+  String getTitle() {
+    return '$defaultTitle ${getTime()}';
+  }
+
   tz.TZDateTime getTimeAlarm() {
     switch (repeatType) {
       case AlarmRepeatType.mondayToFriday:

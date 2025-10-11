@@ -35,30 +35,40 @@ class AlarmLocalDB {
     return result;
   }
 
-  Future<void> updateAlarmStatus(int idAlarm, bool? status) async {
+  Future<AlarmModel?> updateAlarmStatus(int idAlarm, bool? status) async {
     final isar = await localDb;
     AlarmModel? alarm = await getAlarmById(idAlarm);
     if (alarm != null) {
       alarm.isActive = status;
-      isar.writeTxnSync(() {
+      final result = isar.writeTxnSync(() {
         Id? id = isar.alarmModels.putSync(alarm);
         log('Update alarm status successfully with Id: $id - status: $status');
+        return isar.alarmModels.getSync(id);
       });
+      return result;
     }
+    return null;
   }
 
-  Future<void> updateAlarm(int idAlarm, DateTime dateTime, bool? status) async {
+  Future<AlarmModel?> updateAlarm(
+    int idAlarm,
+    DateTime dateTime,
+    bool? status,
+  ) async {
     final isar = await localDb;
     AlarmModel? alarm = await getAlarmById(idAlarm);
     if (alarm != null) {
       alarm
         ..time = dateTime
         ..isActive = status;
-      isar.writeTxnSync(() {
-        isar.alarmModels.putSync(alarm);
+      final result = isar.writeTxnSync(() {
+        int id = isar.alarmModels.putSync(alarm);
         log('Update alarm successfully');
+        return isar.alarmModels.getSync(id);
       });
+      return result;
     }
+    return null;
   }
 
   Future<AlarmModel?> updateDetailAlarm({

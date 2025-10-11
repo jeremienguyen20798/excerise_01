@@ -101,10 +101,15 @@ class _ItemAlarmState extends State<ItemAlarm> {
                 ],
               ),
             ),
-            subtitle: CountdownAlarm(
-              repeatTypeStr: widget.alarm.getTextByRepeatType(),
-              dateTime: widget.alarm.time,
-            ),
+            subtitle: !isActive
+                ? Text(
+                    widget.alarm.getTextByRepeatType(),
+                    style: TextStyle(fontSize: 14.0, color: Colors.grey),
+                  )
+                : CountdownAlarm(
+                    repeatTypeStr: widget.alarm.getTextByRepeatType(),
+                    dateTime: widget.alarm.time,
+                  ),
             trailing: isLongPress
                 ? Checkbox(
                     value: isChoose,

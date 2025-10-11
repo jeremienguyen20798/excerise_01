@@ -1,10 +1,14 @@
+import 'dart:developer';
+
 import 'package:excerise_01/domain/usecase/delete_alarms_usecase.dart';
 import 'package:excerise_01/domain/usecase/get_alarms_usecase.dart';
+import 'package:excerise_01/domain/usecase/update_alarm_status_usecase.dart';
 import 'package:excerise_01/features/home/bloc/home_event.dart';
 import 'package:excerise_01/features/home/bloc/home_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:permission_handler/permission_handler.dart';
 import '../../../core/notification/alarm_notification.dart';
+import '../../../domain/usecase/update_alarm_usecase.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final AlarmNotification _alarmNotification = AlarmNotification();
@@ -72,7 +76,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   ) async {
     final alarms = await GetAlarmsUseCase().execute();
     if (alarms.isNotEmpty) {
-      _itemDeleteIds = alarms.map((item) => item.alarmId ?? 0).toList();
+      _itemDeleteIds = alarms.map((item) => item.alarmId).toList();
       emitter(DeleteAllAlarmsState(true));
     }
   }
@@ -82,16 +86,15 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     UpdateAlarmStatusEvent event,
     Emitter<HomeState> emitter,
   ) async {
-    // int id = event.id;
-    // bool isActive = event.isActive;
-    // await localDB.updateAlarmStatus(id, isActive);
-    // final alarm = await localDB.getAlarmById(id);
+    int id = event.id;
+    bool isActive = event.isActive;
+    UpdateAlarmStatusUseCase().execute(id, isActive);
     // if (event.option == null) {
     //   if (alarm != null) {
     //     if (isActive) {
-    //       await alarmNotification.showNotification(alarm);
+    //       await _alarmNotification.showNotification(alarm);
     //     } else {
-    //       await alarmNotification.cancelAlarmRingById(id);
+    //       await _alarmNotification.cancelAlarmRingById(id);
     //     }
     //   }
     // } else {
@@ -99,9 +102,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     //   if (cancelOption == "cancel") {
     //     if (alarm != null) {
     //       if (isActive) {
-    //         await alarmNotification.showNotification(alarm);
+    //         await _alarmNotification.showNotification(alarm);
     //       } else {
-    //         await alarmNotification.cancelAlarmRingById(id);
+    //         await _alarmNotification.cancelAlarmRingById(id);
     //       }
     //     }
     //   } else {
@@ -115,22 +118,25 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     UpdateAlarmEvent event,
     Emitter<HomeState> emitter,
   ) async {
-    // final int index = event.index;
-    // final data = event.data;
-    // final idAlarm = data['id'];
-    // final dateTime = data['dateTime'];
-    // final isActive = data['isActive'];
-    // log("Data update: $dateTime - $isActive");
-    // await localDB.updateAlarm(idAlarm, dateTime, isActive);
-    // final alarm = await localDB.getAlarmById(idAlarm);
-    // if (alarm != null) {
-    //   if (isActive) {
-    //     await alarmNotification.showNotification(alarm);
-    //   } else {
-    //     await alarmNotification.cancelAlarmRingById(idAlarm);
-    //   }
-    //   emitter(UpdateItemState(index, alarm));
-    // }
+    final int index = event.index;
+    final data = event.data;
+    final idAlarm = data['id'];
+    final dateTime = data['dateTime'];
+    final isActive = data['isActive'];
+    log("Data update: $dateTime - $isActive");
+    final alarm = await UpdateAlarmUseCase().execute(
+      idAlarm,
+      dateTime: dateTime,
+      isActive: isActive,
+    );
+    if (alarm != null) {
+      if (isActive) {
+        await _alarmNotification.showNotification(alarm);
+      } else {
+        await _alarmNotification.cancelAlarmRingById(idAlarm);
+      }
+      emitter(UpdateItemState(index, alarm));
+    }
   }
 
   //Reload danh sách báo thức khi có thêm mới item

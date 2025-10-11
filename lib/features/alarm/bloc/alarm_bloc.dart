@@ -1,6 +1,6 @@
 import 'package:excerise_01/core/constant/app_constant.dart';
 import 'package:excerise_01/domain/usecase/add_alarm_usecase.dart';
-import 'package:excerise_01/domain/usecase/update_alarm_usecase.dart';
+import 'package:excerise_01/domain/usecase/update_detail_alarm_usecase.dart';
 import 'package:excerise_01/features/alarm/bloc/alarm_event.dart';
 import 'package:excerise_01/features/alarm/bloc/alarm_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -51,7 +51,7 @@ class AlarmBloc extends Bloc<AlarmEvent, AlarmState> {
     String? messageAlarm = event.message;
     List<int>? days = event.days;
     AlarmRepeatType alarmRepeatType = event.repeatType;
-    final alarmEntity = await UpdateAlarmUseCase().execute(
+    final alarmEntity = await UpdateDetailAlarmUseCase().execute(
       idAlarm,
       dateTime: dateTime,
       message: messageAlarm,

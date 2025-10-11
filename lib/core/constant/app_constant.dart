@@ -34,6 +34,7 @@ const String addAlarmLabel = 'Thêm nhãn báo thức';
 const String add = 'Đặt';
 const String defaultSpace = ' ';
 const String defaultSpace1 = ' | ';
+const String defaultTitle = 'Báo thức đến lúc';
 
 //Default Alarm Repeat Type Text
 const String defaultOnlyOnceText = 'Một lần';
