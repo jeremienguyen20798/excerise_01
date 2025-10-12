@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:excerise_01/core/utils/formatter.dart';
 import 'package:flutter/material.dart';
@@ -69,7 +70,9 @@ class _CountdownAlarmState extends State<CountdownAlarm> {
 
   void startCountDown(DateTime dateTime) {
     if (dateTime.isBefore(DateTime.now())) {
-      dateTime = dateTime.add(Duration(days: 1));
+      int days = DateTime.now().difference(dateTime).inDays;
+      log('Days: ${days + 1}');
+      dateTime = dateTime.add(Duration(days: days + 1));
     }
     setState(() {
       remaining = dateTime.difference(DateTime.now());
