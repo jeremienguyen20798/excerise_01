@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:excerise_01/entities/alarm.dart';
+import 'package:excerise_01/domain/entities/alarm_entity.dart';
 
 abstract class HomeState extends Equatable {
   @override
@@ -9,7 +9,7 @@ abstract class HomeState extends Equatable {
 class InitHomeState extends HomeState {}
 
 class GetAlarmListState extends HomeState {
-  final List<Alarm> alarms;
+  final List<AlarmEntity> alarms;
 
   GetAlarmListState(this.alarms);
 
@@ -24,7 +24,7 @@ class OnRestartState extends HomeState {}
 class AddItemForDeleteState extends HomeState {}
 
 class DeleteAlarmState extends HomeState {
-  final List<Alarm> alarms;
+  final List<AlarmEntity> alarms;
 
   DeleteAlarmState(this.alarms);
 
@@ -42,7 +42,7 @@ class DeleteAllAlarmsState extends HomeState {
 }
 
 class ReloadAlarmListState extends HomeState {
-  final Alarm alarm;
+  final AlarmEntity alarm;
 
   ReloadAlarmListState(this.alarm);
 
@@ -52,7 +52,7 @@ class ReloadAlarmListState extends HomeState {
 
 class UpdateItemState extends HomeState {
   final int index;
-  final Alarm alarm;
+  final AlarmEntity alarm;
 
   UpdateItemState(this.index, this.alarm);
 
@@ -62,7 +62,7 @@ class UpdateItemState extends HomeState {
 
 class UpdateItemForListState extends HomeState {
   final int index;
-  final Alarm alarm;
+  final AlarmEntity alarm;
 
   UpdateItemForListState(this.index, this.alarm);
 

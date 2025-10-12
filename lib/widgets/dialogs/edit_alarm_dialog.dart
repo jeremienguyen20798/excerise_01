@@ -1,12 +1,13 @@
 import 'package:excerise_01/core/constant/app_constant.dart';
 import 'package:excerise_01/core/utils/formatter.dart';
-import 'package:excerise_01/entities/alarm.dart';
+import 'package:excerise_01/domain/entities/alarm_entity.dart';
 import 'package:excerise_01/features/alarm/view/alarm_page.dart';
+import 'package:excerise_01/widgets/compoment/countdown/countdown_alarm.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class EditAlarmDialog extends StatefulWidget {
-  final Alarm alarm;
+  final AlarmEntity alarm;
 
   const EditAlarmDialog({super.key, required this.alarm});
 
@@ -31,29 +32,37 @@ class _EditAlarmDialogState extends State<EditAlarmDialog> {
   Widget build(BuildContext context) {
     return AlertDialog(
       backgroundColor: Colors.white,
-      insetPadding: EdgeInsets.symmetric(horizontal: 24.0),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
+      insetPadding: EdgeInsets.symmetric(horizontal: 12.0),
       title: ListTile(
         contentPadding: EdgeInsets.zero,
-        title: Text(
-          titleAlarm,
-          style: TextStyle(
-            fontSize: 28.0,
-            color: Colors.black,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        subtitle: widget.alarm.message != null
-            ? Text(
-                widget.alarm.message!,
-                maxLines: 1,
+        title: RichText(
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          text: TextSpan(
+            text: titleAlarm,
+            style: TextStyle(
+              fontSize: 28.0,
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+            ),
+            children: [
+              TextSpan(text: defaultSpace),
+              TextSpan(
+                text: widget.alarm.message!,
                 style: TextStyle(
                   fontSize: 14.0,
                   color: Colors.grey,
                   fontWeight: FontWeight.normal,
-                  overflow: TextOverflow.ellipsis,
                 ),
-              )
-            : null,
+              ),
+            ],
+          ),
+        ),
+        subtitle: CountdownAlarm(
+          dateTime: dateTime,
+          repeatTypeStr: widget.alarm.getTextByRepeatType(),
+        ),
         trailing: Switch(
           value: isActive,
           onChanged: (value) {
@@ -64,7 +73,7 @@ class _EditAlarmDialogState extends State<EditAlarmDialog> {
         ),
       ),
       content: SizedBox(
-        width: MediaQuery.of(context).size.width - 24 * 2,
+        width: MediaQuery.of(context).size.width - 12 * 2,
         height: 200.0,
         child: CupertinoDatePicker(
           mode: CupertinoDatePickerMode.time,
@@ -79,6 +88,7 @@ class _EditAlarmDialogState extends State<EditAlarmDialog> {
           },
         ),
       ),
+      actionsPadding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 24.0),
       actions: [
         Row(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -116,7 +126,7 @@ class _EditAlarmDialogState extends State<EditAlarmDialog> {
               child: MaterialButton(
                 onPressed: () {
                   Navigator.pop(context, {
-                    'id': widget.alarm.id,
+                    'id': widget.alarm.alarmId,
                     "dateTime": dateTime,
                     "isActive": isActive,
                   });
@@ -143,9 +153,11 @@ class _EditAlarmDialogState extends State<EditAlarmDialog> {
     );
   }
 
-  _onBack(Alarm? alarm) {
+  _onBack(AlarmEntity? alarm) {
     if (alarm != null) {
       Navigator.pop(context, alarm);
+    } else {
+      Navigator.pop(context);
     }
   }
 }

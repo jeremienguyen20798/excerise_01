@@ -1,17 +1,16 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:excerise_01/core/utils/formatter.dart';
 import 'package:flutter/material.dart';
 
+import '../../../core/constant/app_constant.dart';
+
 class CountdownAlarm extends StatefulWidget {
-  final String repeatTypeStr;
+  final String? repeatTypeStr;
   final DateTime dateTime;
 
-  const CountdownAlarm({
-    super.key,
-    required this.repeatTypeStr,
-    required this.dateTime,
-  });
+  const CountdownAlarm({super.key, this.repeatTypeStr, required this.dateTime});
 
   @override
   State<CountdownAlarm> createState() => _CountdownAlarmState();
@@ -20,14 +19,21 @@ class CountdownAlarm extends StatefulWidget {
 class _CountdownAlarmState extends State<CountdownAlarm> {
   Timer? countdownTimer;
   Duration remaining = Duration.zero;
-  DateTime? alarmTime; // Thời gian báo thức
-  String repeatTypeStr = '';
+  String? repeatTypeStr;
 
   @override
   void initState() {
     repeatTypeStr = widget.repeatTypeStr;
     startCountDown(widget.dateTime);
     super.initState();
+  }
+
+  @override
+  void didUpdateWidget(covariant CountdownAlarm oldWidget) {
+    if (oldWidget.dateTime != widget.dateTime) {
+      startCountDown(widget.dateTime);
+    }
+    super.didUpdateWidget(oldWidget);
   }
 
   @override
@@ -44,29 +50,37 @@ class _CountdownAlarmState extends State<CountdownAlarm> {
       text: TextSpan(
         text: repeatTypeStr,
         style: TextStyle(fontSize: 14.0, color: Colors.grey),
-        children: [
-          TextSpan(text: ' | ', style: TextStyle(fontSize: 16.0)),
-          TextSpan(
-            text: Formatter.formatTime(remaining),
-            style: TextStyle(fontSize: 14.0),
-          ),
-        ],
+        children: repeatTypeStr != null
+            ? [
+                TextSpan(text: defaultSpace1, style: TextStyle(fontSize: 16.0)),
+                TextSpan(
+                  text: Formatter.formatTime(remaining),
+                  style: TextStyle(fontSize: 14.0),
+                ),
+              ]
+            : [
+                TextSpan(
+                  text: Formatter.formatTime(remaining),
+                  style: TextStyle(fontSize: 14.0),
+                ),
+              ],
       ),
     );
   }
 
   void startCountDown(DateTime dateTime) {
     if (dateTime.isBefore(DateTime.now())) {
-      dateTime = dateTime.add(Duration(days: 1));
+      int days = DateTime.now().difference(dateTime).inDays;
+      log('Days: ${days + 1}');
+      dateTime = dateTime.add(Duration(days: days + 1));
     }
     setState(() {
-      alarmTime = dateTime;
-      remaining = alarmTime!.difference(DateTime.now());
+      remaining = dateTime.difference(DateTime.now());
     });
     countdownTimer?.cancel();
     countdownTimer = Timer.periodic(Duration(seconds: 1), (_) {
       setState(() {
-        remaining = alarmTime!.difference(DateTime.now());
+        remaining = dateTime.difference(DateTime.now());
         if (remaining.isNegative) {
           countdownTimer?.cancel();
           remaining = Duration.zero;

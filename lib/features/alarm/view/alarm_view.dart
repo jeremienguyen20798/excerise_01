@@ -1,20 +1,22 @@
 import 'dart:developer';
 
-import 'package:excerise_01/core/extensions/day_alarm_ext.dart';
+import 'package:excerise_01/core/extensions/alarm_repeat_ext.dart';
 import 'package:excerise_01/core/utils/app_utils.dart';
+import 'package:excerise_01/domain/entities/alarm_entity.dart';
 import 'package:excerise_01/features/alarm/bloc/alarm_bloc.dart';
 import 'package:excerise_01/features/alarm/bloc/alarm_event.dart';
 import 'package:excerise_01/features/alarm/bloc/alarm_state.dart';
+import 'package:excerise_01/features/repeat/repeat_page.dart';
+import 'package:excerise_01/widgets/compoment/countdown/countdown_alarm.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/constant/app_constant.dart';
-import '../../../entities/alarm.dart';
-import '../../../entities/alarm_repeat_type.dart';
+import '../../../domain/entities/alarm_repeat_type.dart';
 
 class AlarmView extends StatefulWidget {
-  final Alarm? alarm;
+  final AlarmEntity? alarm;
 
   const AlarmView({super.key, this.alarm});
 
@@ -24,17 +26,17 @@ class AlarmView extends StatefulWidget {
 
 class _AlarmViewState extends State<AlarmView> {
   AlarmRepeatType repeatType = AlarmRepeatType.onlyOnce;
-  TextEditingController messageController = TextEditingController();
   DateTime dateTime = DateTime.now();
-  List<int>? days;
+  String labelStr = labelInput, titleAlarm = titleAddAlarm;
 
   @override
   void initState() {
     if (widget.alarm != null) {
+      log('Alarm with ${widget.alarm!.alarmId}');
       repeatType = widget.alarm!.repeatType;
       dateTime = widget.alarm!.time;
-      messageController.text = widget.alarm!.message ?? defaultMessage;
-      days = widget.alarm!.days;
+      labelStr = widget.alarm!.message ?? labelInput;
+      titleAlarm = titleEditAlarm;
     }
     super.initState();
   }
@@ -43,18 +45,29 @@ class _AlarmViewState extends State<AlarmView> {
   Widget build(BuildContext context) {
     return BlocConsumer<AlarmBloc, AlarmState>(
       builder: (context, state) {
+        if (state is DateTimeChangedState) {
+          dateTime = state.dateTime;
+        }
         return Scaffold(
           appBar: AppBar(
             leading: IconButton(
               onPressed: () {
                 Navigator.pop(context);
               },
-              icon: Icon(Icons.close),
+              icon: Icon(Icons.close, size: 32.0),
             ),
             centerTitle: true,
             title: Text(
-              titleAddAlarm,
-              style: TextStyle(fontSize: 18.0, color: Colors.black),
+              titleAlarm,
+              style: TextStyle(
+                fontSize: 18.0,
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            bottom: PreferredSize(
+              preferredSize: Size.fromHeight(kTextHeightNone),
+              child: CountdownAlarm(dateTime: dateTime),
             ),
             actions: [
               IconButton(
@@ -62,11 +75,10 @@ class _AlarmViewState extends State<AlarmView> {
                   if (widget.alarm != null) {
                     BlocProvider.of<AlarmBloc>(context).add(
                       UpdateAlarmEvent(
-                        id: widget.alarm!.id,
+                        id: widget.alarm!.alarmId,
                         dateTime: dateTime,
-                        message: messageController.text,
+                        message: labelStr,
                         repeatType: repeatType,
-                        days: days,
                       ),
                     );
                   } else {
@@ -74,96 +86,80 @@ class _AlarmViewState extends State<AlarmView> {
                       AddAlarmEvent(
                         dateTime: dateTime,
                         repeatType: repeatType,
-                        message: messageController.text,
-                        days: days,
+                        message: labelStr,
                       ),
                     );
                   }
                 },
-                icon: Icon(Icons.check),
+                icon: Icon(Icons.check, size: 32.0),
               ),
             ],
           ),
           body: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 16.0,
-              vertical: 8.0,
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: 24.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
               children: [
                 SizedBox(
-                  height: 200,
+                  height: 300,
                   child: CupertinoDatePicker(
                     mode: CupertinoDatePickerMode.time,
                     showTimeSeparator: true,
+                    itemExtent: kToolbarHeight,
                     initialDateTime: dateTime,
                     onDateTimeChanged: (value) {
-                      setState(() {
-                        dateTime = value;
-                      });
+                      BlocProvider.of<AlarmBloc>(
+                        context,
+                      ).add(OnDateTimeChangedEvent(value));
                     },
                     use24hFormat: true,
+                    selectionOverlayBuilder:
+                        (
+                          BuildContext context, {
+                          required int selectedIndex,
+                          required int columnCount,
+                        }) {
+                          return const CupertinoPickerDefaultSelectionOverlay(
+                            capStartEdge: false,
+                            capEndEdge: false,
+                            background: Colors.transparent,
+                          );
+                        },
                   ),
                 ),
                 SizedBox(height: 24.0),
-                TextField(
-                  controller: messageController,
-                  decoration: InputDecoration(
-                    labelText: labelAlarm,
-                    hintText: contentAlarmHintText,
-                    border: OutlineInputBorder(),
-                  ),
+                _buildItemLabel(ringtone, value: 'Báo thức tự nhiên'),
+                _buildItemLabel(
+                  repeat,
+                  value: repeatType.getStr(),
+                  onClick: () async {
+                    final result = await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => RepeatPage(alarmRepeatType: repeatType),
+                      ),
+                    );
+                    repeatType = result;
+                    setState(() {});
+                    log('Alarm repeat type: ${repeatType.name}');
+                  },
                 ),
-                SizedBox(height: 24.0),
-                DropdownMenu<AlarmRepeatType>(
-                  width: MediaQuery.of(context).size.width,
-                  helperText:
-                      repeatType == AlarmRepeatType.custom && days != null
-                      ? 'Thời gian lặp lại: ${days!.map((item) => item.getStr())}'
-                      : null,
-                  inputDecorationTheme: InputDecorationTheme(
-                    border: OutlineInputBorder(),
-                    helperStyle: TextStyle(
-                      color: Colors.deepPurple,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 12.0,
-                    ),
-                  ),
-                  label: Text(
-                    titleRepeat,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16.0,
-                    ),
-                  ),
-                  initialSelection: repeatType,
-                  dropdownMenuEntries: [
-                    DropdownMenuEntry<AlarmRepeatType>(
-                      value: AlarmRepeatType.onlyOnce,
-                      label: defaultOnlyOnceText,
-                    ),
-                    DropdownMenuEntry<AlarmRepeatType>(
-                      value: AlarmRepeatType.daily,
-                      label: defaultDailyText,
-                    ),
-                    DropdownMenuEntry<AlarmRepeatType>(
-                      value: AlarmRepeatType.mondayToFriday,
-                      label: defaultMondayToFridayText,
-                    ),
-                    DropdownMenuEntry<AlarmRepeatType>(
-                      value: AlarmRepeatType.custom,
-                      label: defaultCustom,
-                    ),
-                  ],
-                  onSelected: (AlarmRepeatType? newValue) {
+                _buildItemLabel(
+                  vibrate,
+                  widget: Switch(value: true, onChanged: (value) {}),
+                ),
+                _buildItemLabel(
+                  deleteAlarm,
+                  widget: Switch(value: false, onChanged: (value) {}),
+                ),
+                _buildItemLabel(
+                  label,
+                  value: labelStr,
+                  isLabel: true,
+                  onAddLabel: (label) {
                     setState(() {
-                      repeatType = newValue ?? AlarmRepeatType.onlyOnce;
-                      if (repeatType == AlarmRepeatType.custom) {
-                        _setDaysAlarmRepeat();
-                      }
+                      labelStr = label;
                     });
                   },
                 ),
@@ -184,16 +180,59 @@ class _AlarmViewState extends State<AlarmView> {
     );
   }
 
-  Future<void> _setDaysAlarmRepeat() async {
-    final result = await AppUtils.showCustomRepeatTypeBottomSheet(
-      context,
-      days ?? [],
+  Widget _buildItemLabel(
+    String title, {
+    String? value,
+    bool isLabel = false,
+    Widget? widget,
+    Function()? onClick,
+    Function(String)? onAddLabel,
+  }) {
+    return ListTile(
+      contentPadding: EdgeInsets.symmetric(horizontal: 0.0),
+      onTap: isLabel
+          ? () {
+              AppUtils.showAddLabelBottomSheet(context, (label) {
+                if (onAddLabel != null) {
+                  onAddLabel(label);
+                }
+              });
+            }
+          : null,
+      title: Text(
+        title,
+        style: TextStyle(
+          fontSize: 18.0,
+          color: Colors.black,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      trailing:
+          widget ??
+          InkWell(
+            highlightColor: Colors.transparent,
+            focusColor: Colors.transparent,
+            hoverColor: Colors.transparent,
+            splashColor: Colors.transparent,
+            onTap: () {
+              if (onClick != null) {
+                onClick();
+              }
+            },
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  value ?? '',
+                  style: TextStyle(fontSize: 14.0, color: Colors.grey),
+                ),
+                isLabel == true
+                    ? SizedBox()
+                    : Icon(Icons.arrow_forward_ios, color: Colors.grey),
+              ],
+            ),
+          ),
     );
-    setState(() {
-      if (result != null) {
-        days = result;
-        log('Days length: ${days?.length}');
-      }
-    });
   }
 }

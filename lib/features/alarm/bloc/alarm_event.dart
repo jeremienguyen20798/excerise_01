@@ -1,4 +1,4 @@
-import 'package:excerise_01/entities/alarm_repeat_type.dart';
+import '../../../domain/entities/alarm_repeat_type.dart';
 
 abstract class AlarmEvent {}
 
@@ -20,14 +20,20 @@ class UpdateAlarmEvent extends AlarmEvent {
   int id;
   DateTime dateTime;
   String? message;
-  AlarmRepeatType? repeatType;
+  AlarmRepeatType repeatType;
   List<int>? days;
 
   UpdateAlarmEvent({
     required this.id,
     required this.dateTime,
     this.message,
-    this.repeatType,
+    required this.repeatType,
     this.days,
   });
+}
+
+class OnDateTimeChangedEvent extends AlarmEvent {
+  final DateTime dateTime;
+
+  OnDateTimeChangedEvent(this.dateTime);
 }

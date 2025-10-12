@@ -1,47 +1,45 @@
 import 'package:excerise_01/core/constant/app_constant.dart';
-import 'package:excerise_01/entities/alarm.dart';
-import 'package:excerise_01/entities/alarm_repeat_type.dart';
+import 'package:excerise_01/domain/usecase/add_alarm_usecase.dart';
+import 'package:excerise_01/domain/usecase/update_detail_alarm_usecase.dart';
 import 'package:excerise_01/features/alarm/bloc/alarm_event.dart';
 import 'package:excerise_01/features/alarm/bloc/alarm_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../core/local_db/alarm_local_db.dart';
 import '../../../core/notification/alarm_notification.dart';
+import '../../../domain/entities/alarm_repeat_type.dart';
 
 class AlarmBloc extends Bloc<AlarmEvent, AlarmState> {
-  AlarmLocalDB localDB = AlarmLocalDB();
-  AlarmNotification alarmNotification = AlarmNotification();
+  final AlarmNotification _alarmNotification = AlarmNotification();
 
   AlarmBloc() : super(InitAlarmState()) {
     on<AddAlarmEvent>(_addAlarm);
     on<UpdateAlarmEvent>(_updateAlarm);
+    on<OnDateTimeChangedEvent>(_onDateTimeChanged);
   }
 
   Future<void> _addAlarm(
     AddAlarmEvent event,
     Emitter<AlarmState> emitter,
   ) async {
-    String message = event.message != null && event.message != ''
+    String message = event.message != null && event.message!.isNotEmpty
         ? event.message!
         : defaultMessage;
     final DateTime time = event.dateTime;
     final repeatType = event.repeatType ?? AlarmRepeatType.onlyOnce;
     final days = event.days;
-    final alarm = Alarm(time: time)
-      ..message = message
-      ..repeatType =
-          (repeatType == AlarmRepeatType.custom &&
-              days != null &&
-              days.length == 7)
-          ? AlarmRepeatType.daily
-          : repeatType
-      ..days = days;
-    await localDB.writeAlarm(alarm);
-    await alarmNotification.showNotification(
-      alarm,
-      payloadData: alarm.toPayload(),
+    final alarmEntity = await AddAlarmUseCase().execute(
+      time,
+      message,
+      repeatType,
+      days,
     );
-    emitter(AddAlarmState(alarm));
+    if (alarmEntity != null) {
+      await _alarmNotification.showNotification(
+        alarmEntity,
+        payloadData: alarmEntity.toPayload(),
+      );
+      emitter(AddAlarmState(alarmEntity));
+    }
   }
 
   Future<void> _updateAlarm(
@@ -52,25 +50,24 @@ class AlarmBloc extends Bloc<AlarmEvent, AlarmState> {
     DateTime dateTime = event.dateTime;
     String? messageAlarm = event.message;
     List<int>? days = event.days;
-    AlarmRepeatType? alarmRepeatType = event.repeatType;
-    await localDB.updateDetailAlarm(
-      idAlarm: idAlarm,
+    AlarmRepeatType alarmRepeatType = event.repeatType;
+    final alarmEntity = await UpdateDetailAlarmUseCase().execute(
+      idAlarm,
       dateTime: dateTime,
       message: messageAlarm,
-      repeatType:
-          (alarmRepeatType == AlarmRepeatType.custom &&
-              days != null &&
-              days.length == 7)
-          ? AlarmRepeatType.daily
-          : alarmRepeatType,
+      repeatType: alarmRepeatType,
+      days: days,
     );
-    Alarm? alarm = await localDB.getAlarmById(idAlarm);
-    if (alarm != null) {
-      await alarmNotification.showNotification(
-        alarm,
-        payloadData: alarm.toPayload(),
+    if (alarmEntity != null) {
+      await _alarmNotification.showNotification(
+        alarmEntity,
+        payloadData: alarmEntity.toPayload(),
       );
-      emitter(UpdateAlarmState(alarm));
+      emitter(UpdateAlarmState(alarmEntity));
     }
+  }
+
+  void _onDateTimeChanged(OnDateTimeChangedEvent event, Emitter<AlarmState> emitter) {
+    emitter(DateTimeChangedState(event.dateTime));
   }
 }

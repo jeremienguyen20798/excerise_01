@@ -1,10 +1,10 @@
 import 'dart:developer';
 
-import 'package:excerise_01/entities/alarm.dart';
 import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
 
-import '../../entities/alarm_repeat_type.dart';
+import '../../domain/entities/alarm_repeat_type.dart';
+import '../models/alarm_model.dart';
 
 class AlarmLocalDB {
   late Future<Isar> localDb;
@@ -17,7 +17,7 @@ class AlarmLocalDB {
     final documentDir = await getApplicationDocumentsDirectory();
     if (Isar.instanceNames.isEmpty) {
       return await Isar.open(
-        [AlarmSchema],
+        [AlarmModelSchema],
         directory: documentDir.path,
         inspector: true,
       );
@@ -25,68 +25,83 @@ class AlarmLocalDB {
     return Future.value(Isar.getInstance());
   }
 
-  Future<void> writeAlarm(Alarm alarm) async {
+  Future<AlarmModel?> writeAlarm(AlarmModel alarm) async {
     final isar = await localDb;
-    isar.writeTxnSync(() {
-      Id? id = isar.alarms.putSync(alarm);
+    final result = isar.writeTxnSync(() {
+      Id? id = isar.alarmModels.putSync(alarm);
       log('Create alarm successfully with: $id');
+      return isar.alarmModels.getSync(id);
     });
+    return result;
   }
 
-  Future<void> updateAlarmStatus(int idAlarm, bool? status) async {
+  Future<AlarmModel?> updateAlarmStatus(int idAlarm, bool? status) async {
     final isar = await localDb;
-    Alarm? alarm = await getAlarmById(idAlarm);
+    AlarmModel? alarm = await getAlarmById(idAlarm);
     if (alarm != null) {
       alarm.isActive = status;
-      isar.writeTxnSync(() {
-        Id? id = isar.alarms.putSync(alarm);
+      final result = isar.writeTxnSync(() {
+        Id? id = isar.alarmModels.putSync(alarm);
         log('Update alarm status successfully with Id: $id - status: $status');
+        return isar.alarmModels.getSync(id);
       });
+      return result;
     }
+    return null;
   }
 
-  Future<void> updateAlarm(int idAlarm, DateTime dateTime, bool? status) async {
+  Future<AlarmModel?> updateAlarm(
+    int idAlarm,
+    DateTime dateTime,
+    bool? status,
+  ) async {
     final isar = await localDb;
-    Alarm? alarm = await getAlarmById(idAlarm);
+    AlarmModel? alarm = await getAlarmById(idAlarm);
     if (alarm != null) {
       alarm
         ..time = dateTime
         ..isActive = status;
-      isar.writeTxnSync(() {
-        isar.alarms.putSync(alarm);
+      final result = isar.writeTxnSync(() {
+        int id = isar.alarmModels.putSync(alarm);
         log('Update alarm successfully');
+        return isar.alarmModels.getSync(id);
       });
+      return result;
     }
+    return null;
   }
 
-  Future<void> updateDetailAlarm({
+  Future<AlarmModel?> updateDetailAlarm({
     required int idAlarm,
     DateTime? dateTime,
     String? message,
     AlarmRepeatType? repeatType,
   }) async {
     final isar = await localDb;
-    Alarm? alarm = await getAlarmById(idAlarm);
+    AlarmModel? alarm = await getAlarmById(idAlarm);
     if (alarm != null) {
       alarm
         ..time = dateTime ?? DateTime.now()
         ..message = message
         ..repeatType = repeatType ?? AlarmRepeatType.onlyOnce;
-      isar.writeTxnSync(() {
-        isar.alarms.putSync(alarm);
+      final result = isar.writeTxnSync(() {
+        int id = isar.alarmModels.putSync(alarm);
         log('Update alarm successfully');
+        return isar.alarmModels.getSync(id);
       });
+      return result;
     }
+    return null;
   }
 
-  Future<Alarm?> getAlarmById(int id) async {
+  Future<AlarmModel?> getAlarmById(int id) async {
     final isar = await localDb;
-    return isar.alarms.getSync(id);
+    return isar.alarmModels.getSync(id);
   }
 
-  Future<List<Alarm>> getAlarms() async {
+  Future<List<AlarmModel>> getAlarms() async {
     final isar = await localDb;
-    List<Alarm>? alarms = await isar.alarms.where().findAll();
+    List<AlarmModel>? alarms = await isar.alarmModels.where().findAll();
     if (alarms.isNotEmpty) {
       return alarms;
     }
@@ -98,7 +113,7 @@ class AlarmLocalDB {
     final existingAlarm = await getAlarmById(alarmId);
     isar.writeTxnSync(() {
       if (existingAlarm != null) {
-        isar.alarms.deleteSync(existingAlarm.id);
+        isar.alarmModels.deleteSync(existingAlarm.id);
       }
     });
   }
@@ -106,7 +121,7 @@ class AlarmLocalDB {
   Future<void> deleteAlarms(List<int> alarmIds) async {
     final isar = await localDb;
     isar.writeTxnSync(() {
-      isar.alarms.deleteAllSync(alarmIds);
+      isar.alarmModels.deleteAllSync(alarmIds);
     });
   }
 }

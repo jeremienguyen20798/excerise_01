@@ -1,4 +1,4 @@
-import 'package:excerise_01/entities/alarm.dart';
+import 'package:excerise_01/domain/entities/alarm_entity.dart';
 import 'package:excerise_01/features/home/bloc/home_bloc.dart';
 import 'package:excerise_01/features/home/bloc/home_state.dart';
 import 'package:excerise_01/widgets/compoment/empty_view.dart';
@@ -6,7 +6,7 @@ import 'package:excerise_01/widgets/items/item_alarm.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-List<Alarm> alarms = [];
+List<AlarmEntity> alarms = [];
 
 class AlarmList extends StatelessWidget {
   const AlarmList({super.key});
@@ -35,14 +35,13 @@ class AlarmList extends StatelessWidget {
           alarms.insert(index, item);
         }
         return alarms.isNotEmpty
-            ? ListView.separated(
-                shrinkWrap: true,
-                itemBuilder: (context, index) {
+            ? SliverList.separated(
+                itemCount: alarms.length,
+                itemBuilder: (BuildContext context, int index) {
                   return ItemAlarm(index: index, alarm: alarms[index]);
                 },
                 separatorBuilder: (BuildContext context, int index) =>
                     SizedBox(height: 16.0),
-                itemCount: alarms.length,
               )
             : EmptyView();
       },

@@ -31,49 +31,65 @@ class HomeView extends StatelessWidget {
         }
         return Scaffold(
           backgroundColor: Colors.grey.shade100,
-          appBar: AppBar(
-            title: isLongPress
-                ? Center(
-                    child: Text(
-                      chooseItem,
-                      style: TextStyle(fontSize: 18.0, color: Colors.black),
-                      textAlign: TextAlign.center,
-                    ),
-                  )
-                : Text(defaultMessage, style: TextStyle(fontSize: 28.0)),
-            leading: isLongPress
-                ? IconButton(
-                    onPressed: () {
-                      BlocProvider.of<HomeBloc>(context).add(OnRestartEvent());
-                    },
-                    icon: Icon(Icons.close),
-                  )
-                : null,
-            actions: isLongPress
-                ? [
-                    IconButton(
-                      onPressed: () {
-                        if (isDeleteAllItems) {
+          body: CustomScrollView(
+            slivers: [
+              SliverAppBar(
+                leading: isLongPress
+                    ? IconButton(
+                        onPressed: () {
                           BlocProvider.of<HomeBloc>(
                             context,
-                          ).add(CancelDeleteAllItemsEvent());
-                        } else {
-                          BlocProvider.of<HomeBloc>(
-                            context,
-                          ).add(DeleteAllAlarmsEvent());
-                        }
-                      },
-                      icon: Icon(
-                        Icons.playlist_add_check,
-                        color: isDeleteAllItems
-                            ? Colors.deepPurple
-                            : Colors.black,
-                      ),
-                    ),
-                  ]
-                : null,
+                          ).add(OnRestartEvent());
+                        },
+                        icon: Icon(Icons.close),
+                      )
+                    : null,
+                snap: false,
+                pinned: true,
+                floating: false,
+                backgroundColor: Colors.grey.shade100,
+                flexibleSpace: FlexibleSpaceBar(
+                  titlePadding: EdgeInsets.only(left: 16.0, bottom: 16.0),
+                  background: Align(
+                    alignment: Alignment.centerRight,
+                    child: isLongPress
+                        ? IconButton(
+                            onPressed: () {
+                              if (isDeleteAllItems) {
+                                BlocProvider.of<HomeBloc>(
+                                  context,
+                                ).add(CancelDeleteAllItemsEvent());
+                              } else {
+                                BlocProvider.of<HomeBloc>(
+                                  context,
+                                ).add(DeleteAllAlarmsEvent());
+                              }
+                            },
+                            icon: Icon(
+                              Icons.playlist_add_check,
+                              color: isDeleteAllItems
+                                  ? Colors.deepPurple
+                                  : Colors.black,
+                            ),
+                          )
+                        : IconButton(
+                            onPressed: () {},
+                            icon: Icon(Icons.more_vert, color: Colors.black),
+                          ),
+                  ),
+                  title: isLongPress
+                      ? Text(
+                          chooseItem,
+                          style: TextStyle(fontSize: 16.0, color: Colors.black),
+                          textAlign: TextAlign.center,
+                        )
+                      : Text(defaultAppName, style: TextStyle(fontSize: 16.0)),
+                ),
+                expandedHeight: kToolbarHeight * 2,
+              ),
+              AlarmList(),
+            ],
           ),
-          body: AlarmList(),
           floatingActionButton: isLongPress
               ? null
               : FloatingActionButton(
