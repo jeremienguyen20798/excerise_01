@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:isar/isar.dart';
+import 'package:isar_community/isar.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../../domain/entities/alarm_repeat_type.dart';
@@ -42,7 +42,6 @@ class AlarmLocalDB {
       alarm.isActive = status;
       final result = isar.writeTxnSync(() {
         Id? id = isar.alarmModels.putSync(alarm);
-        log('Update alarm status successfully with Id: $id - status: $status');
         return isar.alarmModels.getSync(id);
       });
       return result;

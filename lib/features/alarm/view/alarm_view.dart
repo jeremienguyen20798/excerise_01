@@ -6,11 +6,11 @@ import 'package:excerise_01/domain/entities/alarm_entity.dart';
 import 'package:excerise_01/features/alarm/bloc/alarm_bloc.dart';
 import 'package:excerise_01/features/alarm/bloc/alarm_event.dart';
 import 'package:excerise_01/features/alarm/bloc/alarm_state.dart';
-import 'package:excerise_01/features/repeat/repeat_page.dart';
 import 'package:excerise_01/widgets/compoment/countdown/countdown_alarm.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../core/constant/app_constant.dart';
 import '../../../domain/entities/alarm_repeat_type.dart';
@@ -134,13 +134,11 @@ class _AlarmViewState extends State<AlarmView> {
                   repeat,
                   value: repeatType.getStr(),
                   onClick: () async {
-                    final result = await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => RepeatPage(alarmRepeatType: repeatType),
-                      ),
+                    final result = await context.push<AlarmRepeatType>(
+                      '/alarm/repeat',
+                      extra: repeatType,
                     );
-                    repeatType = result;
+                    repeatType = result ?? AlarmRepeatType.onlyOnce;
                     setState(() {});
                     log('Alarm repeat type: ${repeatType.name}');
                   },

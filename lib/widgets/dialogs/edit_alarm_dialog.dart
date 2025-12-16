@@ -1,10 +1,10 @@
 import 'package:excerise_01/core/constant/app_constant.dart';
 import 'package:excerise_01/core/utils/formatter.dart';
 import 'package:excerise_01/domain/entities/alarm_entity.dart';
-import 'package:excerise_01/features/alarm/view/alarm_page.dart';
 import 'package:excerise_01/widgets/compoment/countdown/countdown_alarm.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class EditAlarmDialog extends StatefulWidget {
   final AlarmEntity alarm;
@@ -97,12 +97,9 @@ class _EditAlarmDialogState extends State<EditAlarmDialog> {
             Expanded(
               child: MaterialButton(
                 onPressed: () async {
-                  final result = await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => AlarmPage(alarm: widget.alarm),
-                    ),
-                  );
+                  final result =
+                      await context.push('/alarm', extra: widget.alarm)
+                          as AlarmEntity?;
                   _onBack(result);
                 },
                 elevation: 0.0,
@@ -155,9 +152,9 @@ class _EditAlarmDialogState extends State<EditAlarmDialog> {
 
   _onBack(AlarmEntity? alarm) {
     if (alarm != null) {
-      Navigator.pop(context, alarm);
+      context.pop(alarm);
     } else {
-      Navigator.pop(context);
+      context.pop();
     }
   }
 }

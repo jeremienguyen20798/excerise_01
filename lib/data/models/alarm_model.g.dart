@@ -17,33 +17,18 @@ const AlarmModelSchema = CollectionSchema(
   name: r'AlarmModel',
   id: 1796575337475990193,
   properties: {
-    r'days': PropertySchema(
-      id: 0,
-      name: r'days',
-      type: IsarType.longList,
-    ),
-    r'isActive': PropertySchema(
-      id: 1,
-      name: r'isActive',
-      type: IsarType.bool,
-    ),
-    r'message': PropertySchema(
-      id: 2,
-      name: r'message',
-      type: IsarType.string,
-    ),
+    r'days': PropertySchema(id: 0, name: r'days', type: IsarType.longList),
+    r'isActive': PropertySchema(id: 1, name: r'isActive', type: IsarType.bool),
+    r'message': PropertySchema(id: 2, name: r'message', type: IsarType.string),
     r'repeatType': PropertySchema(
       id: 3,
       name: r'repeatType',
       type: IsarType.byte,
       enumMap: _AlarmModelrepeatTypeEnumValueMap,
     ),
-    r'time': PropertySchema(
-      id: 4,
-      name: r'time',
-      type: IsarType.dateTime,
-    )
+    r'time': PropertySchema(id: 4, name: r'time', type: IsarType.dateTime),
   },
+
   estimateSize: _alarmModelEstimateSize,
   serialize: _alarmModelSerialize,
   deserialize: _alarmModelDeserialize,
@@ -60,7 +45,7 @@ const AlarmModelSchema = CollectionSchema(
           name: r'message',
           type: IndexType.value,
           caseSensitive: true,
-        )
+        ),
       ],
     ),
     r'time': IndexSchema(
@@ -73,7 +58,7 @@ const AlarmModelSchema = CollectionSchema(
           name: r'time',
           type: IndexType.value,
           caseSensitive: false,
-        )
+        ),
       ],
     ),
     r'isActive': IndexSchema(
@@ -86,7 +71,7 @@ const AlarmModelSchema = CollectionSchema(
           name: r'isActive',
           type: IndexType.value,
           caseSensitive: false,
-        )
+        ),
       ],
     ),
     r'days': IndexSchema(
@@ -99,16 +84,17 @@ const AlarmModelSchema = CollectionSchema(
           name: r'days',
           type: IndexType.value,
           caseSensitive: false,
-        )
+        ),
       ],
-    )
+    ),
   },
   links: {},
   embeddedSchemas: {},
+
   getId: _alarmModelGetId,
   getLinks: _alarmModelGetLinks,
   attach: _alarmModelAttach,
-  version: '3.1.0+1',
+  version: '3.3.0',
 );
 
 int _alarmModelEstimateSize(
@@ -157,7 +143,7 @@ AlarmModel _alarmModelDeserialize(
     message: reader.readStringOrNull(offsets[2]),
     repeatType:
         _AlarmModelrepeatTypeValueEnumMap[reader.readByteOrNull(offsets[3])] ??
-            AlarmRepeatType.onlyOnce,
+        AlarmRepeatType.onlyOnce,
     time: reader.readDateTime(offsets[4]),
   );
   object.id = id;
@@ -178,9 +164,11 @@ P _alarmModelDeserializeProp<P>(
     case 2:
       return (reader.readStringOrNull(offset)) as P;
     case 3:
-      return (_AlarmModelrepeatTypeValueEnumMap[
-              reader.readByteOrNull(offset)] ??
-          AlarmRepeatType.onlyOnce) as P;
+      return (_AlarmModelrepeatTypeValueEnumMap[reader.readByteOrNull(
+                offset,
+              )] ??
+              AlarmRepeatType.onlyOnce)
+          as P;
     case 4:
       return (reader.readDateTime(offset)) as P;
     default:
@@ -258,10 +246,7 @@ extension AlarmModelQueryWhere
     on QueryBuilder<AlarmModel, AlarmModel, QWhereClause> {
   QueryBuilder<AlarmModel, AlarmModel, QAfterWhereClause> idEqualTo(Id id) {
     return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IdWhereClause.between(
-        lower: id,
-        upper: id,
-      ));
+      return query.addWhereClause(IdWhereClause.between(lower: id, upper: id));
     });
   }
 
@@ -287,8 +272,10 @@ extension AlarmModelQueryWhere
     });
   }
 
-  QueryBuilder<AlarmModel, AlarmModel, QAfterWhereClause> idGreaterThan(Id id,
-      {bool include = false}) {
+  QueryBuilder<AlarmModel, AlarmModel, QAfterWhereClause> idGreaterThan(
+    Id id, {
+    bool include = false,
+  }) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(
         IdWhereClause.greaterThan(lower: id, includeLower: include),
@@ -296,8 +283,10 @@ extension AlarmModelQueryWhere
     });
   }
 
-  QueryBuilder<AlarmModel, AlarmModel, QAfterWhereClause> idLessThan(Id id,
-      {bool include = false}) {
+  QueryBuilder<AlarmModel, AlarmModel, QAfterWhereClause> idLessThan(
+    Id id, {
+    bool include = false,
+  }) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(
         IdWhereClause.lessThan(upper: id, includeUpper: include),
@@ -312,76 +301,88 @@ extension AlarmModelQueryWhere
     bool includeUpper = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IdWhereClause.between(
-        lower: lowerId,
-        includeLower: includeLower,
-        upper: upperId,
-        includeUpper: includeUpper,
-      ));
+      return query.addWhereClause(
+        IdWhereClause.between(
+          lower: lowerId,
+          includeLower: includeLower,
+          upper: upperId,
+          includeUpper: includeUpper,
+        ),
+      );
     });
   }
 
   QueryBuilder<AlarmModel, AlarmModel, QAfterWhereClause> messageIsNull() {
     return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IndexWhereClause.equalTo(
-        indexName: r'message',
-        value: [null],
-      ));
+      return query.addWhereClause(
+        IndexWhereClause.equalTo(indexName: r'message', value: [null]),
+      );
     });
   }
 
   QueryBuilder<AlarmModel, AlarmModel, QAfterWhereClause> messageIsNotNull() {
     return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IndexWhereClause.between(
-        indexName: r'message',
-        lower: [null],
-        includeLower: false,
-        upper: [],
-      ));
+      return query.addWhereClause(
+        IndexWhereClause.between(
+          indexName: r'message',
+          lower: [null],
+          includeLower: false,
+          upper: [],
+        ),
+      );
     });
   }
 
   QueryBuilder<AlarmModel, AlarmModel, QAfterWhereClause> messageEqualTo(
-      String? message) {
+    String? message,
+  ) {
     return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IndexWhereClause.equalTo(
-        indexName: r'message',
-        value: [message],
-      ));
+      return query.addWhereClause(
+        IndexWhereClause.equalTo(indexName: r'message', value: [message]),
+      );
     });
   }
 
   QueryBuilder<AlarmModel, AlarmModel, QAfterWhereClause> messageNotEqualTo(
-      String? message) {
+    String? message,
+  ) {
     return QueryBuilder.apply(this, (query) {
       if (query.whereSort == Sort.asc) {
         return query
-            .addWhereClause(IndexWhereClause.between(
-              indexName: r'message',
-              lower: [],
-              upper: [message],
-              includeUpper: false,
-            ))
-            .addWhereClause(IndexWhereClause.between(
-              indexName: r'message',
-              lower: [message],
-              includeLower: false,
-              upper: [],
-            ));
+            .addWhereClause(
+              IndexWhereClause.between(
+                indexName: r'message',
+                lower: [],
+                upper: [message],
+                includeUpper: false,
+              ),
+            )
+            .addWhereClause(
+              IndexWhereClause.between(
+                indexName: r'message',
+                lower: [message],
+                includeLower: false,
+                upper: [],
+              ),
+            );
       } else {
         return query
-            .addWhereClause(IndexWhereClause.between(
-              indexName: r'message',
-              lower: [message],
-              includeLower: false,
-              upper: [],
-            ))
-            .addWhereClause(IndexWhereClause.between(
-              indexName: r'message',
-              lower: [],
-              upper: [message],
-              includeUpper: false,
-            ));
+            .addWhereClause(
+              IndexWhereClause.between(
+                indexName: r'message',
+                lower: [message],
+                includeLower: false,
+                upper: [],
+              ),
+            )
+            .addWhereClause(
+              IndexWhereClause.between(
+                indexName: r'message',
+                lower: [],
+                upper: [message],
+                includeUpper: false,
+              ),
+            );
       }
     });
   }
@@ -391,12 +392,14 @@ extension AlarmModelQueryWhere
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IndexWhereClause.between(
-        indexName: r'message',
-        lower: [message],
-        includeLower: include,
-        upper: [],
-      ));
+      return query.addWhereClause(
+        IndexWhereClause.between(
+          indexName: r'message',
+          lower: [message],
+          includeLower: include,
+          upper: [],
+        ),
+      );
     });
   }
 
@@ -405,12 +408,14 @@ extension AlarmModelQueryWhere
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IndexWhereClause.between(
-        indexName: r'message',
-        lower: [],
-        upper: [message],
-        includeUpper: include,
-      ));
+      return query.addWhereClause(
+        IndexWhereClause.between(
+          indexName: r'message',
+          lower: [],
+          upper: [message],
+          includeUpper: include,
+        ),
+      );
     });
   }
 
@@ -421,33 +426,37 @@ extension AlarmModelQueryWhere
     bool includeUpper = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IndexWhereClause.between(
-        indexName: r'message',
-        lower: [lowerMessage],
-        includeLower: includeLower,
-        upper: [upperMessage],
-        includeUpper: includeUpper,
-      ));
+      return query.addWhereClause(
+        IndexWhereClause.between(
+          indexName: r'message',
+          lower: [lowerMessage],
+          includeLower: includeLower,
+          upper: [upperMessage],
+          includeUpper: includeUpper,
+        ),
+      );
     });
   }
 
   QueryBuilder<AlarmModel, AlarmModel, QAfterWhereClause> messageStartsWith(
-      String MessagePrefix) {
+    String MessagePrefix,
+  ) {
     return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IndexWhereClause.between(
-        indexName: r'message',
-        lower: [MessagePrefix],
-        upper: ['$MessagePrefix\u{FFFFF}'],
-      ));
+      return query.addWhereClause(
+        IndexWhereClause.between(
+          indexName: r'message',
+          lower: [MessagePrefix],
+          upper: ['$MessagePrefix\u{FFFFF}'],
+        ),
+      );
     });
   }
 
   QueryBuilder<AlarmModel, AlarmModel, QAfterWhereClause> messageIsEmpty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IndexWhereClause.equalTo(
-        indexName: r'message',
-        value: [''],
-      ));
+      return query.addWhereClause(
+        IndexWhereClause.equalTo(indexName: r'message', value: ['']),
+      );
     });
   }
 
@@ -455,69 +464,74 @@ extension AlarmModelQueryWhere
     return QueryBuilder.apply(this, (query) {
       if (query.whereSort == Sort.asc) {
         return query
-            .addWhereClause(IndexWhereClause.lessThan(
-              indexName: r'message',
-              upper: [''],
-            ))
-            .addWhereClause(IndexWhereClause.greaterThan(
-              indexName: r'message',
-              lower: [''],
-            ));
+            .addWhereClause(
+              IndexWhereClause.lessThan(indexName: r'message', upper: ['']),
+            )
+            .addWhereClause(
+              IndexWhereClause.greaterThan(indexName: r'message', lower: ['']),
+            );
       } else {
         return query
-            .addWhereClause(IndexWhereClause.greaterThan(
-              indexName: r'message',
-              lower: [''],
-            ))
-            .addWhereClause(IndexWhereClause.lessThan(
-              indexName: r'message',
-              upper: [''],
-            ));
+            .addWhereClause(
+              IndexWhereClause.greaterThan(indexName: r'message', lower: ['']),
+            )
+            .addWhereClause(
+              IndexWhereClause.lessThan(indexName: r'message', upper: ['']),
+            );
       }
     });
   }
 
   QueryBuilder<AlarmModel, AlarmModel, QAfterWhereClause> timeEqualTo(
-      DateTime time) {
+    DateTime time,
+  ) {
     return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IndexWhereClause.equalTo(
-        indexName: r'time',
-        value: [time],
-      ));
+      return query.addWhereClause(
+        IndexWhereClause.equalTo(indexName: r'time', value: [time]),
+      );
     });
   }
 
   QueryBuilder<AlarmModel, AlarmModel, QAfterWhereClause> timeNotEqualTo(
-      DateTime time) {
+    DateTime time,
+  ) {
     return QueryBuilder.apply(this, (query) {
       if (query.whereSort == Sort.asc) {
         return query
-            .addWhereClause(IndexWhereClause.between(
-              indexName: r'time',
-              lower: [],
-              upper: [time],
-              includeUpper: false,
-            ))
-            .addWhereClause(IndexWhereClause.between(
-              indexName: r'time',
-              lower: [time],
-              includeLower: false,
-              upper: [],
-            ));
+            .addWhereClause(
+              IndexWhereClause.between(
+                indexName: r'time',
+                lower: [],
+                upper: [time],
+                includeUpper: false,
+              ),
+            )
+            .addWhereClause(
+              IndexWhereClause.between(
+                indexName: r'time',
+                lower: [time],
+                includeLower: false,
+                upper: [],
+              ),
+            );
       } else {
         return query
-            .addWhereClause(IndexWhereClause.between(
-              indexName: r'time',
-              lower: [time],
-              includeLower: false,
-              upper: [],
-            ))
-            .addWhereClause(IndexWhereClause.between(
-              indexName: r'time',
-              lower: [],
-              upper: [time],
-              includeUpper: false,
-            ));
+            .addWhereClause(
+              IndexWhereClause.between(
+                indexName: r'time',
+                lower: [time],
+                includeLower: false,
+                upper: [],
+              ),
+            )
+            .addWhereClause(
+              IndexWhereClause.between(
+                indexName: r'time',
+                lower: [],
+                upper: [time],
+                includeUpper: false,
+              ),
+            );
       }
     });
   }
@@ -527,12 +541,14 @@ extension AlarmModelQueryWhere
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IndexWhereClause.between(
-        indexName: r'time',
-        lower: [time],
-        includeLower: include,
-        upper: [],
-      ));
+      return query.addWhereClause(
+        IndexWhereClause.between(
+          indexName: r'time',
+          lower: [time],
+          includeLower: include,
+          upper: [],
+        ),
+      );
     });
   }
 
@@ -541,12 +557,14 @@ extension AlarmModelQueryWhere
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IndexWhereClause.between(
-        indexName: r'time',
-        lower: [],
-        upper: [time],
-        includeUpper: include,
-      ));
+      return query.addWhereClause(
+        IndexWhereClause.between(
+          indexName: r'time',
+          lower: [],
+          upper: [time],
+          includeUpper: include,
+        ),
+      );
     });
   }
 
@@ -557,138 +575,158 @@ extension AlarmModelQueryWhere
     bool includeUpper = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IndexWhereClause.between(
-        indexName: r'time',
-        lower: [lowerTime],
-        includeLower: includeLower,
-        upper: [upperTime],
-        includeUpper: includeUpper,
-      ));
+      return query.addWhereClause(
+        IndexWhereClause.between(
+          indexName: r'time',
+          lower: [lowerTime],
+          includeLower: includeLower,
+          upper: [upperTime],
+          includeUpper: includeUpper,
+        ),
+      );
     });
   }
 
   QueryBuilder<AlarmModel, AlarmModel, QAfterWhereClause> isActiveIsNull() {
     return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IndexWhereClause.equalTo(
-        indexName: r'isActive',
-        value: [null],
-      ));
+      return query.addWhereClause(
+        IndexWhereClause.equalTo(indexName: r'isActive', value: [null]),
+      );
     });
   }
 
   QueryBuilder<AlarmModel, AlarmModel, QAfterWhereClause> isActiveIsNotNull() {
     return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IndexWhereClause.between(
-        indexName: r'isActive',
-        lower: [null],
-        includeLower: false,
-        upper: [],
-      ));
+      return query.addWhereClause(
+        IndexWhereClause.between(
+          indexName: r'isActive',
+          lower: [null],
+          includeLower: false,
+          upper: [],
+        ),
+      );
     });
   }
 
   QueryBuilder<AlarmModel, AlarmModel, QAfterWhereClause> isActiveEqualTo(
-      bool? isActive) {
+    bool? isActive,
+  ) {
     return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IndexWhereClause.equalTo(
-        indexName: r'isActive',
-        value: [isActive],
-      ));
+      return query.addWhereClause(
+        IndexWhereClause.equalTo(indexName: r'isActive', value: [isActive]),
+      );
     });
   }
 
   QueryBuilder<AlarmModel, AlarmModel, QAfterWhereClause> isActiveNotEqualTo(
-      bool? isActive) {
+    bool? isActive,
+  ) {
     return QueryBuilder.apply(this, (query) {
       if (query.whereSort == Sort.asc) {
         return query
-            .addWhereClause(IndexWhereClause.between(
-              indexName: r'isActive',
-              lower: [],
-              upper: [isActive],
-              includeUpper: false,
-            ))
-            .addWhereClause(IndexWhereClause.between(
-              indexName: r'isActive',
-              lower: [isActive],
-              includeLower: false,
-              upper: [],
-            ));
+            .addWhereClause(
+              IndexWhereClause.between(
+                indexName: r'isActive',
+                lower: [],
+                upper: [isActive],
+                includeUpper: false,
+              ),
+            )
+            .addWhereClause(
+              IndexWhereClause.between(
+                indexName: r'isActive',
+                lower: [isActive],
+                includeLower: false,
+                upper: [],
+              ),
+            );
       } else {
         return query
-            .addWhereClause(IndexWhereClause.between(
-              indexName: r'isActive',
-              lower: [isActive],
-              includeLower: false,
-              upper: [],
-            ))
-            .addWhereClause(IndexWhereClause.between(
-              indexName: r'isActive',
-              lower: [],
-              upper: [isActive],
-              includeUpper: false,
-            ));
+            .addWhereClause(
+              IndexWhereClause.between(
+                indexName: r'isActive',
+                lower: [isActive],
+                includeLower: false,
+                upper: [],
+              ),
+            )
+            .addWhereClause(
+              IndexWhereClause.between(
+                indexName: r'isActive',
+                lower: [],
+                upper: [isActive],
+                includeUpper: false,
+              ),
+            );
       }
     });
   }
 
   QueryBuilder<AlarmModel, AlarmModel, QAfterWhereClause> daysElementEqualTo(
-      int daysElement) {
+    int daysElement,
+  ) {
     return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IndexWhereClause.equalTo(
-        indexName: r'days',
-        value: [daysElement],
-      ));
+      return query.addWhereClause(
+        IndexWhereClause.equalTo(indexName: r'days', value: [daysElement]),
+      );
     });
   }
 
   QueryBuilder<AlarmModel, AlarmModel, QAfterWhereClause> daysElementNotEqualTo(
-      int daysElement) {
+    int daysElement,
+  ) {
     return QueryBuilder.apply(this, (query) {
       if (query.whereSort == Sort.asc) {
         return query
-            .addWhereClause(IndexWhereClause.between(
-              indexName: r'days',
-              lower: [],
-              upper: [daysElement],
-              includeUpper: false,
-            ))
-            .addWhereClause(IndexWhereClause.between(
-              indexName: r'days',
-              lower: [daysElement],
-              includeLower: false,
-              upper: [],
-            ));
+            .addWhereClause(
+              IndexWhereClause.between(
+                indexName: r'days',
+                lower: [],
+                upper: [daysElement],
+                includeUpper: false,
+              ),
+            )
+            .addWhereClause(
+              IndexWhereClause.between(
+                indexName: r'days',
+                lower: [daysElement],
+                includeLower: false,
+                upper: [],
+              ),
+            );
       } else {
         return query
-            .addWhereClause(IndexWhereClause.between(
-              indexName: r'days',
-              lower: [daysElement],
-              includeLower: false,
-              upper: [],
-            ))
-            .addWhereClause(IndexWhereClause.between(
-              indexName: r'days',
-              lower: [],
-              upper: [daysElement],
-              includeUpper: false,
-            ));
+            .addWhereClause(
+              IndexWhereClause.between(
+                indexName: r'days',
+                lower: [daysElement],
+                includeLower: false,
+                upper: [],
+              ),
+            )
+            .addWhereClause(
+              IndexWhereClause.between(
+                indexName: r'days',
+                lower: [],
+                upper: [daysElement],
+                includeUpper: false,
+              ),
+            );
       }
     });
   }
 
   QueryBuilder<AlarmModel, AlarmModel, QAfterWhereClause>
-      daysElementGreaterThan(
-    int daysElement, {
-    bool include = false,
-  }) {
+  daysElementGreaterThan(int daysElement, {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IndexWhereClause.between(
-        indexName: r'days',
-        lower: [daysElement],
-        includeLower: include,
-        upper: [],
-      ));
+      return query.addWhereClause(
+        IndexWhereClause.between(
+          indexName: r'days',
+          lower: [daysElement],
+          includeLower: include,
+          upper: [],
+        ),
+      );
     });
   }
 
@@ -697,12 +735,14 @@ extension AlarmModelQueryWhere
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IndexWhereClause.between(
-        indexName: r'days',
-        lower: [],
-        upper: [daysElement],
-        includeUpper: include,
-      ));
+      return query.addWhereClause(
+        IndexWhereClause.between(
+          indexName: r'days',
+          lower: [],
+          upper: [daysElement],
+          includeUpper: include,
+        ),
+      );
     });
   }
 
@@ -713,13 +753,15 @@ extension AlarmModelQueryWhere
     bool includeUpper = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IndexWhereClause.between(
-        indexName: r'days',
-        lower: [lowerDaysElement],
-        includeLower: includeLower,
-        upper: [upperDaysElement],
-        includeUpper: includeUpper,
-      ));
+      return query.addWhereClause(
+        IndexWhereClause.between(
+          indexName: r'days',
+          lower: [lowerDaysElement],
+          includeLower: includeLower,
+          upper: [upperDaysElement],
+          includeUpper: includeUpper,
+        ),
+      );
     });
   }
 }
@@ -728,142 +770,106 @@ extension AlarmModelQueryFilter
     on QueryBuilder<AlarmModel, AlarmModel, QFilterCondition> {
   QueryBuilder<AlarmModel, AlarmModel, QAfterFilterCondition> daysIsNull() {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'days',
-      ));
+      return query.addFilterCondition(
+        const FilterCondition.isNull(property: r'days'),
+      );
     });
   }
 
   QueryBuilder<AlarmModel, AlarmModel, QAfterFilterCondition> daysIsNotNull() {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'days',
-      ));
+      return query.addFilterCondition(
+        const FilterCondition.isNotNull(property: r'days'),
+      );
     });
   }
 
   QueryBuilder<AlarmModel, AlarmModel, QAfterFilterCondition>
-      daysElementEqualTo(int value) {
+  daysElementEqualTo(int value) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'days',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.equalTo(property: r'days', value: value),
+      );
     });
   }
 
   QueryBuilder<AlarmModel, AlarmModel, QAfterFilterCondition>
-      daysElementGreaterThan(
-    int value, {
-    bool include = false,
-  }) {
+  daysElementGreaterThan(int value, {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'days',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.greaterThan(
+          include: include,
+          property: r'days',
+          value: value,
+        ),
+      );
     });
   }
 
   QueryBuilder<AlarmModel, AlarmModel, QAfterFilterCondition>
-      daysElementLessThan(
-    int value, {
-    bool include = false,
-  }) {
+  daysElementLessThan(int value, {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'days',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.lessThan(
+          include: include,
+          property: r'days',
+          value: value,
+        ),
+      );
     });
   }
 
   QueryBuilder<AlarmModel, AlarmModel, QAfterFilterCondition>
-      daysElementBetween(
+  daysElementBetween(
     int lower,
     int upper, {
     bool includeLower = true,
     bool includeUpper = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'days',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.between(
+          property: r'days',
+          lower: lower,
+          includeLower: includeLower,
+          upper: upper,
+          includeUpper: includeUpper,
+        ),
+      );
     });
   }
 
   QueryBuilder<AlarmModel, AlarmModel, QAfterFilterCondition> daysLengthEqualTo(
-      int length) {
+    int length,
+  ) {
     return QueryBuilder.apply(this, (query) {
-      return query.listLength(
-        r'days',
-        length,
-        true,
-        length,
-        true,
-      );
+      return query.listLength(r'days', length, true, length, true);
     });
   }
 
   QueryBuilder<AlarmModel, AlarmModel, QAfterFilterCondition> daysIsEmpty() {
     return QueryBuilder.apply(this, (query) {
-      return query.listLength(
-        r'days',
-        0,
-        true,
-        0,
-        true,
-      );
+      return query.listLength(r'days', 0, true, 0, true);
     });
   }
 
   QueryBuilder<AlarmModel, AlarmModel, QAfterFilterCondition> daysIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
-      return query.listLength(
-        r'days',
-        0,
-        false,
-        999999,
-        true,
-      );
+      return query.listLength(r'days', 0, false, 999999, true);
     });
   }
 
   QueryBuilder<AlarmModel, AlarmModel, QAfterFilterCondition>
-      daysLengthLessThan(
-    int length, {
-    bool include = false,
-  }) {
+  daysLengthLessThan(int length, {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
-      return query.listLength(
-        r'days',
-        0,
-        true,
-        length,
-        include,
-      );
+      return query.listLength(r'days', 0, true, length, include);
     });
   }
 
   QueryBuilder<AlarmModel, AlarmModel, QAfterFilterCondition>
-      daysLengthGreaterThan(
-    int length, {
-    bool include = false,
-  }) {
+  daysLengthGreaterThan(int length, {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
-      return query.listLength(
-        r'days',
-        length,
-        include,
-        999999,
-        true,
-      );
+      return query.listLength(r'days', length, include, 999999, true);
     });
   }
 
@@ -885,12 +891,12 @@ extension AlarmModelQueryFilter
   }
 
   QueryBuilder<AlarmModel, AlarmModel, QAfterFilterCondition> idEqualTo(
-      Id value) {
+    Id value,
+  ) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'id',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.equalTo(property: r'id', value: value),
+      );
     });
   }
 
@@ -899,11 +905,13 @@ extension AlarmModelQueryFilter
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'id',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.greaterThan(
+          include: include,
+          property: r'id',
+          value: value,
+        ),
+      );
     });
   }
 
@@ -912,11 +920,13 @@ extension AlarmModelQueryFilter
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'id',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.lessThan(
+          include: include,
+          property: r'id',
+          value: value,
+        ),
+      );
     });
   }
 
@@ -927,57 +937,59 @@ extension AlarmModelQueryFilter
     bool includeUpper = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'id',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.between(
+          property: r'id',
+          lower: lower,
+          includeLower: includeLower,
+          upper: upper,
+          includeUpper: includeUpper,
+        ),
+      );
     });
   }
 
   QueryBuilder<AlarmModel, AlarmModel, QAfterFilterCondition> isActiveIsNull() {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'isActive',
-      ));
+      return query.addFilterCondition(
+        const FilterCondition.isNull(property: r'isActive'),
+      );
     });
   }
 
   QueryBuilder<AlarmModel, AlarmModel, QAfterFilterCondition>
-      isActiveIsNotNull() {
+  isActiveIsNotNull() {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'isActive',
-      ));
+      return query.addFilterCondition(
+        const FilterCondition.isNotNull(property: r'isActive'),
+      );
     });
   }
 
   QueryBuilder<AlarmModel, AlarmModel, QAfterFilterCondition> isActiveEqualTo(
-      bool? value) {
+    bool? value,
+  ) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'isActive',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.equalTo(property: r'isActive', value: value),
+      );
     });
   }
 
   QueryBuilder<AlarmModel, AlarmModel, QAfterFilterCondition> messageIsNull() {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'message',
-      ));
+      return query.addFilterCondition(
+        const FilterCondition.isNull(property: r'message'),
+      );
     });
   }
 
   QueryBuilder<AlarmModel, AlarmModel, QAfterFilterCondition>
-      messageIsNotNull() {
+  messageIsNotNull() {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'message',
-      ));
+      return query.addFilterCondition(
+        const FilterCondition.isNotNull(property: r'message'),
+      );
     });
   }
 
@@ -986,27 +998,31 @@ extension AlarmModelQueryFilter
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'message',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.equalTo(
+          property: r'message',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
     });
   }
 
   QueryBuilder<AlarmModel, AlarmModel, QAfterFilterCondition>
-      messageGreaterThan(
+  messageGreaterThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'message',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.greaterThan(
+          include: include,
+          property: r'message',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
     });
   }
 
@@ -1016,12 +1032,14 @@ extension AlarmModelQueryFilter
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'message',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.lessThan(
+          include: include,
+          property: r'message',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
     });
   }
 
@@ -1033,14 +1051,16 @@ extension AlarmModelQueryFilter
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'message',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.between(
+          property: r'message',
+          lower: lower,
+          includeLower: includeLower,
+          upper: upper,
+          includeUpper: includeUpper,
+          caseSensitive: caseSensitive,
+        ),
+      );
     });
   }
 
@@ -1049,11 +1069,13 @@ extension AlarmModelQueryFilter
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'message',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.startsWith(
+          property: r'message',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
     });
   }
 
@@ -1062,92 +1084,96 @@ extension AlarmModelQueryFilter
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'message',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.endsWith(
+          property: r'message',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
     });
   }
 
   QueryBuilder<AlarmModel, AlarmModel, QAfterFilterCondition> messageContains(
-      String value,
-      {bool caseSensitive = true}) {
+    String value, {
+    bool caseSensitive = true,
+  }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'message',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.contains(
+          property: r'message',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
     });
   }
 
   QueryBuilder<AlarmModel, AlarmModel, QAfterFilterCondition> messageMatches(
-      String pattern,
-      {bool caseSensitive = true}) {
+    String pattern, {
+    bool caseSensitive = true,
+  }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'message',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.matches(
+          property: r'message',
+          wildcard: pattern,
+          caseSensitive: caseSensitive,
+        ),
+      );
     });
   }
 
   QueryBuilder<AlarmModel, AlarmModel, QAfterFilterCondition> messageIsEmpty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'message',
-        value: '',
-      ));
+      return query.addFilterCondition(
+        FilterCondition.equalTo(property: r'message', value: ''),
+      );
     });
   }
 
   QueryBuilder<AlarmModel, AlarmModel, QAfterFilterCondition>
-      messageIsNotEmpty() {
+  messageIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'message',
-        value: '',
-      ));
+      return query.addFilterCondition(
+        FilterCondition.greaterThan(property: r'message', value: ''),
+      );
     });
   }
 
   QueryBuilder<AlarmModel, AlarmModel, QAfterFilterCondition> repeatTypeEqualTo(
-      AlarmRepeatType value) {
+    AlarmRepeatType value,
+  ) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'repeatType',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.equalTo(property: r'repeatType', value: value),
+      );
     });
   }
 
   QueryBuilder<AlarmModel, AlarmModel, QAfterFilterCondition>
-      repeatTypeGreaterThan(
-    AlarmRepeatType value, {
-    bool include = false,
-  }) {
+  repeatTypeGreaterThan(AlarmRepeatType value, {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'repeatType',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.greaterThan(
+          include: include,
+          property: r'repeatType',
+          value: value,
+        ),
+      );
     });
   }
 
   QueryBuilder<AlarmModel, AlarmModel, QAfterFilterCondition>
-      repeatTypeLessThan(
-    AlarmRepeatType value, {
-    bool include = false,
-  }) {
+  repeatTypeLessThan(AlarmRepeatType value, {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'repeatType',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.lessThan(
+          include: include,
+          property: r'repeatType',
+          value: value,
+        ),
+      );
     });
   }
 
@@ -1158,23 +1184,25 @@ extension AlarmModelQueryFilter
     bool includeUpper = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'repeatType',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.between(
+          property: r'repeatType',
+          lower: lower,
+          includeLower: includeLower,
+          upper: upper,
+          includeUpper: includeUpper,
+        ),
+      );
     });
   }
 
   QueryBuilder<AlarmModel, AlarmModel, QAfterFilterCondition> timeEqualTo(
-      DateTime value) {
+    DateTime value,
+  ) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'time',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.equalTo(property: r'time', value: value),
+      );
     });
   }
 
@@ -1183,11 +1211,13 @@ extension AlarmModelQueryFilter
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'time',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.greaterThan(
+          include: include,
+          property: r'time',
+          value: value,
+        ),
+      );
     });
   }
 
@@ -1196,11 +1226,13 @@ extension AlarmModelQueryFilter
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'time',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.lessThan(
+          include: include,
+          property: r'time',
+          value: value,
+        ),
+      );
     });
   }
 
@@ -1211,13 +1243,15 @@ extension AlarmModelQueryFilter
     bool includeUpper = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'time',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.between(
+          property: r'time',
+          lower: lower,
+          includeLower: includeLower,
+          upper: upper,
+          includeUpper: includeUpper,
+        ),
+      );
     });
   }
 }
@@ -1356,8 +1390,9 @@ extension AlarmModelQueryWhereDistinct
     });
   }
 
-  QueryBuilder<AlarmModel, AlarmModel, QDistinct> distinctByMessage(
-      {bool caseSensitive = true}) {
+  QueryBuilder<AlarmModel, AlarmModel, QDistinct> distinctByMessage({
+    bool caseSensitive = true,
+  }) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'message', caseSensitive: caseSensitive);
     });
@@ -1403,7 +1438,7 @@ extension AlarmModelQueryProperty
   }
 
   QueryBuilder<AlarmModel, AlarmRepeatType, QQueryOperations>
-      repeatTypeProperty() {
+  repeatTypeProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'repeatType');
     });

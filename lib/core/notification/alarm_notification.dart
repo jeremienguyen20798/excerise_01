@@ -76,7 +76,7 @@ class AlarmNotification {
     );
     final scheduleDateTime = alarm.getTimeAlarm();
     await flutterLocalNotificationsPlugin.zonedSchedule(
-      alarm.alarmId ?? 0,
+      alarm.alarmId,
       alarm.getTime(),
       alarm.message,
       scheduleDateTime,

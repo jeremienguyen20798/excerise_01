@@ -41,8 +41,19 @@ class AlarmRepositoryImpl extends AlarmRepository {
 
   @override
   Future<AlarmEntity?> updateAlarmStatus(int id, bool isActive) async {
-    final result = await _localDB.updateAlarmStatus(id, isActive);
-    return result?.toEntity();
+    final alarm = await getAlarmById(id);
+    if (alarm != null) {
+      final distance = DateTime.now().difference(alarm.time).inDays;
+      if (distance == 0) {
+        final result = await _localDB.updateAlarmStatus(id, isActive);
+        return result?.toEntity();
+      } else {
+        alarm.time = alarm.time.add(Duration(days: distance));
+        final result = await _localDB.updateAlarm(id, alarm.time, isActive);
+        return result?.toEntity();
+      }
+    }
+    return null;
   }
 
   @override
