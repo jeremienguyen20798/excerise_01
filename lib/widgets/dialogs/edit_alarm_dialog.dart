@@ -122,7 +122,7 @@ class _EditAlarmDialogState extends State<EditAlarmDialog> {
             Expanded(
               child: MaterialButton(
                 onPressed: () {
-                  Navigator.pop(context, {
+                  context.pop({
                     'id': widget.alarm.alarmId,
                     "dateTime": dateTime,
                     "isActive": isActive,

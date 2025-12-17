@@ -32,6 +32,14 @@ class _ItemAlarmState extends State<ItemAlarm> {
   }
 
   @override
+  void didUpdateWidget(covariant ItemAlarm oldWidget) {
+    if (oldWidget.alarm != widget.alarm) {
+      isActive = widget.alarm.isActive ?? false;
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocBuilder<HomeBloc, HomeState>(
       builder: (context, state) {
@@ -42,6 +50,7 @@ class _ItemAlarmState extends State<ItemAlarm> {
           isChoose = false;
         } else if (state is DeleteAlarmState) {
           isLongPress = false;
+          isChoose = false;
         } else if (state is DeleteAllAlarmsState) {
           isLongPress = true;
           isChoose = true;

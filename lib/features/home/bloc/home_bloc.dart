@@ -6,6 +6,7 @@ import 'package:excerise_01/domain/usecase/update_alarm_status_usecase.dart';
 import 'package:excerise_01/features/home/bloc/home_event.dart';
 import 'package:excerise_01/features/home/bloc/home_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:permission_handler/permission_handler.dart';
 import '../../../core/notification/alarm_notification.dart';
 import '../../../domain/usecase/update_alarm_usecase.dart';
@@ -63,10 +64,15 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     DeleteAlarmEvent event,
     Emitter<HomeState> emitter,
   ) async {
-    await DeleteAlarmsUseCase().execute(_itemDeleteIds);
-    await _alarmNotification.cancelAllAlarmRing();
-    final dataList = await GetAlarmsUseCase().execute();
-    emitter(DeleteAlarmState(dataList));
+    if (_itemDeleteIds.isEmpty) {
+      EasyLoading.showToast('Không có báo thức nào để xóa');
+    } else {
+      await DeleteAlarmsUseCase().execute(_itemDeleteIds);
+      await _alarmNotification.cancelAllAlarmRing();
+      final dataList = await GetAlarmsUseCase().execute();
+      _itemDeleteIds = [];
+      emitter(DeleteAlarmState(dataList));
+    }
   }
 
   //Add all items alarm into blacklist
@@ -130,12 +136,13 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       isActive: isActive,
     );
     if (alarm != null) {
-      if (isActive) {
-        await _alarmNotification.showNotification(alarm);
-      } else {
-        await _alarmNotification.cancelAlarmRingById(idAlarm);
-      }
-      emitter(UpdateItemState(index, alarm));
+      // if (isActive) {
+      //   await _alarmNotification.showNotification(alarm);
+      // } else {
+      //   await _alarmNotification.cancelAlarmRingById(idAlarm);
+      // }
+      final state = UpdateItemState(index, alarm);
+      emitter(state);
     }
   }
 
