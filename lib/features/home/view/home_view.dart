@@ -98,9 +98,11 @@ class HomeView extends StatelessWidget {
                       context,
                       MaterialPageRoute(builder: (_) => AlarmPage()),
                     );
-                    BlocProvider.of<HomeBloc>(
-                      context,
-                    ).add(OnReloadAlarmListEvent(result));
+                    if (result != null) {
+                      BlocProvider.of<HomeBloc>(
+                        context,
+                      ).add(OnReloadAlarmListEvent(result));
+                    }
                   },
                   child: const Icon(Icons.add),
                 ),

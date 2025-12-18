@@ -52,7 +52,7 @@ class _AlarmViewState extends State<AlarmView> {
           appBar: AppBar(
             leading: IconButton(
               onPressed: () {
-                Navigator.pop(context);
+                context.pop();
               },
               icon: Icon(Icons.close, size: 32.0),
             ),
@@ -169,10 +169,10 @@ class _AlarmViewState extends State<AlarmView> {
       listener: (context, state) {
         if (state is AddAlarmState) {
           final alarm = state.alarm;
-          Navigator.pop(context, alarm);
+          context.pop(alarm);
         } else if (state is UpdateAlarmState) {
           final alarm = state.alarm;
-          Navigator.pop(context, alarm);
+          context.pop(alarm);
         }
       },
     );

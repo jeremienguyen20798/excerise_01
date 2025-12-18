@@ -1,6 +1,7 @@
 import 'package:excerise_01/core/constant/app_constant.dart';
 import 'package:excerise_01/core/routers/app_routers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -14,6 +15,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
       routerConfig: appRouters,
+      builder: EasyLoading.init(),
     );
   }
 }
