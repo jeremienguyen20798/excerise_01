@@ -73,3 +73,5 @@ class UpdateItemForListState extends HomeState {
 class CancelDeleteAllItemsState extends HomeState {}
 
 class DeniedNotificationPermissionRequestState extends HomeState {}
+
+class RemoveItemForDeleteIdsState extends HomeState {}

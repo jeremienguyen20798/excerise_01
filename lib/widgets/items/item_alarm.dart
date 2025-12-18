@@ -22,7 +22,10 @@ class ItemAlarm extends StatefulWidget {
 }
 
 class _ItemAlarmState extends State<ItemAlarm> {
-  bool isChoose = false, isActive = false, isLongPress = false;
+  bool isChoose = false,
+      isActive = false,
+      isLongPress = false,
+      isDeleteAllItems = false;
   List<int> itemDeleteIds = [];
 
   @override
@@ -54,6 +57,7 @@ class _ItemAlarmState extends State<ItemAlarm> {
         } else if (state is DeleteAllAlarmsState) {
           isLongPress = true;
           isChoose = true;
+          isDeleteAllItems = state.isDeleteAll;
         } else if (state is CancelDeleteAllItemsState) {
           isChoose = false;
         }
@@ -129,6 +133,10 @@ class _ItemAlarmState extends State<ItemAlarm> {
                           BlocProvider.of<HomeBloc>(
                             context,
                           ).add(AddItemForDeleteEvent(widget.alarm.alarmId));
+                        } else {
+                          BlocProvider.of<HomeBloc>(context).add(
+                            RemoveItemForDeleteIdsEvent(widget.alarm.alarmId),
+                          );
                         }
                       });
                     },

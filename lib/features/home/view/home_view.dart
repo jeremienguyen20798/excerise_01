@@ -28,6 +28,8 @@ class HomeView extends StatelessWidget {
           isDeleteAllItems = state.isDeleteAll;
         } else if (state is CancelDeleteAllItemsState) {
           isDeleteAllItems = false;
+        } else if (state is RemoveItemForDeleteIdsState) {
+          isDeleteAllItems = false;
         }
         return Scaffold(
           backgroundColor: Colors.grey.shade100,

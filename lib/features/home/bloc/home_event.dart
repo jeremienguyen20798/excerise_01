@@ -53,3 +53,9 @@ class UpdateItemForListEvent extends HomeEvent {
 class CancelDeleteAllItemsEvent extends HomeEvent {}
 
 class RequestNotificationPermissionEvent extends HomeEvent {}
+
+class RemoveItemForDeleteIdsEvent extends HomeEvent {
+  int id;
+
+  RemoveItemForDeleteIdsEvent(this.id);
+}

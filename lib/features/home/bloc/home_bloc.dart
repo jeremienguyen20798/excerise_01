@@ -28,6 +28,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<DeleteAlarmEvent>(_onDeleteAlarm);
     on<DeleteAllAlarmsEvent>(_onDeleteAllAlarms);
     on<RequestNotificationPermissionEvent>(_requestNotificationPermission);
+    on<RemoveItemForDeleteIdsEvent>(_removeItemForDeleteIds);
   }
 
   //Lấy ra danh sách các báo thức
@@ -182,5 +183,14 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     if (result.isDenied || result.isPermanentlyDenied) {
       emitter(DeniedNotificationPermissionRequestState());
     }
+  }
+
+  void _removeItemForDeleteIds(
+    RemoveItemForDeleteIdsEvent event,
+    Emitter<HomeState> emitter,
+  ) {
+    int alarmId = event.id;
+    _itemDeleteIds.remove(alarmId);
+    emitter(RemoveItemForDeleteIdsState());
   }
 }
