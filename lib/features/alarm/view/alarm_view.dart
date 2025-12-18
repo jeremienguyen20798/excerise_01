@@ -86,7 +86,7 @@ class _AlarmViewState extends State<AlarmView> {
                       AddAlarmEvent(
                         dateTime: dateTime,
                         repeatType: repeatType,
-                        message: labelStr,
+                        message: labelStr == labelInput ? null : labelStr,
                       ),
                     );
                   }
@@ -190,7 +190,7 @@ class _AlarmViewState extends State<AlarmView> {
       contentPadding: EdgeInsets.symmetric(horizontal: 0.0),
       onTap: isLabel
           ? () {
-              AppUtils.showAddLabelBottomSheet(context, (label) {
+              AppUtils.showAddLabelBottomSheet(context, labelStr, (label) {
                 if (onAddLabel != null) {
                   onAddLabel(label);
                 }

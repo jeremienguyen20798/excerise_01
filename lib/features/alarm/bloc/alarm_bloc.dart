@@ -21,9 +21,7 @@ class AlarmBloc extends Bloc<AlarmEvent, AlarmState> {
     AddAlarmEvent event,
     Emitter<AlarmState> emitter,
   ) async {
-    String message = event.message != null && event.message!.isNotEmpty
-        ? event.message!
-        : defaultMessage;
+    String message = event.message ?? defaultMessage;
     final DateTime time = event.dateTime;
     final repeatType = event.repeatType ?? AlarmRepeatType.onlyOnce;
     final days = event.days;

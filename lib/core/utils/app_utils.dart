@@ -62,13 +62,15 @@ class AppUtils {
 
   static void showAddLabelBottomSheet(
     BuildContext context,
+    String? label,
     Function(String) onAdd,
   ) {
     showModalBottomSheet(
       context: context,
+      isScrollControlled: true,
       backgroundColor: Colors.transparent,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
-      builder: (_) => AddLabelBottomSheet(),
+      builder: (_) => AddLabelBottomSheet(label),
     ).then((value) {
       if (value != null) {
         onAdd(value);
