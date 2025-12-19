@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'dart:developer';
 
+import 'package:excerise_01/core/notification/alarm_status_notifier.dart';
 import 'package:excerise_01/domain/usecase/delete_alarms_usecase.dart';
 import 'package:excerise_01/domain/usecase/get_alarms_usecase.dart';
 import 'package:excerise_01/domain/usecase/update_alarm_status_usecase.dart';
@@ -14,8 +16,13 @@ import '../../../domain/usecase/update_alarm_usecase.dart';
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final AlarmNotification _alarmNotification = AlarmNotification();
   List<int> _itemDeleteIds = [];
+  late StreamSubscription<int> _streamSubscription;
 
   HomeBloc() : super(InitHomeState()) {
+    _streamSubscription = AlarmStatusNotifier.instance.dismissedAlarmStream
+        .listen((alarmId) {
+          add(AlarmDismissedFromNotificationEvent(alarmId));
+        });
     on<ItemAlarmLongPressEvent>(_onLongPressItem);
     on<OnRestartEvent>(_onRestart);
     on<OnReloadAlarmListEvent>(_onReloadAlarmList);
@@ -29,6 +36,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<DeleteAllAlarmsEvent>(_onDeleteAllAlarms);
     on<RequestNotificationPermissionEvent>(_requestNotificationPermission);
     on<RemoveItemForDeleteIdsEvent>(_removeItemForDeleteIds);
+    on<AlarmDismissedFromNotificationEvent>(_alarmDismissedFromNotification);
   }
 
   //Lấy ra danh sách các báo thức
@@ -192,5 +200,20 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     int alarmId = event.id;
     _itemDeleteIds.remove(alarmId);
     emitter(RemoveItemForDeleteIdsState());
+  }
+
+  Future<void> _alarmDismissedFromNotification(
+    AlarmDismissedFromNotificationEvent event,
+    Emitter<HomeState> emitter,
+  ) async {
+    int alarmId = event.alarmId;
+    final result = await UpdateAlarmStatusUseCase().execute(alarmId, false);
+    emitter(AlarmDismissedFromNotificationState(result));
+  }
+
+  @override
+  Future<void> close() {
+    _streamSubscription.cancel();
+    return super.close();
   }
 }

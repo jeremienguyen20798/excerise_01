@@ -33,6 +33,15 @@ class AlarmList extends StatelessWidget {
           final removeItem = alarms.elementAt(index);
           alarms.remove(removeItem);
           alarms.insert(index, item);
+        } else if (state is AlarmDismissedFromNotificationState) {
+          // Tìm index của alarm cần update
+          final index = alarms.indexWhere(
+            (e) => e.alarmId == state.entity?.alarmId,
+          );
+          if (index != -1 && state.entity != null) {
+            alarms[index] =
+                state.entity!; // Thay thế item cũ bằng item mới (đã tắt)
+          }
         }
         return alarms.isNotEmpty
             ? SliverList.separated(

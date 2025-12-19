@@ -59,3 +59,9 @@ class RemoveItemForDeleteIdsEvent extends HomeEvent {
 
   RemoveItemForDeleteIdsEvent(this.id);
 }
+
+class AlarmDismissedFromNotificationEvent extends HomeEvent {
+  int alarmId;
+
+  AlarmDismissedFromNotificationEvent(this.alarmId);
+}

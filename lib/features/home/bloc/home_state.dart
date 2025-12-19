@@ -75,3 +75,12 @@ class CancelDeleteAllItemsState extends HomeState {}
 class DeniedNotificationPermissionRequestState extends HomeState {}
 
 class RemoveItemForDeleteIdsState extends HomeState {}
+
+class AlarmDismissedFromNotificationState extends HomeState {
+  final AlarmEntity? entity;
+
+  AlarmDismissedFromNotificationState(this.entity);
+
+  @override
+  List<Object?> get props => [entity];
+}

@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import '../../data/local_db/alarm_local_db.dart';
@@ -48,7 +46,6 @@ class AlarmNotification {
       initializationSettings,
       onDidReceiveNotificationResponse:
           (NotificationResponse notificationResponse) async {
-            log('Cancel alarm notification with ${notificationResponse.id}');
             int alarmId = notificationResponse.id ?? -1;
             await _localDB.updateAlarmStatus(alarmId, false);
           },
