@@ -1,6 +1,7 @@
 import 'package:excerise_01/core/constant/app_constant.dart';
 import 'package:excerise_01/widgets/items/item_repeat.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../domain/entities/alarm_repeat_type.dart';
 
@@ -38,7 +39,7 @@ class _RepeatPageState extends State<RepeatPage> {
         automaticallyImplyLeading: false,
         leading: IconButton(
           onPressed: () {
-            Navigator.pop(context, _alarmRepeatType);
+            context.pop(_alarmRepeatType);
           },
           icon: Icon(Icons.arrow_back),
         ),

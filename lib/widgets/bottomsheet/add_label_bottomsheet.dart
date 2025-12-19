@@ -1,5 +1,6 @@
 import 'package:excerise_01/core/constant/app_constant.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class AddLabelBottomSheet extends StatefulWidget {
   final String? label;
@@ -64,7 +65,7 @@ class _AddLabelBottomSheetState extends State<AddLabelBottomSheet> {
                 Expanded(
                   child: MaterialButton(
                     onPressed: () {
-                      Navigator.pop(context);
+                      context.pop();
                     },
                     height: 48.0,
                     elevation: 0.0,
@@ -85,7 +86,7 @@ class _AddLabelBottomSheetState extends State<AddLabelBottomSheet> {
                 Expanded(
                   child: MaterialButton(
                     onPressed: () {
-                      Navigator.pop(context, labelController.text);
+                      context.pop(labelController.text);
                     },
                     height: 48.0,
                     elevation: 0.0,

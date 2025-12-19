@@ -1,6 +1,7 @@
 import 'package:excerise_01/core/constant/app_constant.dart';
 import 'package:excerise_01/widgets/items/item_day.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class CustomRepeatTypeBottomSheet extends StatefulWidget {
   final List<int>? days;
@@ -84,7 +85,7 @@ class _CustomRepeatTypeBottomSheetState
                 Expanded(
                   child: MaterialButton(
                     onPressed: () {
-                      Navigator.pop(context);
+                      context.pop();
                     },
                     elevation: 0.0,
                     shape: RoundedRectangleBorder(
@@ -106,7 +107,7 @@ class _CustomRepeatTypeBottomSheetState
                 Expanded(
                   child: MaterialButton(
                     onPressed: () {
-                      Navigator.pop(context, alarmDays);
+                      context.pop(alarmDays);
                     },
                     elevation: 0.0,
                     height: 48.0,

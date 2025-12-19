@@ -1,5 +1,6 @@
 import 'package:excerise_01/core/constant/app_constant.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class NotificationWarningDialog extends StatelessWidget {
@@ -30,8 +31,8 @@ class NotificationWarningDialog extends StatelessWidget {
         TextButton(
           onPressed: () async {
             final isOpened = await openAppSettings();
-            if(isOpened) {
-              Navigator.pop(context);
+            if (isOpened) {
+              context.pop(isOpened);
             }
           },
           child: Text(settings),
