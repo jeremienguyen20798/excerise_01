@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:excerise_01/core/notification/alarm_status_notifier.dart';
+import 'package:excerise_01/domain/entities/alarm_entity.dart';
 import 'package:excerise_01/domain/usecase/delete_alarms_usecase.dart';
 import 'package:excerise_01/domain/usecase/get_alarms_usecase.dart';
 import 'package:excerise_01/domain/usecase/update_alarm_status_usecase.dart';
@@ -16,12 +18,12 @@ import '../../../domain/usecase/update_alarm_usecase.dart';
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final AlarmNotification _alarmNotification = AlarmNotification();
   List<int> _itemDeleteIds = [];
-  late StreamSubscription<int> _streamSubscription;
+  late StreamSubscription<String> _streamSubscription;
 
   HomeBloc() : super(InitHomeState()) {
     _streamSubscription = AlarmStatusNotifier.instance.dismissedAlarmStream
-        .listen((alarmId) {
-          add(AlarmDismissedFromNotificationEvent(alarmId));
+        .listen((alarmJson) {
+          add(AlarmDismissedFromNotificationEvent(alarmJson));
         });
     on<ItemAlarmLongPressEvent>(_onLongPressItem);
     on<OnRestartEvent>(_onRestart);
@@ -206,9 +208,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     AlarmDismissedFromNotificationEvent event,
     Emitter<HomeState> emitter,
   ) async {
-    int alarmId = event.alarmId;
-    final result = await UpdateAlarmStatusUseCase().execute(alarmId, false);
-    emitter(AlarmDismissedFromNotificationState(result));
+    final alarmJson = event.alarmData;
+    final json = jsonDecode(alarmJson);
+    final entity = AlarmEntity.fromJson(json);
+    emitter(AlarmDismissedFromNotificationState(entity));
   }
 
   @override

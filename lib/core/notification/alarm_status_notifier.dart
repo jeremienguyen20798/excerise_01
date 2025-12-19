@@ -10,10 +10,10 @@ class AlarmStatusNotifier {
   static const String _isolateName = 'ALARM_ISOLATE_PORT';
 
   // StreamController để gửi sự kiện
-  final StreamController<int> _alarmController =
-      StreamController<int>.broadcast();
+  final StreamController<String> _alarmController =
+      StreamController<String>.broadcast();
   // Stream để Bloc lắng nghe
-  Stream<int> get dismissedAlarmStream => _alarmController.stream;
+  Stream<String> get dismissedAlarmStream => _alarmController.stream;
 
   // ReceivePort để lắng nghe từ background isolate
   ReceivePort? _receivePort;
@@ -30,24 +30,24 @@ class AlarmStatusNotifier {
 
     // Lắng nghe dữ liệu gửi về từ background
     _receivePort!.listen((dynamic data) {
-      if (data is int) {
+      if (data is String) {
         _alarmController.add(data); // Đẩy vào stream cho Bloc nghe
       }
     });
   }
 
   // Phương thức gọi từ background/notification handler
-  void notifyDismissal(int alarmId) {
+  void notifyDismissal(String alarmJson) {
     // Kiểm tra xem có đang ở Main Isolate không
     // Nếu SendPort tìm thấy tức là ta đang ở Background, cần gửi về Main
     final SendPort? sendPort = IsolateNameServer.lookupPortByName(_isolateName);
     if (sendPort != null) {
       // Đang ở Background Isolate -> Gửi qua đường ống về Main
-      sendPort.send(alarmId);
+      sendPort.send(alarmJson);
     } else {
       // Đang ở Main Isolate (App đang mở foreground) -> Add trực tiếp
       if (!_alarmController.isClosed) {
-        _alarmController.add(alarmId);
+        _alarmController.add(alarmJson);
       }
     }
   }
