@@ -24,6 +24,9 @@ class ItemRepeat extends StatelessWidget {
         color: isItemSelected ? Colors.blue.shade50 : Colors.grey.shade200,
       ),
       child: ListTile(
+        focusColor: Colors.transparent,
+        hoverColor: Colors.transparent,
+        splashColor: Colors.transparent,
         onTap: () {
           onClick(alarmRepeatType);
         },
