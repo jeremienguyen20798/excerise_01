@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:excerise_01/core/extensions/alarm_repeat_ext.dart';
 import 'package:excerise_01/core/utils/app_utils.dart';
+import 'package:excerise_01/core/utils/formatter.dart';
 import 'package:excerise_01/domain/entities/alarm_entity.dart';
 import 'package:excerise_01/features/alarm/bloc/alarm_bloc.dart';
 import 'package:excerise_01/features/alarm/bloc/alarm_event.dart';
@@ -28,6 +29,7 @@ class _AlarmViewState extends State<AlarmView> {
   AlarmRepeatType repeatType = AlarmRepeatType.onlyOnce;
   DateTime dateTime = DateTime.now();
   String labelStr = labelInput, titleAlarm = titleAddAlarm;
+  List<int> days = [];
 
   @override
   void initState() {
@@ -37,6 +39,7 @@ class _AlarmViewState extends State<AlarmView> {
       dateTime = widget.alarm!.time;
       labelStr = widget.alarm!.message ?? labelInput;
       titleAlarm = titleEditAlarm;
+      days = widget.alarm!.days ?? [];
     }
     super.initState();
   }
@@ -79,6 +82,7 @@ class _AlarmViewState extends State<AlarmView> {
                         dateTime: dateTime,
                         message: labelStr,
                         repeatType: repeatType,
+                        days: days,
                       ),
                     );
                   } else {
@@ -87,6 +91,7 @@ class _AlarmViewState extends State<AlarmView> {
                         dateTime: dateTime,
                         repeatType: repeatType,
                         message: labelStr == labelInput ? null : labelStr,
+                        days: days,
                       ),
                     );
                   }
@@ -132,15 +137,22 @@ class _AlarmViewState extends State<AlarmView> {
                 _buildItemLabel(ringtone, value: 'Báo thức tự nhiên'),
                 _buildItemLabel(
                   repeat,
-                  value: repeatType.getStr(),
+                  value: repeatType == AlarmRepeatType.custom && days.isNotEmpty
+                      ? Formatter.formatDaysToStr(days)
+                      : repeatType.getStr(),
                   onClick: () async {
-                    final result = await context.push<AlarmRepeatType>(
+                    final result = await context.push<dynamic>(
                       '/alarm/repeat',
-                      extra: repeatType,
+                      extra: {"repeatType": repeatType, "days": days},
                     );
-                    repeatType = result ?? AlarmRepeatType.onlyOnce;
-                    setState(() {});
-                    log('Alarm repeat type: ${repeatType.name}');
+                    if (result != null) {
+                      repeatType = result['repeatType'] as AlarmRepeatType;
+                      days = result['days'];
+                      setState(() {});
+                      log(
+                        'Alarm repeat type: ${repeatType.name} - days length: ${days.length}',
+                      );
+                    }
                   },
                 ),
                 _buildItemLabel(

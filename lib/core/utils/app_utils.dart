@@ -32,6 +32,7 @@ class AppUtils {
   ) async {
     final days = await showModalBottomSheet(
       context: context,
+      isScrollControlled: true,
       backgroundColor: Colors.transparent,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
       builder: (_) => CustomRepeatTypeBottomSheet(days: alarmDays),

@@ -33,6 +33,16 @@ class _CustomRepeatTypeBottomSheetState
   }
 
   @override
+  void didUpdateWidget(covariant CustomRepeatTypeBottomSheet oldWidget) {
+    if (oldWidget.days != widget.days) {
+      setState(() {
+        alarmDays = widget.days ?? [];
+      });
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.all(16.0),
@@ -42,6 +52,7 @@ class _CustomRepeatTypeBottomSheetState
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
         children: [
           Padding(
             padding: const EdgeInsets.only(top: 24.0, bottom: 16.0),
@@ -54,24 +65,23 @@ class _CustomRepeatTypeBottomSheetState
               ),
             ),
           ),
-          Expanded(
-            child: ListView.builder(
-              itemBuilder: (context, index) => ItemDay(
-                day: days[index],
-                onAddDay: (value) {
-                  setState(() {
-                    alarmDays.add(value);
-                  });
-                },
-                onRemoveDay: (value) {
-                  setState(() {
-                    alarmDays.remove(value);
-                  });
-                },
-              ),
-              itemCount: days.length,
-              shrinkWrap: true,
+          ListView.builder(
+            itemBuilder: (context, index) => ItemDay(
+              day: days[index],
+              isSelected: alarmDays.contains(days[index]),
+              onAddDay: (value) {
+                setState(() {
+                  alarmDays.add(value);
+                });
+              },
+              onRemoveDay: (value) {
+                setState(() {
+                  alarmDays.remove(value);
+                });
+              },
             ),
+            itemCount: days.length,
+            shrinkWrap: true,
           ),
           Padding(
             padding: const EdgeInsets.symmetric(

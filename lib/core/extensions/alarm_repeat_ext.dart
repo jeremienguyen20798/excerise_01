@@ -15,4 +15,29 @@ extension AlarmRepeatExt on AlarmRepeatType {
         return defaultCustomText;
     }
   }
+
+  List<int> getDays() {
+    switch (this) {
+      case AlarmRepeatType.daily:
+        return [
+          DateTime.monday,
+          DateTime.tuesday,
+          DateTime.wednesday,
+          DateTime.thursday,
+          DateTime.friday,
+          DateTime.saturday,
+          DateTime.sunday,
+        ];
+      case AlarmRepeatType.mondayToFriday:
+        return [
+          DateTime.monday,
+          DateTime.tuesday,
+          DateTime.wednesday,
+          DateTime.thursday,
+          DateTime.friday,
+        ];
+      default:
+        return [];
+    }
+  }
 }

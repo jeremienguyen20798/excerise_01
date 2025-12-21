@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 class ItemDay extends StatefulWidget {
   final int day;
+  final bool isSelected;
   final Function(int) onAddDay;
   final Function(int) onRemoveDay;
 
@@ -11,6 +12,7 @@ class ItemDay extends StatefulWidget {
     required this.day,
     required this.onAddDay,
     required this.onRemoveDay,
+    required this.isSelected,
   });
 
   @override
@@ -19,6 +21,20 @@ class ItemDay extends StatefulWidget {
 
 class _ItemDayState extends State<ItemDay> {
   bool isChoose = false;
+
+  @override
+  void initState() {
+    isChoose = widget.isSelected;
+    super.initState();
+  }
+
+  @override
+  void didUpdateWidget(covariant ItemDay oldWidget) {
+    if (oldWidget.isSelected != widget.isSelected) {
+      isChoose = widget.isSelected;
+    }
+    super.didUpdateWidget(oldWidget);
+  }
 
   @override
   Widget build(BuildContext context) {
