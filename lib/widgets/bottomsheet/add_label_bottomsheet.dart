@@ -52,6 +52,7 @@ class _AddLabelBottomSheetState extends State<AddLabelBottomSheet> {
             SizedBox(height: 24.0),
             TextField(
               controller: labelController,
+              autofocus: true,
               decoration: InputDecoration(
                 hintText: labelInput,
                 border: OutlineInputBorder(),

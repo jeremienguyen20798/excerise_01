@@ -50,35 +50,34 @@ class HomeView extends StatelessWidget {
                 pinned: true,
                 floating: false,
                 backgroundColor: Colors.grey.shade100,
+                actions: [
+                  isLongPress
+                      ? IconButton(
+                          onPressed: () {
+                            if (isDeleteAllItems) {
+                              BlocProvider.of<HomeBloc>(
+                                context,
+                              ).add(CancelDeleteAllItemsEvent());
+                            } else {
+                              BlocProvider.of<HomeBloc>(
+                                context,
+                              ).add(DeleteAllAlarmsEvent());
+                            }
+                          },
+                          icon: Icon(
+                            Icons.playlist_add_check,
+                            color: isDeleteAllItems
+                                ? Colors.deepPurple
+                                : Colors.black,
+                          ),
+                        )
+                      : IconButton(
+                          onPressed: () {},
+                          icon: Icon(Icons.more_vert, color: Colors.black),
+                        ),
+                ],
                 flexibleSpace: FlexibleSpaceBar(
                   titlePadding: EdgeInsets.only(left: 16.0, bottom: 16.0),
-                  background: Align(
-                    alignment: Alignment.centerRight,
-                    child: isLongPress
-                        ? IconButton(
-                            onPressed: () {
-                              if (isDeleteAllItems) {
-                                BlocProvider.of<HomeBloc>(
-                                  context,
-                                ).add(CancelDeleteAllItemsEvent());
-                              } else {
-                                BlocProvider.of<HomeBloc>(
-                                  context,
-                                ).add(DeleteAllAlarmsEvent());
-                              }
-                            },
-                            icon: Icon(
-                              Icons.playlist_add_check,
-                              color: isDeleteAllItems
-                                  ? Colors.deepPurple
-                                  : Colors.black,
-                            ),
-                          )
-                        : IconButton(
-                            onPressed: () {},
-                            icon: Icon(Icons.more_vert, color: Colors.black),
-                          ),
-                  ),
                   title: isLongPress
                       ? Text(
                           chooseItem,
