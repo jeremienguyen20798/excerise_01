@@ -67,7 +67,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   //Them các item vào danh sách để xoá
   void _addItemDelete(AddItemForDeleteEvent event, Emitter<HomeState> emitter) {
     _itemDeleteIds.add(event.id);
-    emitter(AddItemForDeleteState());
+    final length = _itemDeleteIds.length;
+    emitter(AddItemForDeleteState(length));
   }
 
   //Xoá các item alarm
@@ -94,7 +95,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     final alarms = await GetAlarmsUseCase().execute();
     if (alarms.isNotEmpty) {
       _itemDeleteIds = alarms.map((item) => item.alarmId).toList();
-      emitter(DeleteAllAlarmsState(true));
+      final deleteItemslength = _itemDeleteIds.length;
+      emitter(DeleteAllAlarmsState(true, deleteItemslength));
     }
   }
 
@@ -201,7 +203,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   ) {
     int alarmId = event.id;
     _itemDeleteIds.remove(alarmId);
-    emitter(RemoveItemForDeleteIdsState());
+    final deleteItemsLength = _itemDeleteIds.length;
+    emitter(RemoveItemForDeleteIdsState(deleteItemsLength));
   }
 
   Future<void> _alarmDismissedFromNotification(

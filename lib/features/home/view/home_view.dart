@@ -17,6 +17,7 @@ class HomeView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<HomeBloc, HomeState>(
       builder: (context, state) {
+        int deleteItemsLength = 0;
         if (state is ItemAlarmLongPressState) {
           isLongPress = true;
         } else if (state is OnRestartState) {
@@ -26,10 +27,15 @@ class HomeView extends StatelessWidget {
           isLongPress = false;
         } else if (state is DeleteAllAlarmsState) {
           isDeleteAllItems = state.isDeleteAll;
+          deleteItemsLength = state.length;
         } else if (state is CancelDeleteAllItemsState) {
           isDeleteAllItems = false;
+          deleteItemsLength = 0;
         } else if (state is RemoveItemForDeleteIdsState) {
           isDeleteAllItems = false;
+          deleteItemsLength = state.length;
+        } else if (state is AddItemForDeleteState) {
+          deleteItemsLength = state.length;
         }
         return Scaffold(
           backgroundColor: Colors.grey.shade100,
@@ -80,7 +86,7 @@ class HomeView extends StatelessWidget {
                   titlePadding: EdgeInsets.only(left: 16.0, bottom: 16.0),
                   title: isLongPress
                       ? Text(
-                          chooseItem,
+                          '$chooseItem$deleteItemsLength$item',
                           style: TextStyle(fontSize: 16.0, color: Colors.black),
                           textAlign: TextAlign.center,
                         )

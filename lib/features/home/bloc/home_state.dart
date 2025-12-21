@@ -21,7 +21,14 @@ class ItemAlarmLongPressState extends HomeState {}
 
 class OnRestartState extends HomeState {}
 
-class AddItemForDeleteState extends HomeState {}
+class AddItemForDeleteState extends HomeState {
+  final int length;
+
+  AddItemForDeleteState(this.length);
+
+  @override
+  List<Object?> get props => [length];
+}
 
 class DeleteAlarmState extends HomeState {
   final List<AlarmEntity> alarms;
@@ -34,11 +41,12 @@ class DeleteAlarmState extends HomeState {
 
 class DeleteAllAlarmsState extends HomeState {
   final bool isDeleteAll;
+  final int length;
 
-  DeleteAllAlarmsState(this.isDeleteAll);
+  DeleteAllAlarmsState(this.isDeleteAll, this.length);
 
   @override
-  List<Object?> get props => [isDeleteAll];
+  List<Object?> get props => [isDeleteAll, length];
 }
 
 class ReloadAlarmListState extends HomeState {
@@ -74,7 +82,14 @@ class CancelDeleteAllItemsState extends HomeState {}
 
 class DeniedNotificationPermissionRequestState extends HomeState {}
 
-class RemoveItemForDeleteIdsState extends HomeState {}
+class RemoveItemForDeleteIdsState extends HomeState {
+  final int length;
+
+  RemoveItemForDeleteIdsState(this.length);
+
+  @override
+  List<Object?> get props => [length];
+}
 
 class AlarmDismissedFromNotificationState extends HomeState {
   final AlarmEntity? entity;
