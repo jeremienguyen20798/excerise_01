@@ -68,6 +68,12 @@ class _ItemAlarmState extends State<ItemAlarm> {
             borderRadius: BorderRadius.circular(16.0),
           ),
           child: ListTile(
+            focusColor: Colors.transparent,
+            hoverColor: Colors.transparent,
+            splashColor: Colors.transparent,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16.0),
+            ),
             contentPadding: EdgeInsets.symmetric(
               horizontal: 16.0,
               vertical: 8.0,
