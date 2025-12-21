@@ -33,7 +33,9 @@ class AlarmEntity {
       message: json['message'],
       repeatType: json['repeatType'].toString().getRepeatType(),
       isActive: json['isActive'],
-      days: json['days'],
+      days: json['days'] != null
+          ? List<int>.from(json['days'] as List<dynamic>)
+          : null,
     );
   }
 
@@ -136,7 +138,7 @@ class AlarmEntity {
       'time': time.toString(),
       'repeatType': repeatType.name,
       'isActive': isActive,
-      'days': days?.map((item) => item.toString()).toList(),
+      'days': days,
     };
     return jsonEncode(data);
   }
