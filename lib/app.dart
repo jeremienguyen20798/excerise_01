@@ -8,23 +8,17 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return EasyLocalization(
-      supportedLocales: [Locale('en', 'US'), Locale('vi', 'VN')],
-      path:
-          'assets/translations', // <-- change the path of the translation files
-      fallbackLocale: Locale('en', 'US'),
-      child: MaterialApp.router(
-        title: 'defaultAppName'.tr(),
-        debugShowCheckedModeBanner: false,
-        localizationsDelegates: context.localizationDelegates,
-        supportedLocales: context.supportedLocales,
-        locale: context.locale,
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        ),
-        routerConfig: appRouters,
-        builder: EasyLoading.init(),
+    return MaterialApp.router(
+      title: 'defaultAppName'.tr(),
+      debugShowCheckedModeBanner: false,
+      localizationsDelegates: context.localizationDelegates,
+      supportedLocales: context.supportedLocales,
+      locale: context.locale,
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
+      routerConfig: appRouters,
+      builder: EasyLoading.init(),
     );
   }
 }

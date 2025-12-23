@@ -2,7 +2,7 @@
     "defaultMessage": "Báo thức",
     "defaultAppName": "Đồng Hồ Báo Thức",
     "defaultEmptyText": "Không có báo thức nào ở đây",
-    "defaultSubEmptyText ": "Kỷ luật là cây cầu nối giữa mục tiêu và thành tựu.",
+    "defaultSubEmptyText": "Kỷ luật là cây cầu nối giữa mục tiêu và thành tựu.",
     "chooseItem": "Đã chọn ",
     "item": " mục",
     "confirmText": "Hoàn tất",
@@ -31,11 +31,13 @@
     "addAlarmLabel": "Thêm nhãn báo thức",
     "add": "Đặt",
     "defaultSpace": " ",
-    "defaultSpace1": " '|' ",
+    "defaultSpace1": " | ",
     "defaultTitle": "Báo thức đến lúc",
     "ringtoneTitle": "Nhạc chuông",
     "defaultOnlyOnceText": "Một lần",
     "defaultDailyText": "Hàng ngày",
     "defaultMondayToFridayText": "Thứ Hai đến thứ Sáu",
-    "defaultCustomText": "Tuỳ chỉnh"
+    "defaultCustomText": "Tuỳ chỉnh",
+    "changeLanguage": "Thay đổi ngôn ngữ",
+    "privacyPolicy": "Chính sách bảo mật"
 }

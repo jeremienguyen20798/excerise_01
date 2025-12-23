@@ -2,7 +2,7 @@
     "defaultMessage": "Alarm",
     "defaultAppName": "Alarm Clock",
     "defaultEmptyText": "There is no alarm here",
-    "defaultSubEmptyText ": "Discipline is the bridge between goals and accomplishments.",
+    "defaultSubEmptyText": "Discipline is the bridge between goals and accomplishments.",
     "chooseItem": "Selected ",
     "item": " item",
     "confirmText": "Completed",
@@ -30,11 +30,13 @@
     "addAlarmLabel": "Add alarm label",
     "add": "Set",
     "defaultSpace": " ",
-    "defaultSpace1": " '|' ",
+    "defaultSpace1": " | ",
     "defaultTitle": "The alarm goes off",
     "ringtoneTitle": "Ringtone",
     "defaultOnlyOnceText": "Once",
     "defaultDailyText": "Daily",
     "defaultMondayToFridayText": "Monday to Friday",
-    "defaultCustomText": "Customize"
+    "defaultCustomText": "Customize",
+    "changeLanguage": "Change language",
+    "privacyPolicy": "Privacy policy"
 }

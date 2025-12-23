@@ -30,5 +30,13 @@ Future<void> main() async {
   await DependencyInjection.setUp();
   // [QUAN TRỌNG] Khởi tạo lắng nghe Port
   AlarmStatusNotifier.instance.initialize();
-  runApp(const MyApp());
+  runApp(
+    EasyLocalization(
+      supportedLocales: [Locale('en', 'US'), Locale('vi', 'VN')],
+      path:
+          'assets/translations', // <-- change the path of the translation files
+      fallbackLocale: Locale('en', 'US'),
+      child: const MyApp(),
+    ),
+  );
 }
