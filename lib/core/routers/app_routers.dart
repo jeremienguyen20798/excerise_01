@@ -4,6 +4,7 @@ import 'package:excerise_01/features/alarm/view/alarm_page.dart';
 import 'package:excerise_01/features/home/view/home_page.dart';
 import 'package:excerise_01/features/repeat/repeat_page.dart';
 import 'package:excerise_01/features/ringtone/view/ringtone_page.dart';
+import 'package:excerise_01/features/settings/view/settings_page.dart';
 import 'package:go_router/go_router.dart';
 
 final GoRouter appRouters = GoRouter(
@@ -38,6 +39,7 @@ final GoRouter appRouters = GoRouter(
             ),
           ],
         ),
+        GoRoute(path: '/settings', builder: (context, state) => SettingsPage()),
       ],
     ),
   ],

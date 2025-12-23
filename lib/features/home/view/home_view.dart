@@ -7,6 +7,7 @@ import 'package:excerise_01/features/home/bloc/home_state.dart';
 import 'package:excerise_01/widgets/compoment/alarm_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 bool isLongPress = false, isDeleteAllItems = false;
 
@@ -78,7 +79,9 @@ class HomeView extends StatelessWidget {
                           ),
                         )
                       : IconButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            context.go('/settings');
+                          },
                           icon: Icon(Icons.more_vert, color: Colors.black),
                         ),
                 ],
