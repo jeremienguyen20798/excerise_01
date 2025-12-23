@@ -1,4 +1,4 @@
-import 'package:excerise_01/core/constant/app_constant.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:excerise_01/core/routers/app_routers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -8,14 +8,23 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      title: defaultAppName,
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+    return EasyLocalization(
+      supportedLocales: [Locale('en', 'US'), Locale('vi', 'VN')],
+      path:
+          'assets/translations', // <-- change the path of the translation files
+      fallbackLocale: Locale('en', 'US'),
+      child: MaterialApp.router(
+        title: 'defaultAppName'.tr(),
+        debugShowCheckedModeBanner: false,
+        localizationsDelegates: context.localizationDelegates,
+        supportedLocales: context.supportedLocales,
+        locale: context.locale,
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        ),
+        routerConfig: appRouters,
+        builder: EasyLoading.init(),
       ),
-      routerConfig: appRouters,
-      builder: EasyLoading.init(),
     );
   }
 }

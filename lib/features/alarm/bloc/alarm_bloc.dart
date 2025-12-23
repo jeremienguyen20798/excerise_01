@@ -1,4 +1,4 @@
-import 'package:excerise_01/core/constant/app_constant.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:excerise_01/domain/usecase/add_alarm_usecase.dart';
 import 'package:excerise_01/domain/usecase/update_detail_alarm_usecase.dart';
 import 'package:excerise_01/features/alarm/bloc/alarm_event.dart';
@@ -21,7 +21,7 @@ class AlarmBloc extends Bloc<AlarmEvent, AlarmState> {
     AddAlarmEvent event,
     Emitter<AlarmState> emitter,
   ) async {
-    String message = event.message ?? defaultMessage;
+    String message = event.message ?? 'defaultMessage'.tr();
     final DateTime time = event.dateTime;
     final repeatType = event.repeatType ?? AlarmRepeatType.onlyOnce;
     final days = event.days;

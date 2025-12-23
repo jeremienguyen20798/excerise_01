@@ -1,4 +1,4 @@
-import 'package:excerise_01/core/constant/app_constant.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:excerise_01/core/utils/app_utils.dart';
 import 'package:excerise_01/features/alarm/view/alarm_page.dart';
 import 'package:excerise_01/features/home/bloc/home_bloc.dart';
@@ -86,11 +86,14 @@ class HomeView extends StatelessWidget {
                   titlePadding: EdgeInsets.only(left: 16.0, bottom: 16.0),
                   title: isLongPress
                       ? Text(
-                          '$chooseItem$deleteItemsLength$item',
+                          '${'chooseItem'.tr()}$deleteItemsLength${'item'.tr()}',
                           style: TextStyle(fontSize: 16.0, color: Colors.black),
                           textAlign: TextAlign.center,
                         )
-                      : Text(defaultAppName, style: TextStyle(fontSize: 16.0)),
+                      : Text(
+                          'defaultAppName'.tr(),
+                          style: TextStyle(fontSize: 16.0),
+                        ),
                 ),
                 expandedHeight: kToolbarHeight * 2,
               ),
@@ -127,7 +130,7 @@ class HomeView extends StatelessWidget {
                         children: [
                           Icon(Icons.delete_outline),
                           Text(
-                            deleteText,
+                            'deleteText'.tr(),
                             style: TextStyle(
                               fontSize: 16.0,
                               color: Colors.black,

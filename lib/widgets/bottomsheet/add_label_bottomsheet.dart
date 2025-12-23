@@ -1,4 +1,4 @@
-import 'package:excerise_01/core/constant/app_constant.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -15,7 +15,7 @@ class _AddLabelBottomSheetState extends State<AddLabelBottomSheet> {
 
   @override
   void initState() {
-    if (widget.label != null && widget.label != labelInput) {
+    if (widget.label != null && widget.label != 'labelInput'.tr()) {
       labelController.text = widget.label!;
     }
     super.initState();
@@ -42,7 +42,7 @@ class _AddLabelBottomSheetState extends State<AddLabelBottomSheet> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              addAlarmLabel,
+              'addAlarmLabel'.tr(),
               style: TextStyle(
                 color: Colors.black,
                 fontSize: 18.0,
@@ -54,7 +54,7 @@ class _AddLabelBottomSheetState extends State<AddLabelBottomSheet> {
               controller: labelController,
               autofocus: true,
               decoration: InputDecoration(
-                hintText: labelInput,
+                hintText: 'labelInput'.tr(),
                 border: OutlineInputBorder(),
               ),
             ),
@@ -75,7 +75,7 @@ class _AddLabelBottomSheetState extends State<AddLabelBottomSheet> {
                     ),
                     color: Colors.grey.shade100,
                     child: Text(
-                      cancel,
+                      'cancel'.tr(),
                       style: TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
@@ -96,7 +96,7 @@ class _AddLabelBottomSheetState extends State<AddLabelBottomSheet> {
                     ),
                     color: Colors.deepPurple,
                     child: Text(
-                      add,
+                      'add'.tr(),
                       style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,

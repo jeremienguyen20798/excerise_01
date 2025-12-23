@@ -1,4 +1,4 @@
-import 'package:excerise_01/core/constant/app_constant.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -9,21 +9,21 @@ class NotificationWarningDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text(warningTitle),
+      title: Text('warningTitle'.tr()),
       content: RichText(
         text: TextSpan(
-          text: permissionStr,
+          text: 'permissionStr'.tr(),
           style: TextStyle(color: Colors.black),
           children: [
             TextSpan(
-              text: notificationStr,
+              text: 'notificationStr'.tr(),
               style: TextStyle(
                 color: Colors.deepPurple,
                 fontWeight: FontWeight.bold,
                 fontSize: 16.0,
               ),
             ),
-            TextSpan(text: warningContent),
+            TextSpan(text: 'warningContent'.tr()),
           ],
         ),
       ),
@@ -32,10 +32,10 @@ class NotificationWarningDialog extends StatelessWidget {
           onPressed: () async {
             final isOpened = await openAppSettings();
             if (isOpened) {
-              context.pop(isOpened);
+              context.pop();
             }
           },
-          child: Text(settings),
+          child: Text('settings'.tr()),
         ),
       ],
     );

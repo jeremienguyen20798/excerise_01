@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:developer';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:excerise_01/core/notification/alarm_status_notifier.dart';
 import 'package:excerise_01/data/local_db/alarm_local_db.dart';
 import 'package:excerise_01/di.dart';
@@ -25,6 +26,7 @@ Future<void> notificationTapBackground(
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await EasyLocalization.ensureInitialized();
   await DependencyInjection.setUp();
   // [QUAN TRỌNG] Khởi tạo lắng nghe Port
   AlarmStatusNotifier.instance.initialize();

@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:excerise_01/core/utils/app_utils.dart';
 import 'package:excerise_01/domain/entities/alarm_entity.dart';
 import 'package:excerise_01/features/home/bloc/home_bloc.dart';
@@ -8,8 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../domain/entities/alarm_repeat_type.dart';
-
-import '../../core/constant/app_constant.dart';
 
 class ItemAlarm extends StatefulWidget {
   final int index;
@@ -108,7 +107,7 @@ class _ItemAlarmState extends State<ItemAlarm> {
                   fontWeight: FontWeight.bold,
                 ),
                 children: [
-                  TextSpan(text: defaultSpace),
+                  TextSpan(text: 'defaultSpace'.tr()),
                   TextSpan(
                     text: widget.alarm.message,
                     style: TextStyle(

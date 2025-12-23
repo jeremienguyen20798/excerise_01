@@ -1,6 +1,6 @@
+import 'package:excerise_01/core/constant/app_constant.dart';
 import 'package:excerise_01/domain/entities/alarm_entity.dart';
 import 'package:isar_community/isar.dart';
-import '../../core/constant/app_constant.dart';
 import '../../domain/entities/alarm_repeat_type.dart';
 
 part 'alarm_model.g.dart';

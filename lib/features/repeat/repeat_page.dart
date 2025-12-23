@@ -1,4 +1,4 @@
-import 'package:excerise_01/core/constant/app_constant.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:excerise_01/core/extensions/alarm_repeat_ext.dart';
 import 'package:excerise_01/core/utils/app_utils.dart';
 import 'package:excerise_01/widgets/items/item_repeat.dart';
@@ -51,7 +51,7 @@ class _RepeatPageState extends State<RepeatPage> {
         elevation: 0.0,
         backgroundColor: Colors.white,
         title: Text(
-          repeat,
+          'repeat'.tr(),
           style: TextStyle(
             fontSize: 18.0,
             color: Colors.black,

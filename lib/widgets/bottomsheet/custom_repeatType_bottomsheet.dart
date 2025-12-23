@@ -1,4 +1,4 @@
-import 'package:excerise_01/core/constant/app_constant.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:excerise_01/widgets/items/item_day.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -57,7 +57,7 @@ class _CustomRepeatTypeBottomSheetState
           Padding(
             padding: const EdgeInsets.only(top: 24.0, bottom: 16.0),
             child: Text(
-              customText,
+              'customText'.tr(),
               style: TextStyle(
                 fontSize: 18.0,
                 color: Colors.black,
@@ -104,7 +104,7 @@ class _CustomRepeatTypeBottomSheetState
                     color: Colors.grey.shade200,
                     height: 48.0,
                     child: Text(
-                      cancel,
+                      'cancel'.tr(),
                       style: TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
@@ -126,7 +126,7 @@ class _CustomRepeatTypeBottomSheetState
                     ),
                     color: Theme.of(context).primaryColor,
                     child: Text(
-                      ok,
+                      'ok'.tr(),
                       style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,

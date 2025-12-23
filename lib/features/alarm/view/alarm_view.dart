@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:excerise_01/core/extensions/alarm_repeat_ext.dart';
 import 'package:excerise_01/core/utils/app_utils.dart';
 import 'package:excerise_01/core/utils/formatter.dart';
@@ -13,7 +14,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../core/constant/app_constant.dart';
 import '../../../domain/entities/alarm_repeat_type.dart';
 
 class AlarmView extends StatefulWidget {
@@ -28,7 +28,7 @@ class AlarmView extends StatefulWidget {
 class _AlarmViewState extends State<AlarmView> {
   AlarmRepeatType repeatType = AlarmRepeatType.onlyOnce;
   DateTime dateTime = DateTime.now();
-  String labelStr = labelInput, titleAlarm = titleAddAlarm;
+  String labelStr = 'labelInput'.tr(), titleAlarm = 'titleAddAlarm'.tr();
   List<int> days = [];
 
   @override
@@ -37,8 +37,8 @@ class _AlarmViewState extends State<AlarmView> {
       log('Alarm with ${widget.alarm!.alarmId}');
       repeatType = widget.alarm!.repeatType;
       dateTime = widget.alarm!.time;
-      labelStr = widget.alarm!.message ?? labelInput;
-      titleAlarm = titleEditAlarm;
+      labelStr = widget.alarm!.message ?? 'labelInput'.tr();
+      titleAlarm = 'titleEditAlarm'.tr();
       days = widget.alarm!.days ?? [];
     }
     super.initState();
@@ -90,7 +90,9 @@ class _AlarmViewState extends State<AlarmView> {
                       AddAlarmEvent(
                         dateTime: dateTime,
                         repeatType: repeatType,
-                        message: labelStr == labelInput ? null : labelStr,
+                        message: labelStr == 'labelInput'.tr()
+                            ? null
+                            : labelStr,
                         days: days,
                       ),
                     );
@@ -134,9 +136,15 @@ class _AlarmViewState extends State<AlarmView> {
                   ),
                 ),
                 SizedBox(height: 24.0),
-                _buildItemLabel(ringtone, value: 'Báo thức tự nhiên'),
                 _buildItemLabel(
-                  repeat,
+                  'ringtone'.tr(),
+                  value: 'Báo thức tự nhiên',
+                  onClick: () {
+                    context.push('/alarm/ringtone');
+                  },
+                ),
+                _buildItemLabel(
+                  'repeat'.tr(),
                   value: repeatType == AlarmRepeatType.custom && days.isNotEmpty
                       ? Formatter.formatDaysToStr(days)
                       : repeatType.getStr(),
@@ -156,15 +164,15 @@ class _AlarmViewState extends State<AlarmView> {
                   },
                 ),
                 _buildItemLabel(
-                  vibrate,
+                  'vibrate'.tr(),
                   widget: Switch(value: true, onChanged: (value) {}),
                 ),
                 _buildItemLabel(
-                  deleteAlarm,
+                  'deleteAlarm'.tr(),
                   widget: Switch(value: false, onChanged: (value) {}),
                 ),
                 _buildItemLabel(
-                  label,
+                  'label'.tr(),
                   value: labelStr,
                   isLabel: true,
                   onAddLabel: (label) {

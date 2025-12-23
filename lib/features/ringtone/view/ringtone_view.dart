@@ -1,4 +1,4 @@
-import 'package:excerise_01/core/constant/app_constant.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:excerise_01/widgets/compoment/alarm_ringtone_list.dart';
 import 'package:flutter/material.dart';
 
@@ -10,7 +10,7 @@ class RingtoneView extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          ringtoneTitle,
+          'ringtoneTitle'.tr(),
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ),
       ),

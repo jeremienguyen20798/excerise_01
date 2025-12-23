@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:excerise_01/core/constant/app_constant.dart';
 import 'package:excerise_01/core/extensions/day_alarm_ext.dart';
 import 'package:excerise_01/core/extensions/string_ext.dart';
@@ -44,7 +45,7 @@ class AlarmEntity {
   }
 
   String getTitle() {
-    return '$defaultTitle ${getTime()}';
+    return '${'defaultTitle'.tr()} ${getTime()}';
   }
 
   tz.TZDateTime getTimeAlarm() {
@@ -88,16 +89,16 @@ class AlarmEntity {
   String getTextByRepeatType() {
     switch (repeatType) {
       case AlarmRepeatType.onlyOnce:
-        return defaultOnlyOnceText;
+        return 'defaultOnlyOnceText'.tr();
       case AlarmRepeatType.daily:
-        return defaultDailyText;
+        return 'defaultDailyText'.tr();
       case AlarmRepeatType.mondayToFriday:
-        return defaultMondayToFridayText;
+        return 'defaultMondayToFridayText'.tr();
       case AlarmRepeatType.custom:
         if (days != null) {
           return _getDays();
         }
-        return defaultCustomText;
+        return 'defaultCustomText'.tr();
     }
   }
 
