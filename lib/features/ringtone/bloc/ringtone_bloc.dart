@@ -71,17 +71,10 @@ class RingtoneBloc extends Bloc<RingtoneEvent, RingtoneState> {
       emitter(RingtoneInitial());
     }
   }
-
-  // Hàm tiện ích: tách số nguyên từ chuỗi (ví dụ "137203" hoặc "1,372,03").
+  // Hàm tiện ích: convert chuỗi thành số nguyên.
   // Trả về 0 nếu không tìm thấy số hợp lệ.
   int _extractNumberFromString(String text) {
     if (text.isEmpty) return 0;
     return int.tryParse(text) ?? 0;
   }
 }
-// Gợi ý nâng cao (không nằm trong code thực thi):
-// - Thêm state `RingtoneLoading` và `RingtoneError` để UI có thể hiển thị
-//   loading spinner và thông báo lỗi.
-// - Nếu cần link trực tiếp tới file nhạc (mp3), cần truy cập từng `href`
-//   chi tiết (crawl trang chi tiết) và tìm thẻ <audio> hoặc link tải.
-// - Thêm `pubspec.yaml` dependencies: `http: ^x.x.x` và `html: ^x.x.x`.
