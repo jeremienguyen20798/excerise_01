@@ -1,10 +1,12 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:excerise_01/core/constant/app_constant.dart';
 import 'package:excerise_01/features/settings/bloc/settings_bloc.dart';
 import 'package:excerise_01/features/settings/bloc/settings_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SettingsView extends StatelessWidget {
   const SettingsView({super.key});
@@ -85,8 +87,33 @@ class SettingsView extends StatelessWidget {
                 ),
               ),
               ListTile(
+                onTap: () async {
+                  if (!await launchUrl(Uri.parse(privacyPolicy))) {
+                    throw Exception('Could not launch $privacyPolicy');
+                  }
+                },
                 title: Text('privacyPolicy'.tr()),
                 leading: Icon(Icons.security_outlined, color: Colors.black),
+              ),
+              ListTile(
+                onTap: () async {
+                  if (!await launchUrl(Uri.parse(buyMeACoffee))) {
+                    throw Exception('Could not launch $buyMeACoffee');
+                  }
+                },
+                title: Text(
+                  'Buy Me a Coffee',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                leading: Image.asset(
+                  'assets/images/buy_me_a_coffee_icon.png',
+                  width: 28.0,
+                  height: 28.0,
+                  fit: BoxFit.contain,
+                ),
               ),
               ListTile(
                 title: Text(
