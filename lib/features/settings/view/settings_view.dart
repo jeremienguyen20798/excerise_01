@@ -1,7 +1,9 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:excerise_01/core/constant/app_constant.dart';
 import 'package:excerise_01/features/settings/bloc/settings_bloc.dart';
+import 'package:excerise_01/features/settings/bloc/settings_event.dart';
 import 'package:excerise_01/features/settings/bloc/settings_state.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:expandable/expandable.dart';
@@ -16,8 +18,17 @@ class SettingsView extends StatelessWidget {
     return BlocBuilder<SettingsBloc, SettingsState>(
       builder: (context, state) {
         String appVersion = '';
+        Locale currentLocale = Locale('vi', 'VN');
         if (state is LoadAppVersionState) {
-          appVersion = '${state.appVersion}+${state.buildNumber}';
+          currentLocale = context.locale;
+          if (kDebugMode) {
+            appVersion = '${state.appVersion}+${state.buildNumber}';
+          } else {
+            appVersion = state.appVersion;
+          }
+        } else if (state is SelectedLanguageState) {
+          context.setLocale(state.selectedLocaled);
+          currentLocale = state.selectedLocaled;
         }
         return Scaffold(
           backgroundColor: Colors.white,
@@ -60,8 +71,13 @@ class SettingsView extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
+                      trailing: currentLocale == Locale('vi', 'VN')
+                          ? Icon(Icons.check, color: Colors.blue)
+                          : null,
                       onTap: () {
-                        context.setLocale(Locale('vi', 'VN'));
+                        BlocProvider.of<SettingsBloc>(
+                          context,
+                        ).add(SelectedLanguageEvent(Locale('vi', 'VN')));
                       },
                     ),
                     ListTile(
@@ -79,8 +95,13 @@ class SettingsView extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
+                      trailing: currentLocale == Locale('en', 'US')
+                          ? Icon(Icons.check, color: Colors.blue)
+                          : null,
                       onTap: () {
-                        context.setLocale(Locale('en', 'US'));
+                        BlocProvider.of<SettingsBloc>(
+                          context,
+                        ).add(SelectedLanguageEvent(Locale('en', 'US')));
                       },
                     ),
                   ],

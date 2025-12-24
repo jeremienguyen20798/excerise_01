@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 
 abstract class SettingsState extends Equatable {
   @override
@@ -15,4 +16,13 @@ class LoadAppVersionState extends SettingsState {
 
   @override
   List<Object?> get props => [appVersion, buildNumber];
+}
+
+class SelectedLanguageState extends SettingsState {
+  final Locale selectedLocaled;
+
+  SelectedLanguageState(this.selectedLocaled);
+
+  @override
+  List<Object?> get props => [selectedLocaled];
 }

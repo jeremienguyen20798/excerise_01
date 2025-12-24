@@ -6,6 +6,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   SettingsBloc() : super(InitialSettingsState()) {
     on<LoadAppVersionEvent>(_loadAppVersion);
+    on<SelectedLanguageEvent>(_selectedLanguageFromLocale);
   }
 
   Future<void> _loadAppVersion(
@@ -16,5 +17,13 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     String version = packageInfo.version;
     String buildNumber = packageInfo.buildNumber;
     emitter(LoadAppVersionState(version, buildNumber));
+  }
+
+  void _selectedLanguageFromLocale(
+    SelectedLanguageEvent event,
+    Emitter<SettingsState> emitter,
+  ) {
+    final locale = event.locale;
+    emitter(SelectedLanguageState(locale));
   }
 }
