@@ -18,7 +18,7 @@ class SettingsView extends StatelessWidget {
     return BlocBuilder<SettingsBloc, SettingsState>(
       builder: (context, state) {
         String appVersion = '';
-        Locale currentLocale = Locale('vi', 'VN');
+        Locale currentLocale = context.locale;
         if (state is LoadAppVersionState) {
           currentLocale = context.locale;
           if (kDebugMode) {
