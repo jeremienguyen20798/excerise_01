@@ -24,5 +24,6 @@ abstract class AlarmRepository {
     String? message,
     AlarmRepeatType? repeatType,
     List<int>? days,
+    bool isDeletedAlarmAfterRing,
   });
 }

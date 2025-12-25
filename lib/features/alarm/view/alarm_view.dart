@@ -30,6 +30,7 @@ class _AlarmViewState extends State<AlarmView> {
   DateTime dateTime = DateTime.now();
   String labelStr = 'labelInput'.tr(), titleAlarm = 'titleAddAlarm'.tr();
   List<int> days = [];
+  bool isDeletedAlarmAfterRing = false;
 
   @override
   void initState() {
@@ -40,6 +41,7 @@ class _AlarmViewState extends State<AlarmView> {
       labelStr = widget.alarm!.message ?? 'labelInput'.tr();
       titleAlarm = 'titleEditAlarm'.tr();
       days = widget.alarm!.days ?? [];
+      isDeletedAlarmAfterRing = widget.alarm?.isDeletedAfterRing ?? false;
     }
     super.initState();
   }
@@ -169,7 +171,19 @@ class _AlarmViewState extends State<AlarmView> {
                 ),
                 _buildItemLabel(
                   'deleteAlarm'.tr(),
-                  widget: Switch(value: false, onChanged: (value) {}),
+                  widget: Switch(
+                    value: isDeletedAlarmAfterRing,
+                    onChanged: (value) {
+                      setState(() {
+                        isDeletedAlarmAfterRing = value;
+                        BlocProvider.of<AlarmBloc>(context).add(
+                          EnableDeletedAlarmAfterRingEvent(
+                            isDeletedAlarmAfterRing,
+                          ),
+                        );
+                      });
+                    },
+                  ),
                 ),
                 _buildItemLabel(
                   'label'.tr(),

@@ -65,3 +65,9 @@ class AlarmDismissedFromNotificationEvent extends HomeEvent {
 
   AlarmDismissedFromNotificationEvent(this.alarmData);
 }
+
+class DeleteAlarmAfterRingEvent extends HomeEvent {
+  AlarmEntity entity;
+
+  DeleteAlarmAfterRingEvent(this.entity);
+}

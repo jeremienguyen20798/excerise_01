@@ -73,12 +73,14 @@ class AlarmRepositoryImpl extends AlarmRepository {
     String? message,
     AlarmRepeatType? repeatType,
     List<int>? days,
+    bool isDeletedAlarmAfterRing = false,
   }) async {
     final model = await _localDB.updateDetailAlarm(
       idAlarm: id,
       dateTime: dateTime,
       message: message,
       repeatType: repeatType,
+      isDeletedAlarmAfterRing: isDeletedAlarmAfterRing,
     );
     return model?.toEntity();
   }

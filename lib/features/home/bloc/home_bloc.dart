@@ -214,7 +214,11 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     final alarmJson = event.alarmData;
     final json = jsonDecode(alarmJson);
     final entity = AlarmEntity.fromJson(json);
-    emitter(AlarmDismissedFromNotificationState(entity));
+    if (entity.isDeletedAfterRing ?? true) {
+      add(GetAlarmListEvent());
+    } else {
+      emitter(AlarmDismissedFromNotificationState(entity));
+    }
   }
 
   @override

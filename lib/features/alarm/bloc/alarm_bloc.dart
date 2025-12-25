@@ -10,11 +10,13 @@ import '../../../domain/entities/alarm_repeat_type.dart';
 
 class AlarmBloc extends Bloc<AlarmEvent, AlarmState> {
   final AlarmNotification _alarmNotification = AlarmNotification();
+  bool isDeleteAlarmAfterRing = false;
 
   AlarmBloc() : super(InitAlarmState()) {
     on<AddAlarmEvent>(_addAlarm);
     on<UpdateAlarmEvent>(_updateAlarm);
     on<OnDateTimeChangedEvent>(_onDateTimeChanged);
+    on<EnableDeletedAlarmAfterRingEvent>(_enableDeletedAlarmAfterRing);
   }
 
   Future<void> _addAlarm(
@@ -30,6 +32,7 @@ class AlarmBloc extends Bloc<AlarmEvent, AlarmState> {
       message,
       repeatType,
       days,
+      isDeleteAlarmAfterRing,
     );
     if (alarmEntity != null) {
       await _alarmNotification.showNotification(
@@ -55,6 +58,7 @@ class AlarmBloc extends Bloc<AlarmEvent, AlarmState> {
       message: messageAlarm,
       repeatType: alarmRepeatType,
       days: days,
+      isDeletedAlarmAfterRing: isDeleteAlarmAfterRing
     );
     if (alarmEntity != null) {
       await _alarmNotification.showNotification(
@@ -65,7 +69,17 @@ class AlarmBloc extends Bloc<AlarmEvent, AlarmState> {
     }
   }
 
-  void _onDateTimeChanged(OnDateTimeChangedEvent event, Emitter<AlarmState> emitter) {
+  void _onDateTimeChanged(
+    OnDateTimeChangedEvent event,
+    Emitter<AlarmState> emitter,
+  ) {
     emitter(DateTimeChangedState(event.dateTime));
+  }
+
+  void _enableDeletedAlarmAfterRing(
+    EnableDeletedAlarmAfterRingEvent event,
+    Emitter<AlarmState> emitter,
+  ) {
+    isDeleteAlarmAfterRing = event.isEnable;
   }
 }

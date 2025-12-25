@@ -17,6 +17,8 @@ class AlarmEntity {
   AlarmRepeatType repeatType;
   bool? isActive;
   List<int>? days;
+  bool isVibration;
+  bool? isDeletedAfterRing;
 
   AlarmEntity({
     required this.alarmId,
@@ -25,6 +27,8 @@ class AlarmEntity {
     this.repeatType = AlarmRepeatType.onlyOnce,
     this.isActive = true,
     this.days,
+    this.isVibration = true,
+    this.isDeletedAfterRing,
   });
 
   factory AlarmEntity.fromJson(Map<String, dynamic> json) {
@@ -37,6 +41,8 @@ class AlarmEntity {
       days: json['days'] != null
           ? List<int>.from(json['days'] as List<dynamic>)
           : null,
+      isVibration: json['isVibration'],
+      isDeletedAfterRing: json['isDeletedAfterRing'],
     );
   }
 
@@ -140,6 +146,8 @@ class AlarmEntity {
       'repeatType': repeatType.name,
       'isActive': isActive,
       'days': days,
+      'isVibration': isVibration,
+      'isDeletedAfterRing': isDeletedAfterRing,
     };
     return jsonEncode(data);
   }
@@ -151,6 +159,8 @@ class AlarmEntity {
       repeatType: repeatType,
       isActive: isActive,
       days: days,
+      isVibration: isVibration,
+      isDeletedAfterRing: isDeletedAfterRing,
     );
   }
 }

@@ -37,3 +37,9 @@ class OnDateTimeChangedEvent extends AlarmEvent {
 
   OnDateTimeChangedEvent(this.dateTime);
 }
+
+class EnableDeletedAlarmAfterRingEvent extends AlarmEvent {
+  final bool isEnable;
+
+  EnableDeletedAlarmAfterRingEvent(this.isEnable);
+}

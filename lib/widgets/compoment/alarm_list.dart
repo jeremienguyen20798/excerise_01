@@ -34,13 +34,14 @@ class AlarmList extends StatelessWidget {
           alarms.remove(removeItem);
           alarms.insert(index, item);
         } else if (state is AlarmDismissedFromNotificationState) {
+          final alarmEntity = state.entity;
           // Tìm index của alarm cần update
           final index = alarms.indexWhere(
-            (e) => e.alarmId == state.entity?.alarmId,
+            (e) => e.alarmId == alarmEntity?.alarmId,
           );
-          if (index != -1 && state.entity != null) {
+          if (index != -1 && alarmEntity != null) {
             alarms[index] =
-                state.entity!; // Thay thế item cũ bằng item mới (đã tắt)
+                alarmEntity; // Thay thế item cũ bằng item mới (đã tắt)
           }
         }
         return alarms.isNotEmpty

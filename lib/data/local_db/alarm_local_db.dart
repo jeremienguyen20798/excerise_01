@@ -75,6 +75,7 @@ class AlarmLocalDB {
     DateTime? dateTime,
     String? message,
     AlarmRepeatType? repeatType,
+    bool? isDeletedAlarmAfterRing,
   }) async {
     final isar = await localDb;
     AlarmModel? alarm = await getAlarmById(idAlarm);
@@ -82,7 +83,8 @@ class AlarmLocalDB {
       alarm
         ..time = dateTime ?? DateTime.now()
         ..message = message
-        ..repeatType = repeatType ?? AlarmRepeatType.onlyOnce;
+        ..repeatType = repeatType ?? AlarmRepeatType.onlyOnce
+        ..isDeletedAfterRing = isDeletedAlarmAfterRing;
       final result = isar.writeTxnSync(() {
         int id = isar.alarmModels.putSync(alarm);
         log('Update alarm successfully');
