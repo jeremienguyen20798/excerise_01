@@ -38,5 +38,6 @@
     "defaultMondayToFridayText": "Monday to Friday",
     "defaultCustomText": "Customize",
     "changeLanguage": "Change language",
-    "privacyPolicy": "Privacy policy"
+    "privacyPolicy": "Privacy policy",
+    "appVersion": "App version"
 }

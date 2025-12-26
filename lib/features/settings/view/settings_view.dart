@@ -22,7 +22,7 @@ class SettingsView extends StatelessWidget {
         if (state is LoadAppVersionState) {
           currentLocale = context.locale;
           if (kDebugMode) {
-            appVersion = '${state.appVersion}+${state.buildNumber}';
+            appVersion = '${state.appVersion} (${state.buildNumber})';
           } else {
             appVersion = state.appVersion;
           }
@@ -138,7 +138,7 @@ class SettingsView extends StatelessWidget {
               ),
               ListTile(
                 title: Text(
-                  'App version: $appVersion',
+                  '${'appVersion'.tr()}: $appVersion',
                   style: TextStyle(fontSize: 15.0, color: Colors.black),
                 ),
               ),

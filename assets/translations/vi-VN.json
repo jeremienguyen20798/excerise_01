@@ -39,5 +39,6 @@
     "defaultMondayToFridayText": "Thứ Hai đến thứ Sáu",
     "defaultCustomText": "Tuỳ chỉnh",
     "changeLanguage": "Thay đổi ngôn ngữ",
-    "privacyPolicy": "Chính sách bảo mật"
+    "privacyPolicy": "Chính sách bảo mật",
+    "appVersion": "Phiên bản ứng dụng"
 }
