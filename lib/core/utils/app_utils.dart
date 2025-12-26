@@ -2,6 +2,7 @@ import 'package:excerise_01/widgets/bottomsheet/custom_repeatType_bottomsheet.da
 import 'package:excerise_01/widgets/bottomsheet/cancel_alarm_bottomsheet.dart';
 import 'package:excerise_01/widgets/dialogs/edit_alarm_dialog.dart';
 import 'package:excerise_01/widgets/dialogs/notification_warning_dialog.dart';
+import 'package:excerise_01/widgets/dialogs/play_ringtone_dialog.dart';
 import 'package:flutter/material.dart';
 
 import '../../domain/entities/alarm_entity.dart';
@@ -77,5 +78,18 @@ class AppUtils {
         onAdd(value);
       }
     });
+  }
+
+  static void showPlayRingtoneDialog(
+    BuildContext context,
+    String name,
+    String mp3Url,
+  ) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) =>
+          PlayRingtoneDialog(ringtoneUrl: mp3Url, nameRingtone: name),
+    );
   }
 }

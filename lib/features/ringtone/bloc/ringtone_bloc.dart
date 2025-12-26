@@ -1,7 +1,10 @@
+import 'dart:developer';
+
 import 'package:excerise_01/core/constant/app_constant.dart';
 import 'package:excerise_01/features/ringtone/bloc/ringtone_event.dart';
 import 'package:excerise_01/features/ringtone/bloc/ringtone_state.dart';
 import 'package:excerise_01/domain/entities/ringtone_entity.dart';
+import 'package:excerise_01/features/ringtone/data/ringtone_crawler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
 import 'package:html/parser.dart' as html_parser;
@@ -9,6 +12,7 @@ import 'package:html/parser.dart' as html_parser;
 class RingtoneBloc extends Bloc<RingtoneEvent, RingtoneState> {
   RingtoneBloc() : super(RingtoneInitial()) {
     on<LoadingRingtoneListEvent>(_loadRingtones);
+    on<PlayRingtoneEvent>(_playRingtone);
   }
 
   Future<void> _loadRingtones(
@@ -44,7 +48,9 @@ class RingtoneBloc extends Bloc<RingtoneEvent, RingtoneState> {
       final items = document.querySelectorAll('.page-100-item');
       for (final item in items) {
         // Tìm anchor chứa tên và đường dẫn
-        final a = item.querySelector('h3 a.white-space') ?? item.querySelector('h3 a');
+        final a =
+            item.querySelector('h3 a.white-space') ??
+            item.querySelector('h3 a');
         if (a == null) continue;
         final href = a.attributes['href']?.trim() ?? '';
         final name = a.text.trim();
@@ -71,10 +77,22 @@ class RingtoneBloc extends Bloc<RingtoneEvent, RingtoneState> {
       emitter(RingtoneInitial());
     }
   }
+
   // Hàm tiện ích: convert chuỗi thành số nguyên.
   // Trả về 0 nếu không tìm thấy số hợp lệ.
   int _extractNumberFromString(String text) {
     if (text.isEmpty) return 0;
     return int.tryParse(text) ?? 0;
+  }
+
+  Future<void> _playRingtone(
+    PlayRingtoneEvent event,
+    Emitter<RingtoneState> emitter,
+  ) async {
+    final String name = event.name;
+    final String ringtoneDetailUrl = event.url;
+    final result = await fetchMp3Link(ringtoneDetailUrl);
+    log('Ringtone mp3 link: $result');
+    emitter(PlayRingtoneState(name, result!));
   }
 }

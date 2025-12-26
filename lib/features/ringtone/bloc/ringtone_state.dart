@@ -16,3 +16,13 @@ class LoadRingtoneListState extends RingtoneState {
   @override
   List<Object?> get props => [ringtones];
 }
+
+class PlayRingtoneState extends RingtoneState {
+  final String name;
+  final String url;
+
+  PlayRingtoneState(this.name, this.url);
+
+  @override
+  List<Object?> get props => [name, url];
+}

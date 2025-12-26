@@ -3,11 +3,20 @@ import 'package:flutter/material.dart';
 
 class ItemRingtone extends StatelessWidget {
   final RingtoneEntity entity;
-  const ItemRingtone({super.key, required this.entity});
+  final Function(String) onClicked;
+
+  const ItemRingtone({
+    super.key,
+    required this.entity,
+    required this.onClicked,
+  });
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      onTap: () {
+        onClicked(entity.url);
+      },
       title: Text(
         entity.name,
         style: TextStyle(
