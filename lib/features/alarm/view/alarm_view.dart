@@ -165,10 +165,10 @@ class _AlarmViewState extends State<AlarmView> {
                     }
                   },
                 ),
-                _buildItemLabel(
-                  'vibrate'.tr(),
-                  widget: Switch(value: true, onChanged: (value) {}),
-                ),
+                // _buildItemLabel(
+                //   'vibrate'.tr(),
+                //   widget: Switch(value: true, onChanged: (value) {}),
+                // ),
                 _buildItemLabel(
                   'deleteAlarm'.tr(),
                   widget: Switch(
