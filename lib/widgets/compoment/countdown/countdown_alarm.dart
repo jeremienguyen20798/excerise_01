@@ -1,10 +1,9 @@
 import 'dart:async';
 import 'dart:developer';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:excerise_01/core/utils/formatter.dart';
 import 'package:flutter/material.dart';
-
-import '../../../core/constant/app_constant.dart';
 
 class CountdownAlarm extends StatefulWidget {
   final String? repeatTypeStr;
@@ -52,7 +51,10 @@ class _CountdownAlarmState extends State<CountdownAlarm> {
         style: TextStyle(fontSize: 14.0, color: Colors.grey),
         children: repeatTypeStr != null
             ? [
-                TextSpan(text: defaultSpace1, style: TextStyle(fontSize: 16.0)),
+                TextSpan(
+                  text: 'defaultSpace1'.tr(),
+                  style: TextStyle(fontSize: 16.0),
+                ),
                 TextSpan(
                   text: Formatter.formatTime(remaining),
                   style: TextStyle(fontSize: 14.0),

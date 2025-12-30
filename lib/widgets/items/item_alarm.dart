@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:excerise_01/core/utils/app_utils.dart';
 import 'package:excerise_01/domain/entities/alarm_entity.dart';
 import 'package:excerise_01/features/home/bloc/home_bloc.dart';
@@ -8,8 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../domain/entities/alarm_repeat_type.dart';
-
-import '../../core/constant/app_constant.dart';
 
 class ItemAlarm extends StatefulWidget {
   final int index;
@@ -22,13 +21,24 @@ class ItemAlarm extends StatefulWidget {
 }
 
 class _ItemAlarmState extends State<ItemAlarm> {
-  bool isChoose = false, isActive = false, isLongPress = false;
+  bool isChoose = false,
+      isActive = false,
+      isLongPress = false,
+      isDeleteAllItems = false;
   List<int> itemDeleteIds = [];
 
   @override
   void initState() {
     isActive = widget.alarm.isActive ?? false;
     super.initState();
+  }
+
+  @override
+  void didUpdateWidget(covariant ItemAlarm oldWidget) {
+    if (oldWidget.alarm != widget.alarm) {
+      isActive = widget.alarm.isActive ?? false;
+    }
+    super.didUpdateWidget(oldWidget);
   }
 
   @override
@@ -42,9 +52,11 @@ class _ItemAlarmState extends State<ItemAlarm> {
           isChoose = false;
         } else if (state is DeleteAlarmState) {
           isLongPress = false;
+          isChoose = false;
         } else if (state is DeleteAllAlarmsState) {
           isLongPress = true;
           isChoose = true;
+          isDeleteAllItems = state.isDeleteAll;
         } else if (state is CancelDeleteAllItemsState) {
           isChoose = false;
         }
@@ -55,6 +67,12 @@ class _ItemAlarmState extends State<ItemAlarm> {
             borderRadius: BorderRadius.circular(16.0),
           ),
           child: ListTile(
+            focusColor: Colors.transparent,
+            hoverColor: Colors.transparent,
+            splashColor: Colors.transparent,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16.0),
+            ),
             contentPadding: EdgeInsets.symmetric(
               horizontal: 16.0,
               vertical: 8.0,
@@ -89,7 +107,7 @@ class _ItemAlarmState extends State<ItemAlarm> {
                   fontWeight: FontWeight.bold,
                 ),
                 children: [
-                  TextSpan(text: defaultSpace),
+                  TextSpan(text: 'defaultSpace'.tr()),
                   TextSpan(
                     text: widget.alarm.message,
                     style: TextStyle(
@@ -120,6 +138,10 @@ class _ItemAlarmState extends State<ItemAlarm> {
                           BlocProvider.of<HomeBloc>(
                             context,
                           ).add(AddItemForDeleteEvent(widget.alarm.alarmId));
+                        } else {
+                          BlocProvider.of<HomeBloc>(context).add(
+                            RemoveItemForDeleteIdsEvent(widget.alarm.alarmId),
+                          );
                         }
                       });
                     },

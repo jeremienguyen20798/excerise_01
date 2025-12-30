@@ -1,6 +1,6 @@
+import 'package:excerise_01/core/constant/app_constant.dart';
 import 'package:excerise_01/domain/entities/alarm_entity.dart';
 import 'package:isar_community/isar.dart';
-import '../../core/constant/app_constant.dart';
 import '../../domain/entities/alarm_repeat_type.dart';
 
 part 'alarm_model.g.dart';
@@ -28,6 +28,10 @@ class AlarmModel {
   //Danh sach cac ngay bao thuc
   @Index(type: IndexType.value)
   List<int>? days;
+  @Index(type: IndexType.value)
+  bool isVibration;
+  @Index(type: IndexType.value)
+  bool? isDeletedAfterRing;
 
   AlarmModel({
     this.message = defaultMessage,
@@ -35,6 +39,8 @@ class AlarmModel {
     this.repeatType = AlarmRepeatType.onlyOnce,
     this.isActive = true,
     this.days,
+    this.isVibration = true,
+    this.isDeletedAfterRing,
   });
 
   AlarmEntity toEntity() {
@@ -45,6 +51,8 @@ class AlarmModel {
       repeatType: repeatType,
       isActive: isActive,
       days: days,
+      isVibration: isVibration,
+      isDeletedAfterRing: isDeletedAfterRing,
     );
   }
 }

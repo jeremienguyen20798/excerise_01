@@ -2,6 +2,7 @@ import 'package:excerise_01/widgets/bottomsheet/custom_repeatType_bottomsheet.da
 import 'package:excerise_01/widgets/bottomsheet/cancel_alarm_bottomsheet.dart';
 import 'package:excerise_01/widgets/dialogs/edit_alarm_dialog.dart';
 import 'package:excerise_01/widgets/dialogs/notification_warning_dialog.dart';
+import 'package:excerise_01/widgets/dialogs/play_ringtone_dialog.dart';
 import 'package:flutter/material.dart';
 
 import '../../domain/entities/alarm_entity.dart';
@@ -32,6 +33,7 @@ class AppUtils {
   ) async {
     final days = await showModalBottomSheet(
       context: context,
+      isScrollControlled: true,
       backgroundColor: Colors.transparent,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
       builder: (_) => CustomRepeatTypeBottomSheet(days: alarmDays),
@@ -62,17 +64,32 @@ class AppUtils {
 
   static void showAddLabelBottomSheet(
     BuildContext context,
+    String? label,
     Function(String) onAdd,
   ) {
     showModalBottomSheet(
       context: context,
+      isScrollControlled: true,
       backgroundColor: Colors.transparent,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
-      builder: (_) => AddLabelBottomSheet(),
+      builder: (_) => AddLabelBottomSheet(label),
     ).then((value) {
       if (value != null) {
         onAdd(value);
       }
     });
+  }
+
+  static void showPlayRingtoneDialog(
+    BuildContext context,
+    String name,
+    String mp3Url,
+  ) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) =>
+          PlayRingtoneDialog(ringtoneUrl: mp3Url, nameRingtone: name),
+    );
   }
 }

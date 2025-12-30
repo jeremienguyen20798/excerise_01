@@ -1,7 +1,9 @@
 import 'dart:convert';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:excerise_01/core/constant/app_constant.dart';
 import 'package:excerise_01/core/extensions/day_alarm_ext.dart';
+import 'package:excerise_01/core/extensions/string_ext.dart';
 import 'package:excerise_01/core/utils/formatter.dart';
 import 'package:excerise_01/data/models/alarm_model.dart';
 import 'package:timezone/timezone.dart' as tz;
@@ -15,6 +17,8 @@ class AlarmEntity {
   AlarmRepeatType repeatType;
   bool? isActive;
   List<int>? days;
+  bool isVibration;
+  bool? isDeletedAfterRing;
 
   AlarmEntity({
     required this.alarmId,
@@ -23,14 +27,31 @@ class AlarmEntity {
     this.repeatType = AlarmRepeatType.onlyOnce,
     this.isActive = true,
     this.days,
+    this.isVibration = true,
+    this.isDeletedAfterRing,
   });
+
+  factory AlarmEntity.fromJson(Map<String, dynamic> json) {
+    return AlarmEntity(
+      alarmId: json['alarmId'],
+      time: DateTime.parse(json['time'].toString()),
+      message: json['message'],
+      repeatType: json['repeatType'].toString().getRepeatType(),
+      isActive: json['isActive'],
+      days: json['days'] != null
+          ? List<int>.from(json['days'] as List<dynamic>)
+          : null,
+      isVibration: json['isVibration'],
+      isDeletedAfterRing: json['isDeletedAfterRing'],
+    );
+  }
 
   String getTime() {
     return Formatter.formatTimeStr(time);
   }
 
   String getTitle() {
-    return '$defaultTitle ${getTime()}';
+    return '${'defaultTitle'.tr()} ${getTime()}';
   }
 
   tz.TZDateTime getTimeAlarm() {
@@ -74,16 +95,16 @@ class AlarmEntity {
   String getTextByRepeatType() {
     switch (repeatType) {
       case AlarmRepeatType.onlyOnce:
-        return defaultOnlyOnceText;
+        return 'defaultOnlyOnceText'.tr();
       case AlarmRepeatType.daily:
-        return defaultDailyText;
+        return 'defaultDailyText'.tr();
       case AlarmRepeatType.mondayToFriday:
-        return defaultMondayToFridayText;
+        return 'defaultMondayToFridayText'.tr();
       case AlarmRepeatType.custom:
         if (days != null) {
           return _getDays();
         }
-        return defaultCustomText;
+        return 'defaultCustomText'.tr();
     }
   }
 
@@ -119,11 +140,14 @@ class AlarmEntity {
 
   String toPayload() {
     final data = {
+      'alarmId': alarmId,
       'message': message,
       'time': time.toString(),
       'repeatType': repeatType.name,
       'isActive': isActive,
-      'days': days?.map((item) => item.toString()).toList(),
+      'days': days,
+      'isVibration': isVibration,
+      'isDeletedAfterRing': isDeletedAfterRing,
     };
     return jsonEncode(data);
   }
@@ -135,6 +159,8 @@ class AlarmEntity {
       repeatType: repeatType,
       isActive: isActive,
       days: days,
+      isVibration: isVibration,
+      isDeletedAfterRing: isDeletedAfterRing,
     );
   }
 }

@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:excerise_01/domain/entities/alarm_entity.dart';
+import 'package:excerise_01/features/home/bloc/home_state.dart';
 
 abstract class AlarmState extends Equatable {
   @override
@@ -34,3 +35,5 @@ class DateTimeChangedState extends AlarmState {
   @override
   List<Object?> get props => [dateTime];
 }
+
+class EnableDeletedAlarmAfterRingState extends HomeState {}

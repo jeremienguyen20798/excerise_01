@@ -1,4 +1,4 @@
-import 'package:excerise_01/core/constant/app_constant.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:excerise_01/core/utils/app_utils.dart';
 import 'package:excerise_01/features/alarm/view/alarm_page.dart';
 import 'package:excerise_01/features/home/bloc/home_bloc.dart';
@@ -7,6 +7,7 @@ import 'package:excerise_01/features/home/bloc/home_state.dart';
 import 'package:excerise_01/widgets/compoment/alarm_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 bool isLongPress = false, isDeleteAllItems = false;
 
@@ -17,6 +18,7 @@ class HomeView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<HomeBloc, HomeState>(
       builder: (context, state) {
+        int deleteItemsLength = 0;
         if (state is ItemAlarmLongPressState) {
           isLongPress = true;
         } else if (state is OnRestartState) {
@@ -26,8 +28,15 @@ class HomeView extends StatelessWidget {
           isLongPress = false;
         } else if (state is DeleteAllAlarmsState) {
           isDeleteAllItems = state.isDeleteAll;
+          deleteItemsLength = state.length;
         } else if (state is CancelDeleteAllItemsState) {
           isDeleteAllItems = false;
+          deleteItemsLength = 0;
+        } else if (state is RemoveItemForDeleteIdsState) {
+          isDeleteAllItems = false;
+          deleteItemsLength = state.length;
+        } else if (state is AddItemForDeleteState) {
+          deleteItemsLength = state.length;
         }
         return Scaffold(
           backgroundColor: Colors.grey.shade100,
@@ -48,42 +57,46 @@ class HomeView extends StatelessWidget {
                 pinned: true,
                 floating: false,
                 backgroundColor: Colors.grey.shade100,
+                actions: [
+                  isLongPress
+                      ? IconButton(
+                          onPressed: () {
+                            if (isDeleteAllItems) {
+                              BlocProvider.of<HomeBloc>(
+                                context,
+                              ).add(CancelDeleteAllItemsEvent());
+                            } else {
+                              BlocProvider.of<HomeBloc>(
+                                context,
+                              ).add(DeleteAllAlarmsEvent());
+                            }
+                          },
+                          icon: Icon(
+                            Icons.playlist_add_check,
+                            color: isDeleteAllItems
+                                ? Colors.deepPurple
+                                : Colors.black,
+                          ),
+                        )
+                      : IconButton(
+                          onPressed: () {
+                            context.go('/settings');
+                          },
+                          icon: Icon(Icons.more_vert, color: Colors.black),
+                        ),
+                ],
                 flexibleSpace: FlexibleSpaceBar(
                   titlePadding: EdgeInsets.only(left: 16.0, bottom: 16.0),
-                  background: Align(
-                    alignment: Alignment.centerRight,
-                    child: isLongPress
-                        ? IconButton(
-                            onPressed: () {
-                              if (isDeleteAllItems) {
-                                BlocProvider.of<HomeBloc>(
-                                  context,
-                                ).add(CancelDeleteAllItemsEvent());
-                              } else {
-                                BlocProvider.of<HomeBloc>(
-                                  context,
-                                ).add(DeleteAllAlarmsEvent());
-                              }
-                            },
-                            icon: Icon(
-                              Icons.playlist_add_check,
-                              color: isDeleteAllItems
-                                  ? Colors.deepPurple
-                                  : Colors.black,
-                            ),
-                          )
-                        : IconButton(
-                            onPressed: () {},
-                            icon: Icon(Icons.more_vert, color: Colors.black),
-                          ),
-                  ),
                   title: isLongPress
                       ? Text(
-                          chooseItem,
+                          '${'chooseItem'.tr()}$deleteItemsLength${'item'.tr()}',
                           style: TextStyle(fontSize: 16.0, color: Colors.black),
                           textAlign: TextAlign.center,
                         )
-                      : Text(defaultAppName, style: TextStyle(fontSize: 16.0)),
+                      : Text(
+                          'defaultAppName'.tr(),
+                          style: TextStyle(fontSize: 16.0),
+                        ),
                 ),
                 expandedHeight: kToolbarHeight * 2,
               ),
@@ -98,9 +111,11 @@ class HomeView extends StatelessWidget {
                       context,
                       MaterialPageRoute(builder: (_) => AlarmPage()),
                     );
-                    BlocProvider.of<HomeBloc>(
-                      context,
-                    ).add(OnReloadAlarmListEvent(result));
+                    if (result != null) {
+                      BlocProvider.of<HomeBloc>(
+                        context,
+                      ).add(OnReloadAlarmListEvent(result));
+                    }
                   },
                   child: const Icon(Icons.add),
                 ),
@@ -118,7 +133,7 @@ class HomeView extends StatelessWidget {
                         children: [
                           Icon(Icons.delete_outline),
                           Text(
-                            deleteText,
+                            'deleteText'.tr(),
                             style: TextStyle(
                               fontSize: 16.0,
                               color: Colors.black,

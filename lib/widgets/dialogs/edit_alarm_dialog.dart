@@ -1,4 +1,4 @@
-import 'package:excerise_01/core/constant/app_constant.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:excerise_01/core/utils/formatter.dart';
 import 'package:excerise_01/domain/entities/alarm_entity.dart';
 import 'package:excerise_01/widgets/compoment/countdown/countdown_alarm.dart';
@@ -47,7 +47,7 @@ class _EditAlarmDialogState extends State<EditAlarmDialog> {
               fontWeight: FontWeight.bold,
             ),
             children: [
-              TextSpan(text: defaultSpace),
+              TextSpan(text: 'defaultSpace'.tr()),
               TextSpan(
                 text: widget.alarm.message!,
                 style: TextStyle(
@@ -109,7 +109,7 @@ class _EditAlarmDialogState extends State<EditAlarmDialog> {
                   borderRadius: BorderRadius.circular(8.0),
                 ),
                 child: Text(
-                  advanceText,
+                  'advanceText'.tr(),
                   style: TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
@@ -122,7 +122,7 @@ class _EditAlarmDialogState extends State<EditAlarmDialog> {
             Expanded(
               child: MaterialButton(
                 onPressed: () {
-                  Navigator.pop(context, {
+                  context.pop({
                     'id': widget.alarm.alarmId,
                     "dateTime": dateTime,
                     "isActive": isActive,
@@ -135,7 +135,7 @@ class _EditAlarmDialogState extends State<EditAlarmDialog> {
                   borderRadius: BorderRadius.circular(8.0),
                 ),
                 child: Text(
-                  confirmText,
+                  'confirmText'.tr(),
                   style: TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.bold,

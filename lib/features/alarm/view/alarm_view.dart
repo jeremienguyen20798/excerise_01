@@ -1,7 +1,9 @@
 import 'dart:developer';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:excerise_01/core/extensions/alarm_repeat_ext.dart';
 import 'package:excerise_01/core/utils/app_utils.dart';
+import 'package:excerise_01/core/utils/formatter.dart';
 import 'package:excerise_01/domain/entities/alarm_entity.dart';
 import 'package:excerise_01/features/alarm/bloc/alarm_bloc.dart';
 import 'package:excerise_01/features/alarm/bloc/alarm_event.dart';
@@ -12,7 +14,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../core/constant/app_constant.dart';
 import '../../../domain/entities/alarm_repeat_type.dart';
 
 class AlarmView extends StatefulWidget {
@@ -27,7 +28,9 @@ class AlarmView extends StatefulWidget {
 class _AlarmViewState extends State<AlarmView> {
   AlarmRepeatType repeatType = AlarmRepeatType.onlyOnce;
   DateTime dateTime = DateTime.now();
-  String labelStr = labelInput, titleAlarm = titleAddAlarm;
+  String labelStr = 'labelInput'.tr(), titleAlarm = 'titleAddAlarm'.tr();
+  List<int> days = [];
+  bool isDeletedAlarmAfterRing = false;
 
   @override
   void initState() {
@@ -35,8 +38,10 @@ class _AlarmViewState extends State<AlarmView> {
       log('Alarm with ${widget.alarm!.alarmId}');
       repeatType = widget.alarm!.repeatType;
       dateTime = widget.alarm!.time;
-      labelStr = widget.alarm!.message ?? labelInput;
-      titleAlarm = titleEditAlarm;
+      labelStr = widget.alarm!.message ?? 'labelInput'.tr();
+      titleAlarm = 'titleEditAlarm'.tr();
+      days = widget.alarm!.days ?? [];
+      isDeletedAlarmAfterRing = widget.alarm?.isDeletedAfterRing ?? false;
     }
     super.initState();
   }
@@ -52,7 +57,7 @@ class _AlarmViewState extends State<AlarmView> {
           appBar: AppBar(
             leading: IconButton(
               onPressed: () {
-                Navigator.pop(context);
+                context.pop();
               },
               icon: Icon(Icons.close, size: 32.0),
             ),
@@ -79,6 +84,7 @@ class _AlarmViewState extends State<AlarmView> {
                         dateTime: dateTime,
                         message: labelStr,
                         repeatType: repeatType,
+                        days: days,
                       ),
                     );
                   } else {
@@ -86,7 +92,10 @@ class _AlarmViewState extends State<AlarmView> {
                       AddAlarmEvent(
                         dateTime: dateTime,
                         repeatType: repeatType,
-                        message: labelStr,
+                        message: labelStr == 'labelInput'.tr()
+                            ? null
+                            : labelStr,
+                        days: days,
                       ),
                     );
                   }
@@ -129,30 +138,55 @@ class _AlarmViewState extends State<AlarmView> {
                   ),
                 ),
                 SizedBox(height: 24.0),
-                _buildItemLabel(ringtone, value: 'Báo thức tự nhiên'),
                 _buildItemLabel(
-                  repeat,
-                  value: repeatType.getStr(),
-                  onClick: () async {
-                    final result = await context.push<AlarmRepeatType>(
-                      '/alarm/repeat',
-                      extra: repeatType,
-                    );
-                    repeatType = result ?? AlarmRepeatType.onlyOnce;
-                    setState(() {});
-                    log('Alarm repeat type: ${repeatType.name}');
+                  'ringtone'.tr(),
+                  value: 'Báo thức tự nhiên',
+                  onClick: () {
+                    context.push('/alarm/ringtone');
                   },
                 ),
                 _buildItemLabel(
-                  vibrate,
-                  widget: Switch(value: true, onChanged: (value) {}),
+                  'repeat'.tr(),
+                  value: repeatType == AlarmRepeatType.custom && days.isNotEmpty
+                      ? Formatter.formatDaysToStr(days)
+                      : repeatType.getStr(),
+                  onClick: () async {
+                    final result = await context.push<dynamic>(
+                      '/alarm/repeat',
+                      extra: {"repeatType": repeatType, "days": days},
+                    );
+                    if (result != null) {
+                      repeatType = result['repeatType'] as AlarmRepeatType;
+                      days = result['days'];
+                      setState(() {});
+                      log(
+                        'Alarm repeat type: ${repeatType.name} - days length: ${days.length}',
+                      );
+                    }
+                  },
+                ),
+                // _buildItemLabel(
+                //   'vibrate'.tr(),
+                //   widget: Switch(value: true, onChanged: (value) {}),
+                // ),
+                _buildItemLabel(
+                  'deleteAlarm'.tr(),
+                  widget: Switch(
+                    value: isDeletedAlarmAfterRing,
+                    onChanged: (value) {
+                      setState(() {
+                        isDeletedAlarmAfterRing = value;
+                        BlocProvider.of<AlarmBloc>(context).add(
+                          EnableDeletedAlarmAfterRingEvent(
+                            isDeletedAlarmAfterRing,
+                          ),
+                        );
+                      });
+                    },
+                  ),
                 ),
                 _buildItemLabel(
-                  deleteAlarm,
-                  widget: Switch(value: false, onChanged: (value) {}),
-                ),
-                _buildItemLabel(
-                  label,
+                  'label'.tr(),
                   value: labelStr,
                   isLabel: true,
                   onAddLabel: (label) {
@@ -169,10 +203,10 @@ class _AlarmViewState extends State<AlarmView> {
       listener: (context, state) {
         if (state is AddAlarmState) {
           final alarm = state.alarm;
-          Navigator.pop(context, alarm);
+          context.pop(alarm);
         } else if (state is UpdateAlarmState) {
           final alarm = state.alarm;
-          Navigator.pop(context, alarm);
+          context.pop(alarm);
         }
       },
     );
@@ -190,7 +224,7 @@ class _AlarmViewState extends State<AlarmView> {
       contentPadding: EdgeInsets.symmetric(horizontal: 0.0),
       onTap: isLabel
           ? () {
-              AppUtils.showAddLabelBottomSheet(context, (label) {
+              AppUtils.showAddLabelBottomSheet(context, labelStr, (label) {
                 if (onAddLabel != null) {
                   onAddLabel(label);
                 }

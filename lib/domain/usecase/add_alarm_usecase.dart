@@ -12,12 +12,14 @@ class AddAlarmUseCase {
     String message,
     AlarmRepeatType repeatType,
     List<int>? dayList,
+    bool isDeletedAlarmAfterRing
   ) async {
     final model = AlarmModel(
       time: dateTime,
       message: message,
       repeatType: repeatType,
       days: dayList,
+      isDeletedAfterRing: isDeletedAlarmAfterRing
     );
     final result = await repository.createAlarm(model);
     return result;

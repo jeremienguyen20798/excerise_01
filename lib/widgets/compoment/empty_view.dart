@@ -1,4 +1,4 @@
-import 'package:excerise_01/core/constant/app_constant.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 class EmptyView extends StatelessWidget {
@@ -15,7 +15,7 @@ class EmptyView extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              defaultEmptyText,
+              'defaultEmptyText'.tr(),
               style: TextStyle(
                 fontSize: 16.0,
                 color: Colors.black,
@@ -25,7 +25,7 @@ class EmptyView extends StatelessWidget {
             RichText(
               textAlign: TextAlign.end,
               text: TextSpan(
-                text: "$defaultSubEmptyText\n",
+                text: "${'defaultSubEmptyText'.tr()}\n",
                 style: TextStyle(
                   fontSize: 14.0,
                   color: Colors.black,

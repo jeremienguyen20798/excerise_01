@@ -1,5 +1,6 @@
 import 'package:excerise_01/domain/entities/alarm_entity.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class CancelAlarmBottomSheet extends StatefulWidget {
   final AlarmEntity alarm;
@@ -41,7 +42,7 @@ class _CancelAlarmBottomSheetState extends State<CancelAlarmBottomSheet> {
           SizedBox(height: 12.0),
           ListTile(
             onTap: () {
-              Navigator.pop(context, "pause");
+              context.pop("pause");
             },
             title: Text(
               titleOption,
@@ -55,7 +56,7 @@ class _CancelAlarmBottomSheetState extends State<CancelAlarmBottomSheet> {
           SizedBox(height: 8.0),
           ListTile(
             onTap: () {
-              Navigator.pop(context, "cancel");
+              context.pop("cancel");
             },
             title: Text(
               'Tắt lặp lại báo thức này',
@@ -69,7 +70,7 @@ class _CancelAlarmBottomSheetState extends State<CancelAlarmBottomSheet> {
           SizedBox(height: 16.0),
           MaterialButton(
             onPressed: () {
-              Navigator.pop(context);
+              context.pop();
             },
             color: Colors.grey.shade100,
             height: 48.0,

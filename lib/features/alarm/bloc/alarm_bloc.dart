@@ -1,4 +1,4 @@
-import 'package:excerise_01/core/constant/app_constant.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:excerise_01/domain/usecase/add_alarm_usecase.dart';
 import 'package:excerise_01/domain/usecase/update_detail_alarm_usecase.dart';
 import 'package:excerise_01/features/alarm/bloc/alarm_event.dart';
@@ -10,20 +10,20 @@ import '../../../domain/entities/alarm_repeat_type.dart';
 
 class AlarmBloc extends Bloc<AlarmEvent, AlarmState> {
   final AlarmNotification _alarmNotification = AlarmNotification();
+  bool isDeleteAlarmAfterRing = false;
 
   AlarmBloc() : super(InitAlarmState()) {
     on<AddAlarmEvent>(_addAlarm);
     on<UpdateAlarmEvent>(_updateAlarm);
     on<OnDateTimeChangedEvent>(_onDateTimeChanged);
+    on<EnableDeletedAlarmAfterRingEvent>(_enableDeletedAlarmAfterRing);
   }
 
   Future<void> _addAlarm(
     AddAlarmEvent event,
     Emitter<AlarmState> emitter,
   ) async {
-    String message = event.message != null && event.message!.isNotEmpty
-        ? event.message!
-        : defaultMessage;
+    String message = event.message ?? 'defaultMessage'.tr();
     final DateTime time = event.dateTime;
     final repeatType = event.repeatType ?? AlarmRepeatType.onlyOnce;
     final days = event.days;
@@ -32,6 +32,7 @@ class AlarmBloc extends Bloc<AlarmEvent, AlarmState> {
       message,
       repeatType,
       days,
+      isDeleteAlarmAfterRing,
     );
     if (alarmEntity != null) {
       await _alarmNotification.showNotification(
@@ -57,6 +58,7 @@ class AlarmBloc extends Bloc<AlarmEvent, AlarmState> {
       message: messageAlarm,
       repeatType: alarmRepeatType,
       days: days,
+      isDeletedAlarmAfterRing: isDeleteAlarmAfterRing
     );
     if (alarmEntity != null) {
       await _alarmNotification.showNotification(
@@ -67,7 +69,17 @@ class AlarmBloc extends Bloc<AlarmEvent, AlarmState> {
     }
   }
 
-  void _onDateTimeChanged(OnDateTimeChangedEvent event, Emitter<AlarmState> emitter) {
+  void _onDateTimeChanged(
+    OnDateTimeChangedEvent event,
+    Emitter<AlarmState> emitter,
+  ) {
     emitter(DateTimeChangedState(event.dateTime));
+  }
+
+  void _enableDeletedAlarmAfterRing(
+    EnableDeletedAlarmAfterRingEvent event,
+    Emitter<AlarmState> emitter,
+  ) {
+    isDeleteAlarmAfterRing = event.isEnable;
   }
 }

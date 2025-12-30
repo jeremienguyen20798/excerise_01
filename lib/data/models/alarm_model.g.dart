@@ -19,14 +19,24 @@ const AlarmModelSchema = CollectionSchema(
   properties: {
     r'days': PropertySchema(id: 0, name: r'days', type: IsarType.longList),
     r'isActive': PropertySchema(id: 1, name: r'isActive', type: IsarType.bool),
-    r'message': PropertySchema(id: 2, name: r'message', type: IsarType.string),
-    r'repeatType': PropertySchema(
+    r'isDeletedAfterRing': PropertySchema(
+      id: 2,
+      name: r'isDeletedAfterRing',
+      type: IsarType.bool,
+    ),
+    r'isVibration': PropertySchema(
       id: 3,
+      name: r'isVibration',
+      type: IsarType.bool,
+    ),
+    r'message': PropertySchema(id: 4, name: r'message', type: IsarType.string),
+    r'repeatType': PropertySchema(
+      id: 5,
       name: r'repeatType',
       type: IsarType.byte,
       enumMap: _AlarmModelrepeatTypeEnumValueMap,
     ),
-    r'time': PropertySchema(id: 4, name: r'time', type: IsarType.dateTime),
+    r'time': PropertySchema(id: 6, name: r'time', type: IsarType.dateTime),
   },
 
   estimateSize: _alarmModelEstimateSize,
@@ -87,6 +97,32 @@ const AlarmModelSchema = CollectionSchema(
         ),
       ],
     ),
+    r'isVibration': IndexSchema(
+      id: 48614757782046555,
+      name: r'isVibration',
+      unique: false,
+      replace: false,
+      properties: [
+        IndexPropertySchema(
+          name: r'isVibration',
+          type: IndexType.value,
+          caseSensitive: false,
+        ),
+      ],
+    ),
+    r'isDeletedAfterRing': IndexSchema(
+      id: -4242100497474826981,
+      name: r'isDeletedAfterRing',
+      unique: false,
+      replace: false,
+      properties: [
+        IndexPropertySchema(
+          name: r'isDeletedAfterRing',
+          type: IndexType.value,
+          caseSensitive: false,
+        ),
+      ],
+    ),
   },
   links: {},
   embeddedSchemas: {},
@@ -126,9 +162,11 @@ void _alarmModelSerialize(
 ) {
   writer.writeLongList(offsets[0], object.days);
   writer.writeBool(offsets[1], object.isActive);
-  writer.writeString(offsets[2], object.message);
-  writer.writeByte(offsets[3], object.repeatType.index);
-  writer.writeDateTime(offsets[4], object.time);
+  writer.writeBool(offsets[2], object.isDeletedAfterRing);
+  writer.writeBool(offsets[3], object.isVibration);
+  writer.writeString(offsets[4], object.message);
+  writer.writeByte(offsets[5], object.repeatType.index);
+  writer.writeDateTime(offsets[6], object.time);
 }
 
 AlarmModel _alarmModelDeserialize(
@@ -140,11 +178,13 @@ AlarmModel _alarmModelDeserialize(
   final object = AlarmModel(
     days: reader.readLongList(offsets[0]),
     isActive: reader.readBoolOrNull(offsets[1]),
-    message: reader.readStringOrNull(offsets[2]),
+    isDeletedAfterRing: reader.readBoolOrNull(offsets[2]),
+    isVibration: reader.readBoolOrNull(offsets[3]) ?? true,
+    message: reader.readStringOrNull(offsets[4]),
     repeatType:
-        _AlarmModelrepeatTypeValueEnumMap[reader.readByteOrNull(offsets[3])] ??
+        _AlarmModelrepeatTypeValueEnumMap[reader.readByteOrNull(offsets[5])] ??
         AlarmRepeatType.onlyOnce,
-    time: reader.readDateTime(offsets[4]),
+    time: reader.readDateTime(offsets[6]),
   );
   object.id = id;
   return object;
@@ -162,14 +202,18 @@ P _alarmModelDeserializeProp<P>(
     case 1:
       return (reader.readBoolOrNull(offset)) as P;
     case 2:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readBoolOrNull(offset)) as P;
     case 3:
+      return (reader.readBoolOrNull(offset) ?? true) as P;
+    case 4:
+      return (reader.readStringOrNull(offset)) as P;
+    case 5:
       return (_AlarmModelrepeatTypeValueEnumMap[reader.readByteOrNull(
                 offset,
               )] ??
               AlarmRepeatType.onlyOnce)
           as P;
-    case 4:
+    case 6:
       return (reader.readDateTime(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -237,6 +281,22 @@ extension AlarmModelQueryWhereSort
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(
         const IndexWhereClause.any(indexName: r'days'),
+      );
+    });
+  }
+
+  QueryBuilder<AlarmModel, AlarmModel, QAfterWhere> anyIsVibration() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(
+        const IndexWhereClause.any(indexName: r'isVibration'),
+      );
+    });
+  }
+
+  QueryBuilder<AlarmModel, AlarmModel, QAfterWhere> anyIsDeletedAfterRing() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(
+        const IndexWhereClause.any(indexName: r'isDeletedAfterRing'),
       );
     });
   }
@@ -764,6 +824,144 @@ extension AlarmModelQueryWhere
       );
     });
   }
+
+  QueryBuilder<AlarmModel, AlarmModel, QAfterWhereClause> isVibrationEqualTo(
+    bool isVibration,
+  ) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(
+        IndexWhereClause.equalTo(
+          indexName: r'isVibration',
+          value: [isVibration],
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<AlarmModel, AlarmModel, QAfterWhereClause> isVibrationNotEqualTo(
+    bool isVibration,
+  ) {
+    return QueryBuilder.apply(this, (query) {
+      if (query.whereSort == Sort.asc) {
+        return query
+            .addWhereClause(
+              IndexWhereClause.between(
+                indexName: r'isVibration',
+                lower: [],
+                upper: [isVibration],
+                includeUpper: false,
+              ),
+            )
+            .addWhereClause(
+              IndexWhereClause.between(
+                indexName: r'isVibration',
+                lower: [isVibration],
+                includeLower: false,
+                upper: [],
+              ),
+            );
+      } else {
+        return query
+            .addWhereClause(
+              IndexWhereClause.between(
+                indexName: r'isVibration',
+                lower: [isVibration],
+                includeLower: false,
+                upper: [],
+              ),
+            )
+            .addWhereClause(
+              IndexWhereClause.between(
+                indexName: r'isVibration',
+                lower: [],
+                upper: [isVibration],
+                includeUpper: false,
+              ),
+            );
+      }
+    });
+  }
+
+  QueryBuilder<AlarmModel, AlarmModel, QAfterWhereClause>
+  isDeletedAfterRingIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(
+        IndexWhereClause.equalTo(
+          indexName: r'isDeletedAfterRing',
+          value: [null],
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<AlarmModel, AlarmModel, QAfterWhereClause>
+  isDeletedAfterRingIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(
+        IndexWhereClause.between(
+          indexName: r'isDeletedAfterRing',
+          lower: [null],
+          includeLower: false,
+          upper: [],
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<AlarmModel, AlarmModel, QAfterWhereClause>
+  isDeletedAfterRingEqualTo(bool? isDeletedAfterRing) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(
+        IndexWhereClause.equalTo(
+          indexName: r'isDeletedAfterRing',
+          value: [isDeletedAfterRing],
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<AlarmModel, AlarmModel, QAfterWhereClause>
+  isDeletedAfterRingNotEqualTo(bool? isDeletedAfterRing) {
+    return QueryBuilder.apply(this, (query) {
+      if (query.whereSort == Sort.asc) {
+        return query
+            .addWhereClause(
+              IndexWhereClause.between(
+                indexName: r'isDeletedAfterRing',
+                lower: [],
+                upper: [isDeletedAfterRing],
+                includeUpper: false,
+              ),
+            )
+            .addWhereClause(
+              IndexWhereClause.between(
+                indexName: r'isDeletedAfterRing',
+                lower: [isDeletedAfterRing],
+                includeLower: false,
+                upper: [],
+              ),
+            );
+      } else {
+        return query
+            .addWhereClause(
+              IndexWhereClause.between(
+                indexName: r'isDeletedAfterRing',
+                lower: [isDeletedAfterRing],
+                includeLower: false,
+                upper: [],
+              ),
+            )
+            .addWhereClause(
+              IndexWhereClause.between(
+                indexName: r'isDeletedAfterRing',
+                lower: [],
+                upper: [isDeletedAfterRing],
+                includeUpper: false,
+              ),
+            );
+      }
+    });
+  }
 }
 
 extension AlarmModelQueryFilter
@@ -972,6 +1170,42 @@ extension AlarmModelQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.equalTo(property: r'isActive', value: value),
+      );
+    });
+  }
+
+  QueryBuilder<AlarmModel, AlarmModel, QAfterFilterCondition>
+  isDeletedAfterRingIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        const FilterCondition.isNull(property: r'isDeletedAfterRing'),
+      );
+    });
+  }
+
+  QueryBuilder<AlarmModel, AlarmModel, QAfterFilterCondition>
+  isDeletedAfterRingIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        const FilterCondition.isNotNull(property: r'isDeletedAfterRing'),
+      );
+    });
+  }
+
+  QueryBuilder<AlarmModel, AlarmModel, QAfterFilterCondition>
+  isDeletedAfterRingEqualTo(bool? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.equalTo(property: r'isDeletedAfterRing', value: value),
+      );
+    });
+  }
+
+  QueryBuilder<AlarmModel, AlarmModel, QAfterFilterCondition>
+  isVibrationEqualTo(bool value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.equalTo(property: r'isVibration', value: value),
       );
     });
   }
@@ -1276,6 +1510,32 @@ extension AlarmModelQuerySortBy
     });
   }
 
+  QueryBuilder<AlarmModel, AlarmModel, QAfterSortBy>
+  sortByIsDeletedAfterRing() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isDeletedAfterRing', Sort.asc);
+    });
+  }
+
+  QueryBuilder<AlarmModel, AlarmModel, QAfterSortBy>
+  sortByIsDeletedAfterRingDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isDeletedAfterRing', Sort.desc);
+    });
+  }
+
+  QueryBuilder<AlarmModel, AlarmModel, QAfterSortBy> sortByIsVibration() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isVibration', Sort.asc);
+    });
+  }
+
+  QueryBuilder<AlarmModel, AlarmModel, QAfterSortBy> sortByIsVibrationDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isVibration', Sort.desc);
+    });
+  }
+
   QueryBuilder<AlarmModel, AlarmModel, QAfterSortBy> sortByMessage() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'message', Sort.asc);
@@ -1339,6 +1599,32 @@ extension AlarmModelQuerySortThenBy
     });
   }
 
+  QueryBuilder<AlarmModel, AlarmModel, QAfterSortBy>
+  thenByIsDeletedAfterRing() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isDeletedAfterRing', Sort.asc);
+    });
+  }
+
+  QueryBuilder<AlarmModel, AlarmModel, QAfterSortBy>
+  thenByIsDeletedAfterRingDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isDeletedAfterRing', Sort.desc);
+    });
+  }
+
+  QueryBuilder<AlarmModel, AlarmModel, QAfterSortBy> thenByIsVibration() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isVibration', Sort.asc);
+    });
+  }
+
+  QueryBuilder<AlarmModel, AlarmModel, QAfterSortBy> thenByIsVibrationDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isVibration', Sort.desc);
+    });
+  }
+
   QueryBuilder<AlarmModel, AlarmModel, QAfterSortBy> thenByMessage() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'message', Sort.asc);
@@ -1390,6 +1676,19 @@ extension AlarmModelQueryWhereDistinct
     });
   }
 
+  QueryBuilder<AlarmModel, AlarmModel, QDistinct>
+  distinctByIsDeletedAfterRing() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'isDeletedAfterRing');
+    });
+  }
+
+  QueryBuilder<AlarmModel, AlarmModel, QDistinct> distinctByIsVibration() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'isVibration');
+    });
+  }
+
   QueryBuilder<AlarmModel, AlarmModel, QDistinct> distinctByMessage({
     bool caseSensitive = true,
   }) {
@@ -1428,6 +1727,19 @@ extension AlarmModelQueryProperty
   QueryBuilder<AlarmModel, bool?, QQueryOperations> isActiveProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'isActive');
+    });
+  }
+
+  QueryBuilder<AlarmModel, bool?, QQueryOperations>
+  isDeletedAfterRingProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'isDeletedAfterRing');
+    });
+  }
+
+  QueryBuilder<AlarmModel, bool, QQueryOperations> isVibrationProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'isVibration');
     });
   }
 
