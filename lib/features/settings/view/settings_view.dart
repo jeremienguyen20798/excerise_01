@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:excerise_01/core/ad/load_ad.dart';
 import 'package:excerise_01/core/constant/app_constant.dart';
 import 'package:excerise_01/features/settings/bloc/settings_bloc.dart';
 import 'package:excerise_01/features/settings/bloc/settings_event.dart';
@@ -8,10 +9,31 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class SettingsView extends StatelessWidget {
+class SettingsView extends StatefulWidget {
   const SettingsView({super.key});
+
+  @override
+  State<SettingsView> createState() => _SettingsViewState();
+}
+
+class _SettingsViewState extends State<SettingsView> {
+  BannerAd? _bannerAd;
+  final LoadAd _loadAd = LoadAd();
+
+  @override
+  void initState() {
+    _loadBannerAd();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _bannerAd?.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +67,7 @@ class SettingsView extends StatelessWidget {
           ),
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
+            mainAxisSize: MainAxisSize.max,
             children: [
               ExpandablePanel(
                 theme: ExpandableThemeData(tapHeaderToExpand: true),
@@ -142,10 +164,27 @@ class SettingsView extends StatelessWidget {
                   style: TextStyle(fontSize: 15.0, color: Colors.black),
                 ),
               ),
+              Spacer(),
+              _bannerAd != null
+                  ? Container(
+                      alignment: Alignment.center,
+                      width: double.infinity,
+                      height: _bannerAd!.size.height.toDouble(),
+                      child: AdWidget(ad: _bannerAd!),
+                    )
+                  : SizedBox(),
             ],
           ),
         );
       },
     );
+  }
+
+  void _loadBannerAd() async {
+    _loadAd.loadBannerAd((bannerAd) {
+      setState(() {
+        _bannerAd = bannerAd;
+      });
+    });
   }
 }

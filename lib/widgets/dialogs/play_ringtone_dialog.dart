@@ -1,7 +1,9 @@
+import 'package:excerise_01/core/ad/load_ad.dart';
 import 'package:excerise_01/core/utils/formatter.dart';
 import 'package:excerise_01/widgets/compoment/ringtone_audio_seekbar.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:just_audio/just_audio.dart';
 
 class PlayRingtoneDialog extends StatefulWidget {
@@ -22,11 +24,14 @@ class _PlayRingtoneDialogState extends State<PlayRingtoneDialog> {
   final audioPlayer = AudioPlayer();
   bool isPlaying = false;
   Duration totalDuration = Duration.zero, currentDuration = Duration.zero;
+  final LoadAd _loadAd = LoadAd();
+  BannerAd? _bannerAd;
 
   @override
   void initState() {
     super.initState();
     initAudioPlayer();
+    _loadBannerAd();
   }
 
   @override
@@ -57,51 +62,84 @@ class _PlayRingtoneDialogState extends State<PlayRingtoneDialog> {
         ),
       ),
       contentPadding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          RingtoneAudioSeekbar(
-            player: audioPlayer,
-            onSeekBarChanged: (Duration duration) {
-              setState(() {
-                currentDuration = duration;
-              });
-            },
-          ),
-        ],
+      content: SizedBox(
+        width: MediaQuery.of(context).size.width - 24 * 2,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            RingtoneAudioSeekbar(
+              player: audioPlayer,
+              onSeekBarChanged: (Duration duration) {
+                setState(() {
+                  currentDuration = duration;
+                });
+              },
+            ),
+          ],
+        ),
       ),
       actionsAlignment: MainAxisAlignment.spaceBetween,
       actions: [
-        RichText(
-          text: TextSpan(
-            text: Formatter.formatDuration(currentDuration),
-            style: TextStyle(color: Colors.black, fontSize: 14.0),
-            children: [
-              TextSpan(text: ' / '),
-              TextSpan(text: Formatter.formatDuration(totalDuration)),
-            ],
-          ),
-        ),
-        MaterialButton(
-          highlightColor: Colors.transparent,
-          focusColor: Colors.transparent,
-          splashColor: Colors.transparent,
-          hoverColor: Colors.transparent,
-          onPressed: () {
-            setState(() {
-              isPlaying = audioPlayer.playing;
-              if (isPlaying) {
-                pauseRingtone();
-              } else {
-                playRingtone();
-              }
-            });
-          },
-          child: isPlaying ? Icon(Icons.pause) : Icon(Icons.play_arrow),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Expanded(
+                  child: RichText(
+                    text: TextSpan(
+                      text: Formatter.formatDuration(currentDuration),
+                      style: TextStyle(color: Colors.black, fontSize: 14.0),
+                      children: [
+                        TextSpan(text: ' / '),
+                        TextSpan(text: Formatter.formatDuration(totalDuration)),
+                      ],
+                    ),
+                  ),
+                ),
+                MaterialButton(
+                  highlightColor: Colors.transparent,
+                  focusColor: Colors.transparent,
+                  splashColor: Colors.transparent,
+                  hoverColor: Colors.transparent,
+                  onPressed: () {
+                    setState(() {
+                      isPlaying = audioPlayer.playing;
+                      if (isPlaying) {
+                        pauseRingtone();
+                      } else {
+                        playRingtone();
+                      }
+                    });
+                  },
+                  child: isPlaying ? Icon(Icons.pause) : Icon(Icons.play_arrow),
+                ),
+              ],
+            ),
+            _bannerAd != null
+                ? Container(
+                    alignment: Alignment.center,
+                    width: double.infinity,
+                    height: _bannerAd!.size.height.toDouble(),
+                    child: AdWidget(ad: _bannerAd!),
+                  )
+                : SizedBox(),
+          ],
         ),
       ],
     );
+  }
+
+  void _loadBannerAd() {
+    _loadAd.loadBannerAd((bannerAd) {
+      setState(() {
+        _bannerAd = bannerAd;
+      });
+    });
   }
 
   Future<void> initAudioPlayer() async {

@@ -40,6 +40,10 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+            
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-8799927677958161~5665240621"/>
 
         <service
             android:name="com.dexterous.flutterlocalnotifications.ForegroundService"

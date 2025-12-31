@@ -9,6 +9,7 @@ import 'package:excerise_01/di.dart';
 import 'package:excerise_01/domain/entities/alarm_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 import 'app.dart';
 
@@ -36,6 +37,8 @@ Future<void> notificationTapBackground(
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
+  // Initialize the Mobile Ads SDK.
+  MobileAds.instance.initialize();
   await DependencyInjection.setUp();
   // [QUAN TRỌNG] Khởi tạo lắng nghe Port
   AlarmStatusNotifier.instance.initialize();
