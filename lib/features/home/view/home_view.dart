@@ -21,6 +21,7 @@ class HomeView extends StatelessWidget {
         int deleteItemsLength = 0;
         if (state is ItemAlarmLongPressState) {
           isLongPress = true;
+          deleteItemsLength = state.length;
         } else if (state is OnRestartState) {
           isLongPress = false;
           isDeleteAllItems = false;

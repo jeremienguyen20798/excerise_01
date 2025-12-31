@@ -17,7 +17,15 @@ class GetAlarmListState extends HomeState {
   List<Object?> get props => [alarms];
 }
 
-class ItemAlarmLongPressState extends HomeState {}
+class ItemAlarmLongPressState extends HomeState {
+  final int length;
+  final AlarmEntity? alarmEntity;
+
+  ItemAlarmLongPressState(this.length, this.alarmEntity);
+
+  @override
+  List<Object?> get props => [length, alarmEntity];
+}
 
 class OnRestartState extends HomeState {}
 

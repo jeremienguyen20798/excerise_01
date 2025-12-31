@@ -43,6 +43,13 @@ class AlarmList extends StatelessWidget {
             alarms[index] =
                 alarmEntity; // Thay thế item cũ bằng item mới (đã tắt)
           }
+        } else if (state is ItemAlarmLongPressState) {
+          if (state.alarmEntity != null) {
+            final index = alarms.indexWhere(
+              (item) => item.alarmId == state.alarmEntity!.alarmId,
+            );
+            alarms[index] = state.alarmEntity!;
+          }
         }
         return alarms.isNotEmpty
             ? SliverList.separated(

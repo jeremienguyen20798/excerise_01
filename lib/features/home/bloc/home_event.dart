@@ -14,7 +14,11 @@ class UpdateAlarmStatusEvent extends HomeEvent {
   UpdateAlarmStatusEvent(this.option, this.id, this.isActive);
 }
 
-class ItemAlarmLongPressEvent extends HomeEvent {}
+class ItemAlarmLongPressEvent extends HomeEvent {
+  AlarmEntity alarmEntity;
+
+  ItemAlarmLongPressEvent(this.alarmEntity);
+}
 
 class OnRestartEvent extends HomeEvent {}
 

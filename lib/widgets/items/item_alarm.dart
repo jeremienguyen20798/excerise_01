@@ -46,7 +46,9 @@ class _ItemAlarmState extends State<ItemAlarm> {
     return BlocBuilder<HomeBloc, HomeState>(
       builder: (context, state) {
         if (state is ItemAlarmLongPressState) {
+          final alarmState = state.alarmEntity;
           isLongPress = true;
+          isChoose = alarmState == widget.alarm;
         } else if (state is OnRestartState) {
           isLongPress = false;
           isChoose = false;
@@ -78,7 +80,9 @@ class _ItemAlarmState extends State<ItemAlarm> {
               vertical: 8.0,
             ),
             onLongPress: () {
-              BlocProvider.of<HomeBloc>(context).add(ItemAlarmLongPressEvent());
+              BlocProvider.of<HomeBloc>(
+                context,
+              ).add(ItemAlarmLongPressEvent(widget.alarm));
             },
             onTap: () {
               AppUtils.showEditAlarmDialog(
