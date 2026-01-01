@@ -39,6 +39,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<RequestNotificationPermissionEvent>(_requestNotificationPermission);
     on<RemoveItemForDeleteIdsEvent>(_removeItemForDeleteIds);
     on<AlarmDismissedFromNotificationEvent>(_alarmDismissedFromNotification);
+    on<ScrollOnTopEvent>(_scrollOnTop);
+    on<ScrollOnBottomEvent>(_scrollOnBottom);
   }
 
   //Lấy ra danh sách các báo thức
@@ -222,6 +224,14 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     } else {
       emitter(AlarmDismissedFromNotificationState(entity));
     }
+  }
+
+  void _scrollOnTop(ScrollOnTopEvent event, Emitter<HomeState> emitter) {
+    emitter(ScrollOnTopState());
+  }
+
+  void _scrollOnBottom(ScrollOnBottomEvent event, Emitter<HomeState> emitter) {
+    emitter(ScrollOnBottomState());
   }
 
   @override

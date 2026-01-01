@@ -107,3 +107,7 @@ class AlarmDismissedFromNotificationState extends HomeState {
   @override
   List<Object?> get props => [entity];
 }
+
+class ScrollOnTopState extends HomeState {}
+
+class ScrollOnBottomState extends HomeState {}

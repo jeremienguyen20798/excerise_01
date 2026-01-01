@@ -75,3 +75,7 @@ class DeleteAlarmAfterRingEvent extends HomeEvent {
 
   DeleteAlarmAfterRingEvent(this.entity);
 }
+
+class ScrollOnTopEvent extends HomeEvent {}
+
+class ScrollOnBottomEvent extends HomeEvent {}
