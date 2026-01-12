@@ -39,6 +39,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<RequestNotificationPermissionEvent>(_requestNotificationPermission);
     on<RemoveItemForDeleteIdsEvent>(_removeItemForDeleteIds);
     on<AlarmDismissedFromNotificationEvent>(_alarmDismissedFromNotification);
+    on<ScrollOnTopEvent>(_scrollOnTop);
+    on<ScrollOnBottomEvent>(_scrollOnBottom);
   }
 
   //Lấy ra danh sách các báo thức
@@ -51,11 +53,14 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   }
 
   //Xử lý khi long press item alarm thì hiện UI chọn một hoặc nhiều item để xoá
-  void _onLongPressItem(
+  Future<void> _onLongPressItem(
     ItemAlarmLongPressEvent event,
     Emitter<HomeState> emitter,
-  ) {
-    emitter(ItemAlarmLongPressState());
+  ) async {
+    final alarm = event.alarmEntity;
+    _itemDeleteIds.add(alarm.alarmId);
+    final itemDeleteLength = _itemDeleteIds.length;
+    emitter(ItemAlarmLongPressState(itemDeleteLength, alarm));
   }
 
   //Đưa mọi thứ trở về trạng thái ban đầu
@@ -107,15 +112,15 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   ) async {
     int id = event.id;
     bool isActive = event.isActive;
-    UpdateAlarmStatusUseCase().execute(id, isActive);
+    final alarm = await UpdateAlarmStatusUseCase().execute(id, isActive);
     // if (event.option == null) {
-    //   if (alarm != null) {
-    //     if (isActive) {
-    //       await _alarmNotification.showNotification(alarm);
-    //     } else {
-    //       await _alarmNotification.cancelAlarmRingById(id);
-    //     }
-    //   }
+    if (alarm != null) {
+      if (isActive) {
+        await _alarmNotification.showNotification(alarm);
+      } else {
+        await _alarmNotification.cancelAlarmRingById(id);
+      }
+    }
     // } else {
     //   String cancelOption = event.option!;
     //   if (cancelOption == "cancel") {
@@ -149,11 +154,11 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       isActive: isActive,
     );
     if (alarm != null) {
-      // if (isActive) {
-      //   await _alarmNotification.showNotification(alarm);
-      // } else {
-      //   await _alarmNotification.cancelAlarmRingById(idAlarm);
-      // }
+      if (isActive) {
+        await _alarmNotification.showNotification(alarm);
+      } else {
+        await _alarmNotification.cancelAlarmRingById(idAlarm);
+      }
       final state = UpdateItemState(index, alarm);
       emitter(state);
     }
@@ -219,6 +224,14 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     } else {
       emitter(AlarmDismissedFromNotificationState(entity));
     }
+  }
+
+  void _scrollOnTop(ScrollOnTopEvent event, Emitter<HomeState> emitter) {
+    emitter(ScrollOnTopState());
+  }
+
+  void _scrollOnBottom(ScrollOnBottomEvent event, Emitter<HomeState> emitter) {
+    emitter(ScrollOnBottomState());
   }
 
   @override

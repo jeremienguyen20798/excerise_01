@@ -1,0 +1,62 @@
+# Tên của Workflow - hiển thị trên tab "Actions" của GitHub
+name: Flutter CI/CD
+
+# Định nghĩa các sự kiện (Events) sẽ kích hoạt quy trình này tự động chạy
+on:
+  push:
+    # Kích hoạt khi bạn đẩy code (git push) lên nhánh "main"
+    branches: [main]
+  pull_request:
+    # Kích hoạt khi ai đó yêu cầu gộp code (PR) vào nhánh "main"
+    branches: [main]
+
+# Danh sách các công việc (Jobs) cần thực hiện  
+jobs:
+  build:
+    # Chọn hệ điều hành cho máy ảo chạy CI
+    # ubuntu-latest là Linux, nhanh và rẻ (tiết kiệm phút miễn phí nhất)
+    runs-on: ubuntu-latest # Sử dụng server linux
+    # Các bước (Steps) thực hiện tuần tự trong Job này
+    steps:
+    # Lấy code từ GitHub về máy ảo để có thể làm việc
+      - name: Checkout code
+      - uses: actions/checkout@v3 # Lấy code từ repository
+    # Cấu hình môi trường Java (Bắt buộc để build ứng dụng Android)
+      - name: Setup Java
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu' # Sử dụng bản phân phối OpenJDK Zulu
+          java-version: '17' # Phiên bản Java ổn định cho flutter hiện nay
+    # Cài đặt flutter SDK vào máy ảo
+      - name: SetUp Flutter
+      - uses: subosito/flutter-action@v2
+        with:
+          # Lây phiên bản 3.x mới nhất (hoặc bạn có thể ghi rõ 3.19.0 chẳng hạn)
+          flutter-version: '3.x'
+          channel: 'stable'
+    # Tải các thư viện/package mà dự án đang dùng
+      - name: Cài đặt library
+      - uses: flutter pub get
+    # -------------------- CÓ THỂ BỎ QUA HAI BƯỚC NÀY TRONG PROJECT CÁ NHÂN ------------------------
+    # Phân tích mã nguồn mở
+    # Lệnh này kiểm tra xem code có đúng chuẩn không, có biến nào thừa hay lỗi tiềm ẩn không.
+    # Nếu bước này báo lỗi (Error), CI sẽ dừng lại ngay lập tức.
+      - name: Static Analysis
+      - uses: flutter analyze
+    # Chạy Unit Test và Widget Test
+    # Đảm bảo các logic tính toán bên trong không bị sai sau khi sửa code
+      - name: Run Test
+      - uses: flutter test
+    # -----------------------------------------------------------------------------------------------
+    # Xây dựng tệp cài đặt APK cho Android
+      - name: Build APK File
+      - uses: flutter build apk --release
+    # Lưu trữ file APK (Artifact)
+    # Vì máy ảo sẽ bị xóa sạch sau khi chạy xong, chúng ta cần đẩy file APK
+    # lên server GitHub để bạn có thể vào tải về.
+      - name: Upload Artifact
+      - uses: action/upload-artifact@v3
+        with:
+          name: release-apk # tên của file zip chứa APK trên GitHub
+          # Đường dẫn đến file apk vừa build xong ở bước trên
+          path: build/app/outputs/flutter-apk/app-release.apk

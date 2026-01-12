@@ -1,6 +1,7 @@
 import 'package:excerise_01/core/utils/formatter.dart';
 import 'package:excerise_01/widgets/compoment/ringtone_audio_seekbar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:go_router/go_router.dart';
 import 'package:just_audio/just_audio.dart';
 
@@ -27,6 +28,12 @@ class _PlayRingtoneDialogState extends State<PlayRingtoneDialog> {
   void initState() {
     super.initState();
     initAudioPlayer();
+  }
+
+  @override
+  void dispose() {
+    audioPlayer.dispose();
+    super.dispose();
   }
 
   @override
@@ -105,10 +112,20 @@ class _PlayRingtoneDialogState extends State<PlayRingtoneDialog> {
   }
 
   Future<void> initAudioPlayer() async {
-    totalDuration =
-        await audioPlayer.setUrl(widget.ringtoneUrl) ?? Duration.zero;
-    isPlaying = audioPlayer.playing;
-    currentDuration = audioPlayer.position;
+    try {
+      totalDuration =
+          await audioPlayer.setUrl(widget.ringtoneUrl) ?? Duration.zero;
+      isPlaying = audioPlayer.playing;
+      currentDuration = audioPlayer.position;
+      setState(() {});
+    } catch (error) {
+      onLoadRingtoneError();
+    }
+  }
+
+  void onLoadRingtoneError() {
+    EasyLoading.showError("Không tải được nhạc chuông này");
+    context.pop();
   }
 
   Future<void> pauseRingtone() async {

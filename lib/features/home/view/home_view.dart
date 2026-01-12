@@ -9,7 +9,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-bool isLongPress = false, isDeleteAllItems = false;
+bool isLongPress = false, isDeleteAllItems = false, isHideButton = false;
+ScrollController _scrollController = ScrollController();
+int deleteItemsLength = 0;
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
@@ -18,14 +20,17 @@ class HomeView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<HomeBloc, HomeState>(
       builder: (context, state) {
-        int deleteItemsLength = 0;
         if (state is ItemAlarmLongPressState) {
           isLongPress = true;
+          isHideButton = false;
+          deleteItemsLength = state.length;
         } else if (state is OnRestartState) {
           isLongPress = false;
+          isHideButton = false;
           isDeleteAllItems = false;
         } else if (state is DeleteAlarmState) {
           isLongPress = false;
+          isHideButton = false;
         } else if (state is DeleteAllAlarmsState) {
           isDeleteAllItems = state.isDeleteAll;
           deleteItemsLength = state.length;
@@ -37,71 +42,98 @@ class HomeView extends StatelessWidget {
           deleteItemsLength = state.length;
         } else if (state is AddItemForDeleteState) {
           deleteItemsLength = state.length;
+        } else if (state is ScrollOnTopState) {
+          isHideButton = true;
+        } else if (state is ScrollOnBottomState) {
+          isHideButton = false;
         }
         return Scaffold(
           backgroundColor: Colors.grey.shade100,
-          body: CustomScrollView(
-            slivers: [
-              SliverAppBar(
-                leading: isLongPress
-                    ? IconButton(
-                        onPressed: () {
-                          BlocProvider.of<HomeBloc>(
-                            context,
-                          ).add(OnRestartEvent());
-                        },
-                        icon: Icon(Icons.close),
-                      )
-                    : null,
-                snap: false,
-                pinned: true,
-                floating: false,
-                backgroundColor: Colors.grey.shade100,
-                actions: [
-                  isLongPress
+          body: NotificationListener<ScrollNotification>(
+            onNotification: (notification) {
+              // Lấy vị trí cuộn hiện tại
+              final double currentScrollPosition =
+                  _scrollController.position.pixels;
+              print('Cuộn hiện tại: $currentScrollPosition');
+              // So sánh vị trí cuộn hiện tại với vị trí có giá trị nhỏ nhất mà appTitle vào AppBar
+              if (currentScrollPosition >= 28.362171519886147) {
+                BlocProvider.of<HomeBloc>(context).add(ScrollOnTopEvent());
+                // So sánh vị trí cuộn hiện tại với khoảng vị trí thích hợp để làm xuất hiện button close
+              } else if (currentScrollPosition <= 28.907581676136658 &&
+                  currentScrollPosition >= 13.09019886363484) {
+                BlocProvider.of<HomeBloc>(context).add(ScrollOnBottomEvent());
+              }
+              return true;
+            },
+            child: CustomScrollView(
+              controller: _scrollController,
+              slivers: [
+                SliverAppBar(
+                  leading: isHideButton
+                      ? null
+                      : isLongPress
                       ? IconButton(
                           onPressed: () {
-                            if (isDeleteAllItems) {
-                              BlocProvider.of<HomeBloc>(
-                                context,
-                              ).add(CancelDeleteAllItemsEvent());
-                            } else {
-                              BlocProvider.of<HomeBloc>(
-                                context,
-                              ).add(DeleteAllAlarmsEvent());
-                            }
+                            BlocProvider.of<HomeBloc>(
+                              context,
+                            ).add(OnRestartEvent());
                           },
-                          icon: Icon(
-                            Icons.playlist_add_check,
-                            color: isDeleteAllItems
-                                ? Colors.deepPurple
-                                : Colors.black,
+                          icon: Icon(Icons.close),
+                        )
+                      : null,
+                  snap: false,
+                  pinned: true,
+                  floating: false,
+                  backgroundColor: Colors.grey.shade100,
+                  actions: [
+                    isLongPress
+                        ? IconButton(
+                            onPressed: () {
+                              if (isDeleteAllItems) {
+                                BlocProvider.of<HomeBloc>(
+                                  context,
+                                ).add(CancelDeleteAllItemsEvent());
+                              } else {
+                                BlocProvider.of<HomeBloc>(
+                                  context,
+                                ).add(DeleteAllAlarmsEvent());
+                              }
+                            },
+                            icon: Icon(
+                              Icons.playlist_add_check,
+                              color: isDeleteAllItems
+                                  ? Colors.deepPurple
+                                  : Colors.black,
+                            ),
+                          )
+                        : IconButton(
+                            onPressed: () {
+                              context.go('/settings');
+                            },
+                            icon: Icon(Icons.more_vert, color: Colors.black),
                           ),
-                        )
-                      : IconButton(
-                          onPressed: () {
-                            context.go('/settings');
-                          },
-                          icon: Icon(Icons.more_vert, color: Colors.black),
-                        ),
-                ],
-                flexibleSpace: FlexibleSpaceBar(
-                  titlePadding: EdgeInsets.only(left: 16.0, bottom: 16.0),
-                  title: isLongPress
-                      ? Text(
-                          '${'chooseItem'.tr()}$deleteItemsLength${'item'.tr()}',
-                          style: TextStyle(fontSize: 16.0, color: Colors.black),
-                          textAlign: TextAlign.center,
-                        )
-                      : Text(
-                          'defaultAppName'.tr(),
-                          style: TextStyle(fontSize: 16.0),
-                        ),
+                  ],
+                  flexibleSpace: FlexibleSpaceBar(
+                    titlePadding: EdgeInsets.only(left: 16.0, bottom: 16.0),
+                    title: isLongPress
+                        ? Text(
+                            '${'chooseItem'.tr()}$deleteItemsLength${'item'.tr()}',
+                            style: TextStyle(
+                              fontSize: 16.0,
+                              color: Colors.black,
+                            ),
+                            textAlign: TextAlign.center,
+                          )
+                        : Text(
+                            'defaultAppName'.tr(),
+                            style: TextStyle(fontSize: 16.0),
+                          ),
+                  ),
+                  expandedHeight: kToolbarHeight * 2,
                 ),
-                expandedHeight: kToolbarHeight * 2,
-              ),
-              AlarmList(),
-            ],
+                AlarmList(),
+              ],
+            ),
           ),
           floatingActionButton: isLongPress
               ? null
