@@ -55,7 +55,7 @@ jobs:
     # Vì máy ảo sẽ bị xóa sạch sau khi chạy xong, chúng ta cần đẩy file APK
     # lên server GitHub để bạn có thể vào tải về.
      - name: Upload Artifact
-       uses: actions/upload-artifact@v3
+       uses: actions/upload-artifact@v4
        with:
         name: release-apk # tên của file zip chứa APK trên GitHub
           # Đường dẫn đến file apk vừa build xong ở bước trên
