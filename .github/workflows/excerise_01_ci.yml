@@ -36,26 +36,26 @@ jobs:
         channel: 'stable'
     # Tải các thư viện/package mà dự án đang dùng
      - name: Cài đặt library
-       uses: flutter pub get
+       run: flutter pub get
     # -------------------- CÓ THỂ BỎ QUA HAI BƯỚC NÀY TRONG PROJECT CÁ NHÂN ------------------------
     # Phân tích mã nguồn mở
     # Lệnh này kiểm tra xem code có đúng chuẩn không, có biến nào thừa hay lỗi tiềm ẩn không.
     # Nếu bước này báo lỗi (Error), CI sẽ dừng lại ngay lập tức.
      - name: Static Analysis
-       uses: flutter analyze
+       run: flutter analyze
     # Chạy Unit Test và Widget Test
     # Đảm bảo các logic tính toán bên trong không bị sai sau khi sửa code
      - name: Run Test
-       uses: flutter test
+       run: flutter test
     # -----------------------------------------------------------------------------------------------
     # Xây dựng tệp cài đặt APK cho Android
      - name: Build APK File
-       uses: flutter build apk --release
+       run: flutter build apk --release
     # Lưu trữ file APK (Artifact)
     # Vì máy ảo sẽ bị xóa sạch sau khi chạy xong, chúng ta cần đẩy file APK
     # lên server GitHub để bạn có thể vào tải về.
      - name: Upload Artifact
-       uses: action/upload-artifact@v3
+       uses: actions/upload-artifact@v3
        with:
         name: release-apk # tên của file zip chứa APK trên GitHub
           # Đường dẫn đến file apk vừa build xong ở bước trên
