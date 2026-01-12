@@ -32,6 +32,13 @@ android {
         multiDexEnabled = true
     }
 
+    // BẮT BUỘC CHO 16KB PAGE SIZE
+    packaging {
+        jniLibs {
+            useLegacyPackaging = true
+        }
+    }
+
     buildTypes {
         release {
             // TODO: Add your own signing config for the release build.
