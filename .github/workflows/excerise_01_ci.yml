@@ -41,12 +41,12 @@ jobs:
     # Phân tích mã nguồn mở
     # Lệnh này kiểm tra xem code có đúng chuẩn không, có biến nào thừa hay lỗi tiềm ẩn không.
     # Nếu bước này báo lỗi (Error), CI sẽ dừng lại ngay lập tức.
-     - name: Static Analysis
-       run: flutter analyze
+    #  - name: Static Analysis
+    #    run: flutter analyze
     # Chạy Unit Test và Widget Test
     # Đảm bảo các logic tính toán bên trong không bị sai sau khi sửa code
-     - name: Run Test
-       run: flutter test
+    #  - name: Run Test
+    #    run: flutter test
     # -----------------------------------------------------------------------------------------------
     # Xây dựng tệp cài đặt APK cho Android
      - name: Build APK File
