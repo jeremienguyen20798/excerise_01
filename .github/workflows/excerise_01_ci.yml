@@ -53,7 +53,7 @@ jobs:
     # Dấu \ là báo hiệu rằng câu lệnh tiếp theo chưa kết thúc, phần tiếp theo nằm ở dòng dưới
      - name: Build APK File
        run: | 
-         flutter build apk --release --target=lib/main.dart \ 
+         flutter build apk --release --target=lib/main.dart \
          --build-name=1.0.${{github.run_number}} \
          --build-number=${{github.run_number}}
     # Đẩy app lên Firebase App Distribution
