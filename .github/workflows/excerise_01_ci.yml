@@ -66,7 +66,7 @@ jobs:
          firebase appdistribution:distribute build/app/outputs/flutter-apk/app-release.apk \
            --app "${{secrets.FIREBASE_APP_ID}}" \
            --token "${{secrets.FIREBASE_TOKEN}}" \
-           --group "dev-testers"
+           --groups "dev-testers" \
            --release-notes "Bản build số ${{github.run_number}}"
     # Lưu trữ file APK (Artifact)
     # Vì máy ảo sẽ bị xóa sạch sau khi chạy xong, chúng ta cần đẩy file APK
