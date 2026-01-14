@@ -48,9 +48,27 @@ jobs:
     #  - name: Run Test
     #    run: flutter test
     # -----------------------------------------------------------------------------------------------
-    # Xây dựng tệp cài đặt APK cho Android
+    # Xây dựng tệp cài đặt APK cho Android (Tự động tăng số build dựa trên GitHub Run Number)
+    # Dấu | báo hiệu rằng câu lệnh tiếp là một khối lệnh (là một lệnh được viết trên nhiều dòng)
+    # Dấu \ là báo hiệu rằng câu lệnh tiếp theo chưa kết thúc, phần tiếp theo nằm ở dòng dưới
      - name: Build APK File
-       run: flutter build apk --release
+       run: | 
+         flutter build apk --release \ 
+         --build-name=1.0.${{github.run_number}} \
+         --build-number=${{github.run_number}}
+    # Đẩy app lên Firebase App Distribution
+     - name: Upload to Firebase App Distribution
+       uses: w9jds/firebase-action-distribute@v1
+       with:
+         # Sử dụng Secret, được cấu hình trong GitHub
+         token: ${{secrets.FIREBASE_TOKEN}}
+         appId: ${{secrets.FIREBASE_APP_ID}}
+         # Nhóm tester nhận được bản build này
+         groups: dev-testers
+         # File cần đẩy lên
+         file: build/app/outputs/flutter-apk/app-release.apk
+         # Ghi chú cho bản build (Lấy từ nội dung commit)
+         releaseNotes: ${{github.event.head_commit.message}}
     # Lưu trữ file APK (Artifact)
     # Vì máy ảo sẽ bị xóa sạch sau khi chạy xong, chúng ta cần đẩy file APK
     # lên server GitHub để bạn có thể vào tải về.
