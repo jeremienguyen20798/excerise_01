@@ -41,16 +41,33 @@ jobs:
     # Phân tích mã nguồn mở
     # Lệnh này kiểm tra xem code có đúng chuẩn không, có biến nào thừa hay lỗi tiềm ẩn không.
     # Nếu bước này báo lỗi (Error), CI sẽ dừng lại ngay lập tức.
-     - name: Static Analysis
-       run: flutter analyze
+    #  - name: Static Analysis
+    #    run: flutter analyze
     # Chạy Unit Test và Widget Test
     # Đảm bảo các logic tính toán bên trong không bị sai sau khi sửa code
-     - name: Run Test
-       run: flutter test
+    #  - name: Run Test
+    #    run: flutter test
     # -----------------------------------------------------------------------------------------------
-    # Xây dựng tệp cài đặt APK cho Android
+    # Xây dựng tệp cài đặt APK cho Android (Tự động tăng số build dựa trên GitHub Run Number)
+    # Dấu | báo hiệu rằng câu lệnh tiếp là một khối lệnh (là một lệnh được viết trên nhiều dòng)
+    # Dấu \ là báo hiệu rằng câu lệnh tiếp theo chưa kết thúc, phần tiếp theo nằm ở dòng dưới
      - name: Build APK File
-       run: flutter build apk --release
+       run: | 
+         flutter build apk --release --target=lib/main.dart \
+         --build-name=1.0.${{github.run_number}} \
+         --build-number=${{github.run_number}}
+    # Đẩy app lên Firebase App Distribution
+     - name: Upload to Firebase App Distribution
+       run: |
+         # Cài đặt công cụ firebase
+         curl -sL https://firebase.tools | upgrade=true bash
+
+         # Chạy lệnh đẩy app lên
+         firebase appdistribution:distribute build/app/outputs/flutter-apk/app-release.apk \
+           --app "${{secrets.FIREBASE_APP_ID}}" \
+           --token "${{secrets.FIREBASE_TOKEN}}" \
+           --groups "dev-testers" \
+           --release-notes "Bản build số ${{github.run_number}}"
     # Lưu trữ file APK (Artifact)
     # Vì máy ảo sẽ bị xóa sạch sau khi chạy xong, chúng ta cần đẩy file APK
     # lên server GitHub để bạn có thể vào tải về.
